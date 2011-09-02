@@ -1,0 +1,9 @@
+bin-debug/
+bin/
+.idea/
+.settings/
+.DS_Store
+*~
+Tank.iml
+.project
+.actionScriptProperties
