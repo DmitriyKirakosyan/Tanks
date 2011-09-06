@@ -69,7 +69,7 @@ public class MapMatrix {
 				_matrix.push(new Vector.<uint>());
 			}
 			
-			for each (var k:int = 0; k < _matrix.length; ++k) {
+			for (var k:int = 0; k < _matrix.length; ++k) {
 				for (var j:int = 0; j < MATRIX_HEIGHT; ++j) {
 					if (k == int(MATRIX_WIDTH/2) && j == int(MATRIX_HEIGHT/2)) {
 						_matrix[k].push(MatrixItemIds.EMPTY);

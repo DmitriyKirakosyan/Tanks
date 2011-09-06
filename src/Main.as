@@ -3,8 +3,10 @@ package {
 	import flash.events.MouseEvent;
 	
 	import game.GameController;
-	
-	[SWF(width=600, height=600, frameRate=25)]
+
+import menu.TankPodium;
+
+[SWF(width=600, height=600, frameRate=25)]
 	public class Main extends Sprite {
 		private var container:Sprite; 
 		public var gameController:GameController;
@@ -15,16 +17,9 @@ package {
 			const paper:PaperView = new PaperView();
 			container.addChild(paper);
 			
-			gameController = new GameController(container);
-			
-			stage.addEventListener(MouseEvent.CLICK, onMouseClick);
+			//gameController = new GameController(container);
+			new TankPodium(container);
 		}
-		
-		private function onMouseClick(event:MouseEvent):void {
-			//if (gameController && gameController.tankController) {
-			//	gameController.tankController.shot(new Point(event.stageX, event.stageY));
-			//}
-		}
-	
+
 	}
 }
