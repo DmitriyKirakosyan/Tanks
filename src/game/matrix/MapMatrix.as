@@ -3,7 +3,10 @@ package game.matrix {
 	import flash.geom.Point;
 	import game.GameController;
 	import flash.display.Sprite;
-	public class MapMatrix {
+
+import mx.rpc.events.HeaderEvent;
+
+public class MapMatrix {
 		private var _matrix:Vector.<Vector.<uint>>;
 		private var _container:Sprite;
 		
@@ -66,11 +69,15 @@ package game.matrix {
 				_matrix.push(new Vector.<uint>());
 			}
 			
-			for each (var vect:Vector.<uint> in _matrix) {
+			for each (var k:int = 0; k < _matrix.length; ++k) {
 				for (var j:int = 0; j < MATRIX_HEIGHT; ++j) {
-					Math.random() > .2 ? vect.push(MatrixItemIds.EMPTY) :
-																Math.random() < .1 ? vect.push(MatrixItemIds.STONE)
-																									: vect.push(MatrixItemIds.BRICKS);
+					if (k == int(MATRIX_WIDTH/2) && j == int(MATRIX_HEIGHT/2)) {
+						_matrix[k].push(MatrixItemIds.EMPTY);
+					} else {
+						Math.random() > .2 ? _matrix[k].push(MatrixItemIds.EMPTY) :
+																	Math.random() < .1 ? _matrix[k].push(MatrixItemIds.STONE)
+																										: _matrix[k].push(MatrixItemIds.BRICKS);
+					}
 				}
 			}
 		}
