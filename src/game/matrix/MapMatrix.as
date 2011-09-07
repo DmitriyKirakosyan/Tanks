@@ -62,6 +62,9 @@ public class MapMatrix {
 		public function cleanCell(x:int, y:int):void {
 			_matrix[x][y] = MatrixItemIds.EMPTY;
 		}
+
+		public function remove():void {
+		}
 		
 		private function createMatrix():void {
 			_matrix = new Vector.<Vector.<uint>>();

@@ -13,7 +13,7 @@ import game.matrix.MapMatrix;
 
 import game.tank.Tank;
 
-public class TankPodium {
+public class TankPodium implements IScene{
 	private var _tank:Tank;
 	private var _container:Sprite;
 
@@ -27,6 +27,15 @@ public class TankPodium {
 		rotateTank();
 	}
 
+	public function open():void {
+	}
+
+	public function remove():void {
+		TweenMax.killTweensOf(_tank);
+		_container.removeChild(_tank);
+		_tank = null;
+	}
+
 	private function rotateTank():void {
 		var timeline:TimelineMax = new TimelineMax({repeat : -1});
 		timeline.append(new TweenMax(_tank, 1.6, { rotation : 180, ease : Linear.easeNone, onComplete : function():void {_tank.rotation = -180;}}));
@@ -35,10 +44,9 @@ public class TankPodium {
 
 	private function onClick(event:MouseEvent):void {
 		_container.removeEventListener(MouseEvent.CLICK, onClick);
-		TweenMax.killTweensOf(_tank);
-		_container.removeChild(_tank);
-		_tank = null;
+		remove();
 		new GameController(_container);
 	}
+
 }
 }

@@ -51,7 +51,7 @@ package game.drawing {
 		}
 		
 		public function startDrawTankPath():void {
-			removePreviousPath();
+			removePath();
 			_path = new Vector.<Point>();
 			createNewPathPart();
 			_path.push(_mapMatrix.getMatrixPoint(new Point(_currentMousePoint.x, 
@@ -68,6 +68,12 @@ package game.drawing {
 			const part:Shape = _pathParts[0];
 			removePartFromContainer(part);
 			_pathParts.shift();
+		}
+
+		public function remove():void {
+			_currentMousePoint = null;
+			removePath();
+			_drawing = false;
 		}
 		
 		/* Internal functions */
@@ -129,17 +135,17 @@ package game.drawing {
 			}
 		}
 		
-		private function removePreviousPath():void {
+		private function removePath():void {
 			if (_path) {
 				if (_pathParts && _pathParts.length > 0) {
 					for each (var part:Shape in _pathParts) {
+						TweenMax.killTweensOf(part);
 						_drawingContainer.removeChild(part);
 					}
 					_pathParts = null;
 				}
 				_path = null;
 			}
-			if (_drawingContainer.mask) { _drawingContainer.mask = null; }
 		}
 		
 		private function onMouseDown(event:MouseEvent):void {

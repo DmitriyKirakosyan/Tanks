@@ -16,7 +16,7 @@ package game {
 	import game.tank.TankController;
 	import game.tank.TargetsController;
 
-	public class GameController {
+	public class GameController implements IScene{
 		private var _container:Sprite;
 		private var _bulletsController:BulletsController;
 		private var _tankController:TankController;
@@ -34,6 +34,15 @@ package game {
 			initControllers();
 			listenControllers();
 			listenStageEvents();
+		}
+
+		public function open():void {
+
+		}
+		public function remove():void {
+		 	_mapMatrix.remove();
+			_mouseDrawController.remove();
+			_bulletsController.remove();
 		}
 		
 		private function initControllers():void {
