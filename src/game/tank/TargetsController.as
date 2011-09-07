@@ -3,7 +3,10 @@ package game.tank {
 	import game.events.TankShotingEvent;
 	import game.events.TankEvent;
 	import flash.geom.Point;
-	import pathfinder.Pathfinder;
+
+import game.tank.TankController;
+
+import pathfinder.Pathfinder;
 	import game.events.TargetsControllerEvent;
 	import flash.events.EventDispatcher;
 	import flash.display.Sprite;
@@ -26,9 +29,7 @@ package game.tank {
 			_mapMatrix = mapMatrix;
 			_playerTank = playerTank;
 			_enemyes = new Vector.<TankController>();
-			for (var i:int = 0; i < Math.random() * 5; i++) { createTarget(); }
 			initTimer();
-			startTimer();
 		}
 		
 		public function scaleTime(value:Number):void {
@@ -55,11 +56,25 @@ package game.tank {
 				}
 			}
 		}
+
+		public function init():void {
+			for (var i:int = 0; i < Math.random() * 5; i++) { createTarget(); }
+			startTimer();
+		}
+
+		public function remove():void {
+			_timer.stop();
+			for each (var enemy:TankController in _enemyes) {
+				enemy.remove();
+			}
+			_enemyes = new Vector.<TankController>();
+		}
 		
 		/* Internal functions */
 		
 		private function createTarget():void {
 			var enemyTank:TankController = new TankController(_container, _mapMatrix);
+			enemyTank.init();
 			var rndX:int = Math.random() * MapMatrix.MATRIX_WIDTH;
 			var rndY:int = Math.random() * MapMatrix.MATRIX_HEIGHT;
 			enemyTank.tank.x = rndX;

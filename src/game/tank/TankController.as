@@ -53,7 +53,6 @@ package game.tank {
 			_mapMatrix = mapMatrix;
 			tank.x = _mapMatrix.getMatrixPoint(new Point(_startX, _startY)).x;
 			tank.y = _mapMatrix.getMatrixPoint(new Point(_startX, _startY)).y;
-			container.addChild(tank);
 		}
 		
 		public function get tankTimeline():TimelineMax { return _movingTimeline; }
@@ -121,6 +120,21 @@ package game.tank {
 			tank.gunController.addEventListener(GunRotateCompleteEvent.COMPLETE,
 																						onGunRotateComplete);
 			tank.gunController.gunRotation(_mapMatrix.getMatrixPoint((new Point(point.x, point.y))));
+		}
+
+		public function init():void {
+			_container.addChild(tank);
+			tank.init();
+		}
+
+		public function remove():void {
+			TweenMax.killTweensOf(tank);
+			tank.killTweens();
+			_movingTimeline.kill();
+			if (_autoAttackTimer && _autoAttackTimer.running) { _autoAttackTimer.stop(); }
+			if (_container.contains(tank)) {
+				_container.removeChild(tank);
+			}
 		}
 		
 		private function onGunRotateComplete(event:GunRotateCompleteEvent):void {

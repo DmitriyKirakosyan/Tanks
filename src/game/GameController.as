@@ -1,6 +1,10 @@
 package game {
-	import game.events.DamageObjectEvent;
-	import pathfinder.Pathfinder;
+import flash.events.EventDispatcher;
+
+import game.events.DamageObjectEvent;
+import game.events.SceneEvent;
+
+import pathfinder.Pathfinder;
 	import game.tank.Tank;
 	import game.events.TargetsControllerEvent;
 	import game.events.TankShotingEvent;
@@ -16,7 +20,7 @@ package game {
 	import game.tank.TankController;
 	import game.tank.TargetsController;
 
-	public class GameController implements IScene{
+	public class GameController extends EventDispatcher implements IScene{
 		private var _container:Sprite;
 		private var _bulletsController:BulletsController;
 		private var _tankController:TankController;
@@ -32,17 +36,24 @@ package game {
 		public function GameController(c:Sprite):void {
 			_container = c;
 			initControllers();
-			listenControllers();
-			listenStageEvents();
 		}
 
 		public function open():void {
-
+		 	_tankController.init();
+			_targetsController.init();
+			_mapObjectsController.init();
+			initMapObjectsController();
+			addListeners();
 		}
+
 		public function remove():void {
+			removeListeners();
 		 	_mapMatrix.remove();
 			_mouseDrawController.remove();
 			_bulletsController.remove();
+			_tankController.remove();
+			_targetsController.remove();
+			_mapObjectsController.remove();
 		}
 		
 		private function initControllers():void {
@@ -55,7 +66,6 @@ package game {
 			_targetsController = new TargetsController(_container, _mapMatrix, _tankController.tank);
 			_mapObjectsController = new MapObjectsController(_mapMatrix, _container);
 			_mapObjectsController.addPlayerTank(_tankController.tank);
-			initMapObjectsController();
 			_tankMovementListener = new TankMovementListener(_tankController, _mapObjectsController,
 																												_mouseDrawController);
 			_timeController = new TimeController(_container);
@@ -77,7 +87,7 @@ package game {
 			}
 		}
 		
-		private function listenControllers():void {
+		private function addListeners():void {
 			_mouseDrawController.addEventListener(DrawingControllerEvent.WANT_START_DRAW, onWantStartDraw);
 			_mouseDrawController.addEventListener(DrawingControllerEvent.NEW_MOVE_POINT, onNewMovePoint);
 			_mouseDrawController.addEventListener(DrawingControllerEvent.DRAWING_COMPLETE, onDrawingComplete);
@@ -87,19 +97,23 @@ package game {
 			_tankController.addEventListener(TankShotingEvent.WAS_SHOT, onTankShot);
 			_targetsController.addEventListener(TankShotingEvent.WAS_SHOT, onTankShot);
 			_targetsController.addEventListener(TargetsControllerEvent.NEW_TANK, onNewEnemyTank);
+			listenStageEvents();
 		}
 		
 		private function listenStageEvents():void {
 			_container.addEventListener(MouseEvent.CLICK, onStageClick);
 		}
 		
-		private function killTank():void {
+		private function removeListeners():void {
 			_mouseDrawController.removeEventListener(DrawingControllerEvent.WANT_START_DRAW, onWantStartDraw);
 			_mouseDrawController.removeEventListener(DrawingControllerEvent.NEW_MOVE_POINT, onNewMovePoint);
 			_mouseDrawController.removeEventListener(DrawingControllerEvent.DRAWING_COMPLETE, onDrawingComplete);
 			_mapObjectsController.removeEventListener(MineBamEvent.BAM, onMineBam);
 			_mapObjectsController.removeEventListener(DamageObjectEvent.DAMANGE_PLAYER_TANK, onPlayerDamage);
+			_mapObjectsController.removeEventListener(DamageObjectEvent.DAMANGE_ENEMY_TANK, onEnemyDamage);
 			_tankController.removeEventListener(TankShotingEvent.WAS_SHOT, onTankShot);
+			_targetsController.removeEventListener(TankShotingEvent.WAS_SHOT, onTankShot);
+			_targetsController.removeEventListener(TargetsControllerEvent.NEW_TANK, onNewEnemyTank);
 			_container.removeEventListener(MouseEvent.CLICK, onStageClick);
 			
 		}
@@ -111,7 +125,11 @@ package game {
 		}
 		private function onPlayerDamage(event:DamageObjectEvent):void {
 			_tankController.bam();
-			killTank();
+			_container.addEventListener(MouseEvent.CLICK, onClick);
+		}
+		private function onClick(event:MouseEvent):void {
+			_container.removeEventListener(MouseEvent.CLICK, onClick);
+			dispatchEvent(new SceneEvent(SceneEvent.WANT_REMOVE));
 		}
 		
 		private function onStageClick(event:MouseEvent):void {
@@ -125,7 +143,7 @@ package game {
 			if (Math.abs(_tankController.tank.x - event.minePoint.x) < event.distantion &&
 					Math.abs(_tankController.tank.y - event.minePoint.y) < event.distantion) {
 				_tankController.bam();
-				killTank();
+				_container.addEventListener(MouseEvent.CLICK, onClick);
 			}
 		}
 		

@@ -34,10 +34,22 @@ package game.mapObjects {
 			_scaleTime = 1;
 			_mapMatrix = matrix;
 			_container = container;
-			addMines();
 		}
 		
 		/*API*/
+
+		public function init():void {
+			addMines();
+			drawObjects();
+		}
+
+		public function remove():void {
+			removeMines();
+			removeBricks();
+			removeStones();
+			_playerTankKilled = false;
+			_scaleTime = 1;
+		}
 		
 		public function scaleTime(value:Number):void {
 			_scaleTime = value;
@@ -102,13 +114,25 @@ package game.mapObjects {
 			_stones.push(stone);
 			_container.addChild(stone);
 		}
-		
+		private function removeStones():void {
+			for each (var stone:Stone in _stones) {
+				if (_container.contains(stone)) { _container.removeChild(stone); }
+				_stones= new Vector.<Stone>();
+			}
+		}
+
 		private function addBrick(mPoint:Point):void {
 			var brick:Brick;
 			brick = new Brick(_mapMatrix.getStageRectangle(mPoint));
 			if (!_bricks) { _bricks = new Vector.<Brick>(); }
 			_bricks.push(brick);
 			_container.addChild(brick);
+		}
+		private function removeBricks():void {
+			for each (var brick:Brick in _bricks) {
+				if (_container.contains(brick)) { _container.removeChild(brick); }
+				_bricks = new Vector.<Brick>();
+			}
 		}
 		
 		private function addMines():void {
@@ -121,6 +145,14 @@ package game.mapObjects {
 				_mines.push(mine);
 				_container.addChild(mine);
 			}
+		}
+		private function removeMines():void {
+			for each(var mine:Mine in _mines) {
+				mine.removeEventListener(Event.CONNECT, onMineActivate);
+				TweenMax.killTweensOf(mine);
+				if (_container.contains(mine)) { _container.addChild(mine); }
+			}
+			_mines = new Vector.<Mine>();
 		}
 		
 		private function onMineActivate(event:Event):void {
@@ -178,7 +210,7 @@ package game.mapObjects {
 			if (_playerTank != bullet.selfTank &&
 					bullet.hitTestObject(_playerTank)) {
 					_playerTankKilled = true;
-					showBamOnTank(new Point(_playerTank.stageX, _playerTank.stageY), true);
+					showBamOnTank(new Point(_playerTank.stageX, _playerTank.stageY));
 				dispatchEvent(new DamageObjectEvent(DamageObjectEvent.DAMANGE_PLAYER_TANK, _playerTank));
 			}
 		}

@@ -3,6 +3,7 @@ package {
 	import flash.events.MouseEvent;
 	
 	import game.GameController;
+import game.SceneController;
 
 import menu.TankPodium;
 
@@ -17,8 +18,7 @@ import menu.TankPodium;
 			const paper:PaperView = new PaperView();
 			container.addChild(paper);
 			
-			//gameController = new GameController(container);
-			new TankPodium(container);
+			new SceneController(container);
 		}
 
 	}
