@@ -65,6 +65,7 @@ public class GameController extends EventDispatcher implements IScene{
 			Pathfinder.matrix = _mapMatrix.matrix;
 			_mouseDrawController = new MouseDrawController(_container, _mapMatrix);
 //			_bulletsController = new BulletsController(_container);
+			trace("tank base : ", UserState.instance.tankVO.tankBase);
 			_tankController = new TankController(_container, _mapMatrix, UserState.instance.tankVO, true);
 			_targetsController = new TargetsController(_container, _mapMatrix, _tankController.tank);
 			_mapObjectsController = new MapObjectsController(_mapMatrix, _container);

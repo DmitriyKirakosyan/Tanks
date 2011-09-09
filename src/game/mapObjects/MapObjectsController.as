@@ -109,7 +109,7 @@ package game.mapObjects {
 		
 		private function addStone(mPoint:Point):void {
 			var stone:Stone;
-			stone = new Stone(_mapMatrix.getStageRectangle(mPoint));
+			stone = new Stone(mPoint);
 			if (!_stones) { _stones = new Vector.<Stone>(); }
 			_stones.push(stone);
 			_container.addChild(stone);
@@ -123,7 +123,7 @@ package game.mapObjects {
 
 		private function addBrick(mPoint:Point):void {
 			var brick:Brick;
-			brick = new Brick(_mapMatrix.getStageRectangle(mPoint));
+			brick = new Brick(mPoint);
 			if (!_bricks) { _bricks = new Vector.<Brick>(); }
 			_bricks.push(brick);
 			_container.addChild(brick);

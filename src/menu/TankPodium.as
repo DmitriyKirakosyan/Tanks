@@ -3,12 +3,14 @@ package menu {
 import com.greensock.TimelineMax;
 import com.greensock.TweenMax;
 import com.greensock.easing.Linear;
+import com.greensock.easing.Linear;
 
 import flash.display.Shape;
 
 import flash.display.Sprite;
 import flash.events.EventDispatcher;
 import flash.events.MouseEvent;
+import flash.filters.BlurFilter;
 import flash.geom.Point;
 
 import game.GameController;
@@ -18,6 +20,8 @@ import game.matrix.MapMatrix;
 
 import game.tank.Tank;
 import game.tank.TankVO;
+
+import state.UserState;
 
 public class TankPodium extends EventDispatcher implements IScene{
 	private var _tank:Tank;
@@ -44,7 +48,6 @@ public class TankPodium extends EventDispatcher implements IScene{
 	}
 
 	public function remove():void {
-		removeListeners();
 		TweenMax.killTweensOf(_tank);
 		_container.removeChild(_tank);
 	}
@@ -58,14 +61,13 @@ public class TankPodium extends EventDispatcher implements IScene{
 		//_container.addEventListener(MouseEvent.CLICK, onClick);
 	}
 
-	private function removeListeners():void {
-		_container.removeEventListener(MouseEvent.CLICK, onClick);
-	}
-
 	private function onTankMouseDown(event:MouseEvent):void {
 		if (_tank.hitTestPoint(event.stageX, event.stageY)) {
 			_dragTank = true;
 			if (_dragBackTween) { _dragBackTween.kill(); }
+		} else {
+			UserState.instance.tankVO.tankBase = _tank.vo.tankBase;
+			switchScene();
 		}
 	}
 	private function onTankMouseUp(event:MouseEvent):void {
@@ -83,7 +85,24 @@ public class TankPodium extends EventDispatcher implements IScene{
 		const coef:int = _tank.x > _defaultTankPoint.x ? 1 : -1;
 		TweenMax.killTweensOf(_tank.gun);
 		TweenMax.killTweensOf(_tank.tankBase);
-		TweenMax.to(_tank,  .6, {originX : _tank.originX + coef * 100, scaleX : 4, scaleY : .1, blurFilter:{blurX:20}, alpha : 0});
+		TweenMax.to(_tank,  .3, {originX : _tank.originX + coef * 60, scaleX : 4, scaleY : .1, blurFilter:{blurX:20}, alpha : 0, ease:Linear.easeOut, onComplete : onTankShiftComplete});
+	}
+
+	private function onTankShiftComplete():void {
+		_container.removeChild(_tank);
+		const vo:TankVO = new TankVO();
+		const point:Point = new Point(_tank.x,  _tank.y);
+		vo.tankBase = _tank.vo.tankBase == 0 ? 1 : 0;
+		_tank = new Tank(vo);
+		_tank.init();
+		const distance:Number = Math.abs(_defaultTankPoint.x -point.x);
+		_tank.x = point.x < _defaultTankPoint.x ? point.x + 2*distance :point.x - 2 * distance;
+		_tank.alpha = 0;
+		_tank.filters = [new BlurFilter(20)];
+		_tank.scaleX = 4;
+		_tank.scaleY = .1; _tank.y = point.y;
+		_container.addChild(_tank);
+		TweenMax.to(_tank,  .3, {x : _defaultTankPoint.x, scaleX : 1, scaleY : 1, alpha : 1, ease:Linear.easeIn, blurFilter:{blurX:0}, onComplete : function():void { _tank.filters = []; }});
 	}
 
 	private function onTankMouseMove(event:MouseEvent):void {
@@ -101,8 +120,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 		timeline.insert(new TweenMax(_tank.tankBase, 1.6, { rotation : 180, ease : Linear.easeNone, onComplete : function():void {_tank.tankBase.rotation = -180;}}));
 	}
 
-	private function onClick(event:MouseEvent):void {
-		_container.removeEventListener(MouseEvent.CLICK, onClick);
+	private function switchScene():void {
 		dispatchEvent(new SceneEvent(SceneEvent.WANT_REMOVE));
 	}
 

@@ -6,10 +6,10 @@ package game.mapObjects {
 	public class Brick extends MapObject {
 		private var _damaged:Boolean;
 		
-		public function Brick(rect:Rectangle) {
+		public function Brick(point:Point) {
 			_damaged = false;
-			this.x = rect.x;
-			this.y = rect.y;
+			this.x = point.x;
+			this.y = point.y;
 			const brick:BricksView = new BricksView();
 			this.addChild(brick);
 		}

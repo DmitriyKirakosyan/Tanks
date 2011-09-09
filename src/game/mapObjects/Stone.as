@@ -1,5 +1,7 @@
 package game.mapObjects {
-	import game.MapObject;
+import flash.geom.Point;
+
+import game.MapObject;
 	import flash.geom.Rectangle;
 	import flash.display.Sprite;
 
@@ -7,12 +9,11 @@ package game.mapObjects {
 		private var _rect:Rectangle;
 		private var _view:StoneView;
 		
-		public function Stone(rect:Rectangle) {
+		public function Stone(point:Point) {
 			super();
-			_rect = rect;
 			_view = new StoneView();
-			this.x = rect.x;
-			this.y = rect.y;
+			this.x = point.x;
+			this.y = point.y;
 			this.addChild(_view);
 		}
 		
