@@ -150,7 +150,7 @@ package game.mapObjects {
 			for each(var mine:Mine in _mines) {
 				mine.removeEventListener(Event.CONNECT, onMineActivate);
 				TweenMax.killTweensOf(mine);
-				if (_container.contains(mine)) { _container.addChild(mine); }
+				if (_container.contains(mine)) { _container.removeChild(mine); }
 			}
 			_mines = new Vector.<Mine>();
 		}

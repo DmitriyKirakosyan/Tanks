@@ -13,7 +13,7 @@ public class SceneController {
 		_gameScene = new GameController(container);
 		_menuScene = new TankPodium(container);
 
-		_gameScene.open();
+		_menuScene.open();
 
 		addListeners();
 	}

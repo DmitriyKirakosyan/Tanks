@@ -14,13 +14,14 @@ import game.events.SceneEvent;
 import game.matrix.MapMatrix;
 
 import game.tank.Tank;
+import game.tank.TankVO;
 
 public class TankPodium extends EventDispatcher implements IScene{
 	private var _tank:Tank;
 	private var _container:Sprite;
 
 	public function TankPodium(container:Sprite) {
-		_tank = new Tank();
+		_tank = new Tank(new TankVO());
 		_tank.init();
 		_container = container;
 		_tank.x = MapMatrix.MATRIX_WIDTH/2;
@@ -30,6 +31,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 	public function open():void {
 		trace("menu open");
 		_container.addChild(_tank);
+		_tank.rotation = 0;
 		_container.addEventListener(MouseEvent.CLICK, onClick);
 		rotateTank();
 	}

@@ -16,13 +16,16 @@ import pathfinder.Pathfinder;
 	import game.drawing.MouseDrawController;
 	import game.matrix.MapMatrix;
 	import flash.display.Sprite;
-	import game.tank.BulletsController;
 	import game.tank.TankController;
 	import game.tank.TargetsController;
 
-	public class GameController extends EventDispatcher implements IScene{
+import state.UserState;
+
+import state.UserState;
+
+public class GameController extends EventDispatcher implements IScene{
 		private var _container:Sprite;
-		private var _bulletsController:BulletsController;
+//		private var _bulletsController:BulletsController;
 		private var _tankController:TankController;
 		private var _tankMovementListener:TankMovementListener;
 		private var _targetsController:TargetsController;
@@ -50,7 +53,7 @@ import pathfinder.Pathfinder;
 			removeListeners();
 		 	_mapMatrix.remove();
 			_mouseDrawController.remove();
-			_bulletsController.remove();
+//			_bulletsController.remove();
 			_tankController.remove();
 			_targetsController.remove();
 			_mapObjectsController.remove();
@@ -61,8 +64,8 @@ import pathfinder.Pathfinder;
 			_mapMatrix.drawMatrix();
 			Pathfinder.matrix = _mapMatrix.matrix;
 			_mouseDrawController = new MouseDrawController(_container, _mapMatrix);
-			_bulletsController = new BulletsController(_container);
-			_tankController = new TankController(_container, _mapMatrix, true);
+//			_bulletsController = new BulletsController(_container);
+			_tankController = new TankController(_container, _mapMatrix, UserState.instance.tankVO, true);
 			_targetsController = new TargetsController(_container, _mapMatrix, _tankController.tank);
 			_mapObjectsController = new MapObjectsController(_mapMatrix, _container);
 			_mapObjectsController.addPlayerTank(_tankController.tank);

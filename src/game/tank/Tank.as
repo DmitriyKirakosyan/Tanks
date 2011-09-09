@@ -13,20 +13,23 @@ import game.GameController;
 
 	public class Tank extends MapObject {
 		public var gun:GunView;
-		public var tankBase:TankBaseView;
+		public var tankBase:Sprite;
 		public var gunController:GunController;
 
-        private var _player:Boolean;
+		private var _vo;
+
+		private var _player:Boolean;
 		
 		private var _speedup:Number = 0;
 		private var maxSpeedup:Number = .5;
 
 		private var _bamTimeline:TimelineMax;
 		
-		public function Tank(player:Boolean = false) {
+		public function Tank(vo:TankVO, player:Boolean = false) {
 			_player = player;
 			gun = new GunView();
-			tankBase = new TankBaseView();
+			_vo = vo;
+			tankBase = vo.tankBase == 0 ? new TankBaseView() : new BricksView();
 			if (!_player) {
 				const colorInfo:ColorTransform = new ColorTransform();
 				colorInfo.color = 0x941aff;

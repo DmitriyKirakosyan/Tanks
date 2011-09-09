@@ -43,10 +43,10 @@ package game.tank {
 		public static const DOWN_ROT_PLUS:int = 180;
 		public static const DOWN_ROT_MINUS:int =-180;
 		
-		public function TankController(container:Sprite, mapMatrix:MapMatrix, player:Boolean=false):void {
+		public function TankController(container:Sprite, mapMatrix:MapMatrix, tankVO:TankVO, player:Boolean=false):void {
 			_moving = false;
 			_scaleTime = 1;
-			tank = new Tank(player);
+			tank = new Tank(tankVO, player);
 			_movingTimeline = new TimelineMax();
 			_direction = new TankDirection(TankDirection.UP_DIR);
 			_container = container;

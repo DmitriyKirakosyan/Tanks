@@ -73,7 +73,7 @@ import pathfinder.Pathfinder;
 		/* Internal functions */
 		
 		private function createTarget():void {
-			var enemyTank:TankController = new TankController(_container, _mapMatrix);
+			var enemyTank:TankController = new TankController(_container, _mapMatrix, new TankVO());
 			enemyTank.init();
 			var rndX:int = Math.random() * MapMatrix.MATRIX_WIDTH;
 			var rndY:int = Math.random() * MapMatrix.MATRIX_HEIGHT;
