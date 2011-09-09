@@ -43,16 +43,14 @@ package game.tank {
 		public static const DOWN_ROT_PLUS:int = 180;
 		public static const DOWN_ROT_MINUS:int =-180;
 		
-		public function TankController(container:Sprite, mapMatrix:MapMatrix, tankVO:TankVO, player:Boolean=false):void {
+		public function TankController(container:Sprite, mapMatrix:MapMatrix):void {
 			_moving = false;
 			_scaleTime = 1;
-			tank = new Tank(tankVO, player);
+
 			_movingTimeline = new TimelineMax();
 			_direction = new TankDirection(TankDirection.UP_DIR);
 			_container = container;
 			_mapMatrix = mapMatrix;
-			tank.x = _mapMatrix.getMatrixPoint(new Point(_startX, _startY)).x;
-			tank.y = _mapMatrix.getMatrixPoint(new Point(_startX, _startY)).y;
 		}
 		
 		public function get tankTimeline():TimelineMax { return _movingTimeline; }
@@ -102,7 +100,9 @@ package game.tank {
 		/* Internal functions */
 		
 		private function onAutoAttackTimer(event:TimerEvent):void {
-			shot(new Point(_targetTank.originX, _targetTank.originY));
+			if (_targetTank) {
+				shot(new Point(_targetTank.originX, _targetTank.originY));
+			}
 		}
 		
 		private function onMovingComplete():void {
@@ -122,9 +122,13 @@ package game.tank {
 			tank.gunController.gunRotation(_mapMatrix.getMatrixPoint((new Point(point.x, point.y))));
 		}
 
-		public function init():void {
+		public function init(tankVO:TankVO, player:Boolean = false):void {
+			tank = new Tank(tankVO, player);
 			_container.addChild(tank);
-			tank.init();
+			if (player) {
+				tank.x = _mapMatrix.getMatrixPoint(new Point(_startX, _startY)).x;
+				tank.y = _mapMatrix.getMatrixPoint(new Point(_startX, _startY)).y;
+			}
 		}
 
 		public function remove():void {

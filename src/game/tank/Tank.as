@@ -29,10 +29,16 @@ import game.GameController;
 			_player = player;
 			gun = new GunView();
 			_vo = vo;
-			tankBase = vo.tankBase == 0 ? new TankBaseView() : new BricksView();
-			if (tankBase is BricksView) {
-				tankBase.x -= tankBase.width/2; tankBase.y -= tankBase.height/2;
+			if (vo.tankBase == 0) {
+				tankBase = new TankBaseView();
+			} else {
+				tankBase = new Sprite();
+				const brickView:BricksView = new BricksView();
+				brickView.x -= brickView.width/2; brickView.y -= brickView.height/2;
+				tankBase.addChild(brickView);
 			}
+			this.addChild(tankBase);
+			this.addChild(gun);
 			//if (!_player) {
 			//	const colorInfo:ColorTransform = new ColorTransform();
 			//	colorInfo.color = 0x941aff;
@@ -43,9 +49,9 @@ import game.GameController;
 
 		public function get vo():TankVO { return _vo; }
 
-		public function init():void {
-			this.addChild(tankBase);
-			this.addChild(gun);
+		public function remove():void {
+			if (this.contains(tankBase)) this.addChild(tankBase);
+			if (this.contains(gun)) this.addChild(gun);
 		}
 		
 		public function bam():void {

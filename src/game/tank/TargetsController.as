@@ -24,12 +24,15 @@ import pathfinder.Pathfinder;
 		
 		private var _playerTank:Tank;
 		
-		public function TargetsController(container:Sprite, mapMatrix:MapMatrix, playerTank:Tank) {
+		public function TargetsController(container:Sprite, mapMatrix:MapMatrix) {
 			_container = container;
 			_mapMatrix = mapMatrix;
-			_playerTank = playerTank;
 			_enemyes = new Vector.<TankController>();
 			initTimer();
+		}
+
+		public function addPlayerTank(tank:Tank):void {
+			_playerTank = tank;
 		}
 		
 		public function scaleTime(value:Number):void {
@@ -73,8 +76,8 @@ import pathfinder.Pathfinder;
 		/* Internal functions */
 		
 		private function createTarget():void {
-			var enemyTank:TankController = new TankController(_container, _mapMatrix, new TankVO());
-			enemyTank.init();
+			var enemyTank:TankController = new TankController(_container, _mapMatrix);
+			enemyTank.init(new TankVO());
 			var rndX:int = Math.random() * MapMatrix.MATRIX_WIDTH;
 			var rndY:int = Math.random() * MapMatrix.MATRIX_HEIGHT;
 			enemyTank.tank.x = rndX;

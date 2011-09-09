@@ -25,7 +25,6 @@ import state.UserState;
 
 public class GameController extends EventDispatcher implements IScene{
 		private var _container:Sprite;
-//		private var _bulletsController:BulletsController;
 		private var _tankController:TankController;
 		private var _tankMovementListener:TankMovementListener;
 		private var _targetsController:TargetsController;
@@ -42,9 +41,11 @@ public class GameController extends EventDispatcher implements IScene{
 		}
 
 		public function open():void {
-		 	_tankController.init();
+		 	_tankController.init(UserState.instance.tankVO, true);
 			_targetsController.init();
+			_targetsController.addPlayerTank(_tankController.tank);
 			_mapObjectsController.init();
+			_mapObjectsController.addPlayerTank(_tankController.tank);
 			initMapObjectsController();
 			addListeners();
 		}
@@ -53,7 +54,6 @@ public class GameController extends EventDispatcher implements IScene{
 			removeListeners();
 		 	_mapMatrix.remove();
 			_mouseDrawController.remove();
-//			_bulletsController.remove();
 			_tankController.remove();
 			_targetsController.remove();
 			_mapObjectsController.remove();
@@ -64,12 +64,10 @@ public class GameController extends EventDispatcher implements IScene{
 			_mapMatrix.drawMatrix();
 			Pathfinder.matrix = _mapMatrix.matrix;
 			_mouseDrawController = new MouseDrawController(_container, _mapMatrix);
-//			_bulletsController = new BulletsController(_container);
 			trace("tank base : ", UserState.instance.tankVO.tankBase);
-			_tankController = new TankController(_container, _mapMatrix, UserState.instance.tankVO, true);
-			_targetsController = new TargetsController(_container, _mapMatrix, _tankController.tank);
+			_tankController = new TankController(_container, _mapMatrix);
+			_targetsController = new TargetsController(_container, _mapMatrix);
 			_mapObjectsController = new MapObjectsController(_mapMatrix, _container);
-			_mapObjectsController.addPlayerTank(_tankController.tank);
 			_tankMovementListener = new TankMovementListener(_tankController, _mapObjectsController,
 																												_mouseDrawController);
 			_timeController = new TimeController(_container);
@@ -90,7 +88,7 @@ public class GameController extends EventDispatcher implements IScene{
 				}
 			}
 		}
-		
+
 		private function addListeners():void {
 			_mouseDrawController.addEventListener(DrawingControllerEvent.WANT_START_DRAW, onWantStartDraw);
 			_mouseDrawController.addEventListener(DrawingControllerEvent.NEW_MOVE_POINT, onNewMovePoint);
