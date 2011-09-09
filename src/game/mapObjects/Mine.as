@@ -9,7 +9,9 @@ package game.mapObjects {
 	import flash.geom.Point;
 	import flash.display.Sprite;
 
-	public class Mine extends Sprite{
+import game.MapObject;
+
+public class Mine extends MapObject{
 		private var _distance:int;
 		private var _activated:Boolean;
 		
@@ -23,7 +25,7 @@ package game.mapObjects {
 			this.y = pint.y;
 			super();
 		}
-		
+		/*
 		override public function set x(value:Number):void {
 			super.x = value * GameController.CELL + GameController.CELL/2;
 		}
@@ -32,7 +34,7 @@ package game.mapObjects {
 		}
 		override public function get x():Number { return (super.x - GameController.CELL/2) / GameController.CELL;}
 		override public function get y():Number { return (super.y - GameController.CELL/2) / GameController.CELL; }
-		
+		*/
 		/* API */
 		
 		public function get distance():int { return _distance; }

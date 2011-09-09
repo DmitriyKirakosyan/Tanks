@@ -84,16 +84,5 @@ import game.GameController;
 		}
 
 		
-		override public function set x(value:Number):void {
-			super.x = value * GameController.CELL + GameController.CELL/2;
-		}
-		override public function set y(value:Number):void {
-			super.y = value * GameController.CELL + GameController.CELL/2;
-		}
-		override public function get x():Number { return (super.x - GameController.CELL/2) / GameController.CELL;}
-		override public function get y():Number { return (super.y - GameController.CELL/2) / GameController.CELL; }
-		
-		public function get stageX():Number { return super.x; }
-		public function get stageY():Number { return super.y; }
 	}
 }

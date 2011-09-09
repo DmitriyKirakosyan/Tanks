@@ -181,7 +181,7 @@ package game.mapObjects {
 						bullet.hitTestObject(enemyTank)) {
 					removeBullet(bullet);
 					removeEnemyTank(enemyTank);
-					showBamOnTank(new Point(enemyTank.stageX, enemyTank.stageY));
+					showBamOnTank(new Point(enemyTank.originX, enemyTank.originY));
 					dispatchEvent(new DamageObjectEvent(DamageObjectEvent.DAMANGE_ENEMY_TANK, enemyTank));
 				}
 			}
@@ -210,7 +210,7 @@ package game.mapObjects {
 			if (_playerTank != bullet.selfTank &&
 					bullet.hitTestObject(_playerTank)) {
 					_playerTankKilled = true;
-					showBamOnTank(new Point(_playerTank.stageX, _playerTank.stageY));
+					showBamOnTank(new Point(_playerTank.originX, _playerTank.originY));
 				dispatchEvent(new DamageObjectEvent(DamageObjectEvent.DAMANGE_PLAYER_TANK, _playerTank));
 			}
 		}

@@ -102,7 +102,7 @@ package game.tank {
 		/* Internal functions */
 		
 		private function onAutoAttackTimer(event:TimerEvent):void {
-			shot(new Point(_targetTank.stageX, _targetTank.stageY));
+			shot(new Point(_targetTank.originX, _targetTank.originY));
 		}
 		
 		private function onMovingComplete():void {
