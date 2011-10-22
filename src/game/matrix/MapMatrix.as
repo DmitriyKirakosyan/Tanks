@@ -4,8 +4,6 @@ package game.matrix {
 	import game.GameController;
 	import flash.display.Sprite;
 
-import mx.rpc.events.HeaderEvent;
-
 public class MapMatrix {
 		private var _matrix:Vector.<Vector.<uint>>;
 		private var _container:Sprite;

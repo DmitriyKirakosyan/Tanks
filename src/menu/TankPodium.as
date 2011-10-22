@@ -47,6 +47,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 	}
 
 	public function remove():void {
+		removeListeners();
 		TweenMax.killTweensOf(_tank);
 		_container.removeChild(_tank);
 	}
@@ -57,7 +58,12 @@ public class TankPodium extends EventDispatcher implements IScene{
 		_container.addEventListener(MouseEvent.MOUSE_DOWN, onTankMouseDown);
 		_container.addEventListener(MouseEvent.MOUSE_UP, onTankMouseUp);
 		_container.addEventListener(MouseEvent.MOUSE_MOVE, onTankMouseMove);
-		//_container.addEventListener(MouseEvent.CLICK, onClick);
+	}
+	
+	private function removeListeners():void {
+		_container.removeEventListener(MouseEvent.MOUSE_DOWN, onTankMouseDown);
+		_container.removeEventListener(MouseEvent.MOUSE_UP, onTankMouseUp);
+		_container.removeEventListener(MouseEvent.MOUSE_MOVE, onTankMouseMove);
 	}
 
 	private function onTankMouseDown(event:MouseEvent):void {
