@@ -1,22 +1,20 @@
 package game.tank {
 import com.greensock.TimelineMax;
+import com.greensock.TweenMax;
 
+import flash.display.Sprite;
+import flash.geom.ColorTransform;
 import flash.geom.Point;
 
-import game.MapObject;
-	import com.greensock.TweenMax;
-
-import flash.geom.ColorTransform;
-
 import game.GameController;
-	import flash.display.Sprite;
+import game.MapObject;
 
 	public class Tank extends MapObject {
 		public var gun:GunView;
 		public var tankBase:Sprite;
 		public var gunController:GunController;
 
-		private var _vo;
+		private var _vo:TankVO;
 
 		private var _player:Boolean;
 		
@@ -24,11 +22,17 @@ import game.GameController;
 		private var maxSpeedup:Number = .5;
 
 		private var _bamTimeline:TimelineMax;
-		
+
+		public var liveTab:LiveTab;
+
 		public function Tank(vo:TankVO, player:Boolean = false) {
 			_player = player;
 			gun = new GunView();
 			_vo = vo;
+			
+			liveTab = new LiveTab();
+			this.addChild(liveTab);
+			
 			if (vo.tankBase == 0) {
 				tankBase = new TankBaseView();
 			} else {
@@ -39,12 +43,15 @@ import game.GameController;
 			}
 			this.addChild(tankBase);
 			this.addChild(gun);
-			//if (!_player) {
-			//	const colorInfo:ColorTransform = new ColorTransform();
-			//	colorInfo.color = 0x941aff;
-			//	this.transform.colorTransform = colorInfo;
-			//}
 			gunController = new GunController(gun, this);
+		}
+		
+		public function tankDamage():void{
+			this.liveTab.scaleX -= .5;
+		}
+		
+		public function updateLive():void {
+			this.liveTab.scaleX = 1;
 		}
 
 		public function get vo():TankVO { return _vo; }
