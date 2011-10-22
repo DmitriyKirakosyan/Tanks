@@ -117,8 +117,7 @@ package game.tank {
 		public function shot(point:Point):void {
 			_bulletPoint = point;
 			tank.gunController.removeTween();
-			tank.gunController.addEventListener(GunRotateCompleteEvent.COMPLETE,
-																						onGunRotateComplete);
+			tank.gunController.addEventListener(GunRotateCompleteEvent.COMPLETE, onGunRotateComplete);
 			tank.gunController.gunRotation(_mapMatrix.getMatrixPoint((new Point(point.x, point.y))));
 		}
 
@@ -144,8 +143,8 @@ package game.tank {
 		private function onGunRotateComplete(event:GunRotateCompleteEvent):void {
 			tank.gunController.removeEventListener(GunRotateCompleteEvent.COMPLETE,
 																						onGunRotateComplete);
-			const stagePoint:Point =_mapMatrix.getStagePoint(new Point(tank.x, tank.y));
-			const bullet:Bullet = new Bullet(tank, stagePoint);
+			const stageTankPoint:Point = new Point(tank.originX, tank.originY);
+			const bullet:Bullet = new Bullet(tank);
 			bullet.moveTo(_bulletPoint);
 			_container.addChild(bullet);
 			dispatchEvent(new TankShotingEvent(TankShotingEvent.WAS_SHOT, bullet));

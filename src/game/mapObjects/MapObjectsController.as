@@ -1,8 +1,9 @@
 package game.mapObjects {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Bounce;
-	
-	import flash.display.Sprite;
+import com.greensock.easing.Linear;
+
+import flash.display.Sprite;
 	import flash.events.EventDispatcher;
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
@@ -124,11 +125,26 @@ package game.mapObjects {
 		
 		/* bullet functions */
 		private function onBulletUpdate(bullet:Bullet):void {
+			bullet.tickTailPeriod();
+			if (bullet.timeToTail) { drawBulletTail(bullet); }
 			checkHitEnemyTank(bullet);
 			checkHitStone(bullet);
 			checkHitBrick(bullet);
 			checkHitPlayerTank(bullet);
 		}
+
+		private function drawBulletTail(bullet:Bullet):void {
+			var bulletTailPart:Sprite = new Sprite();
+			bullet.drawBulletPointOn(bulletTailPart);
+			bulletTailPart.x = bullet.x;
+			bulletTailPart.y = bullet.y;
+			bulletTailPart.scaleX = bulletTailPart.scaleY = .1;
+			bulletTailPart.alpha = .5;
+			_container.addChild(bulletTailPart);
+			TweenMax.to(bulletTailPart, 2, { scaleX : 3, scaleY : 3, alpha : 0, ease : Linear.easeNone,
+										onComplete: function():void { _container.removeChild(bulletTailPart); } });
+		}
+
 		private function checkHitEnemyTank(bullet:Bullet):void {
 			if (!_enemyTanks) { return; }
 			for each (var enemyTank:Tank in _enemyTanks) {
