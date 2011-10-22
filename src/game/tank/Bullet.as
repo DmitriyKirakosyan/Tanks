@@ -22,7 +22,7 @@ public class Bullet extends Sprite {
 			var view:BulletView = new BulletView();
 			_tailPeriodCounter = 0;
 			_selfTank = selfTank;
-			drawBulletPointOn(this)
+			drawBulletPointOn(this, 0xf0002f);
 			this.rotation = selfTank.gunController.gunRot;
 			const bulletPoint:Point = selfTank.gunController.getBulletPoint();
 			this.x = bulletPoint.x;
@@ -68,8 +68,8 @@ public class Bullet extends Sprite {
 			if (_tween) { _tween.timeScale = value; }
 		}
 
-		public function drawBulletPointOn(sprite:Sprite):void {
-			sprite.graphics.beginFill(0x0fafcd);
+		public function drawBulletPointOn(sprite:Sprite, color:uint = 0x0fafcd):void {
+			sprite.graphics.beginFill(color);
 			sprite.graphics.drawCircle(0,0,2);
 			sprite.graphics.endFill();
 		}

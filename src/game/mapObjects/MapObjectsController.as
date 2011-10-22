@@ -139,9 +139,9 @@ import flash.display.Sprite;
 			bulletTailPart.x = bullet.x;
 			bulletTailPart.y = bullet.y;
 			bulletTailPart.scaleX = bulletTailPart.scaleY = .1;
-			bulletTailPart.alpha = .5;
+			bulletTailPart.alpha = .6;
 			_container.addChild(bulletTailPart);
-			TweenMax.to(bulletTailPart, 2, { scaleX : 3, scaleY : 3, alpha : 0, ease : Linear.easeNone,
+			TweenMax.to(bulletTailPart, 1.5, { scaleX : 3, scaleY : 3, alpha : 0, ease : Linear.easeNone,
 										onComplete: function():void { _container.removeChild(bulletTailPart); } });
 		}
 
