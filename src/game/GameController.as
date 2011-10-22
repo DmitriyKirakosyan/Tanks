@@ -64,12 +64,11 @@ public class GameController extends EventDispatcher implements IScene{
 			_mapMatrix.drawMatrix();
 			Pathfinder.matrix = _mapMatrix.matrix;
 			_mouseDrawController = new MouseDrawController(_container, _mapMatrix);
-			trace("tank base : ", UserState.instance.tankVO.tankBase);
+			trace("[GameController.initControllers] tank base : ", UserState.instance.tankVO.tankBase);
 			_tankController = new TankController(_container, _mapMatrix);
 			_targetsController = new TargetsController(_container, _mapMatrix);
 			_mapObjectsController = new MapObjectsController(_mapMatrix, _container);
-			_tankMovementListener = new TankMovementListener(_tankController, _mapObjectsController,
-																												_mouseDrawController);
+			_tankMovementListener = new TankMovementListener(_tankController, _mapObjectsController, _mouseDrawController);
 			_timeController = new TimeController(_container);
 			initTimeController();
 		}

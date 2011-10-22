@@ -19,7 +19,7 @@ public class MedKit extends MapObject {
 			this.x = rect.x;
 			this.y = rect.y;
 			medKitSprite = new Sprite();
-			//medKitSprite.addChild(new MedKitImg());
+		//	medKitSprite.addChild(new MedKitImg());
 			this.addChild(medKitSprite);
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}

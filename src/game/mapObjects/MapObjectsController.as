@@ -3,7 +3,6 @@ package game.mapObjects {
 	import com.greensock.easing.Bounce;
 	
 	import flash.display.Sprite;
-	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
@@ -11,19 +10,16 @@ package game.mapObjects {
 	
 	import game.IControllerWithTime;
 	import game.events.DamageObjectEvent;
-	import game.events.MineBamEvent;
 	import game.matrix.MapMatrix;
 	import game.matrix.MatrixItemIds;
 	import game.tank.Bullet;
 	import game.tank.Tank;
 
-	public class MapObjectsController extends EventDispatcher
-																		implements IControllerWithTime{
+	public class MapObjectsController extends EventDispatcher implements IControllerWithTime{
 		private var _mapMatrix:MapMatrix;
 		private var _container:Sprite;
 		private var _stones:Vector.<Stone>;
 		private var _bricks:Vector.<Brick>;
-		private var _mines:Vector.<Mine>;
 		private var _bullets:Vector.<Bullet>;
 		private var _enemyTanks:Vector.<Tank>;
 		private var _playerTank:Tank;
@@ -46,12 +42,10 @@ package game.mapObjects {
 		/*API*/
 
 		public function init():void {
-			addMines();
 			drawObjects();
 		}
 
 		public function remove():void {
-			removeMines();
 			removeBricks();
 			removeStones();
 			_playerTankKilled = false;
@@ -60,23 +54,9 @@ package game.mapObjects {
 		
 		public function scaleTime(value:Number):void {
 			_scaleTime = value;
-			if (_mines) {
-				for each (var mine:Mine in _mines) {
-					mine.scaleTime(value);
-				}
-			}
 			if (_bullets) {
 				for each (var bullet:Bullet in _bullets) {
 					bullet.scaleTime(value);
-				}
-			}
-		}
-		
-		public function checkReactionForTank(tank:Tank):void {
-			for each (var mine:Mine in _mines) {
-				if (Math.abs(tank.x - mine.x) < mine.distance &&
-						Math.abs(tank.y - mine.y) < mine.distance) {
-					mine.activate(_scaleTime);
 				}
 			}
 		}
@@ -140,38 +120,6 @@ package game.mapObjects {
 				if (_container.contains(brick)) { _container.removeChild(brick); }
 				_bricks = new Vector.<Brick>();
 			}
-		}
-		
-		private function addMines():void {
-			_mines = new Vector.<Mine>();
-			const minesCount:int = 10;//Math.random() * 10;
-			var mine:Mine;
-			for (var i:int = 0; i < minesCount; ++i) {
-				mine = new Mine(_mapMatrix.getRandomPoint());
-				mine.addEventListener(Event.CONNECT, onMineActivate);
-				_mines.push(mine);
-				_container.addChild(mine);
-			}
-		}
-		private function removeMines():void {
-			for each(var mine:Mine in _mines) {
-				mine.removeEventListener(Event.CONNECT, onMineActivate);
-				TweenMax.killTweensOf(mine);
-				if (_container.contains(mine)) { _container.removeChild(mine); }
-			}
-			_mines = new Vector.<Mine>();
-		}
-		
-		private function onMineActivate(event:Event):void {
-			const mine:Mine = event.target as Mine;
-			mine.removeEventListener(Event.CONNECT, onMineActivate);
-			//_container.removeChild(mine);
-			removeMineFromList(mine);
-			dispatchEvent(new MineBamEvent(MineBamEvent.BAM, mine.distance, new Point(mine.x, mine.y)));
-		}
-		private function removeMineFromList(mine:Mine):void {
-			const mineIndex:int = _mines.indexOf(mine);
-			if (mineIndex >= 0) { _mines.splice(mineIndex, 1); }
 		}
 		
 		/* bullet functions */

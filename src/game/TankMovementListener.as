@@ -24,7 +24,6 @@ package game {
 		}
 		
 		private function onTankComeToCell(event:TankEvent):void {
-			_mapObjectsController.checkReactionForTank(_tankController.tank);
 			_mouseDrawController.removePart();
 		}
 		
