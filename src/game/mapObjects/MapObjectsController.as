@@ -215,8 +215,7 @@ package game.mapObjects {
 			_container.addChild(medKit);
 		}
 		
-		private function checkHitMedKit(tank:Tank):void {
-			tank = _playerTank;
+		private function checkHitMedKit():void {
 			if (!medKit) {return;}
 			if (_playerTank.hitTestObject(medKit)){
 				removeMedKit(medKit);
