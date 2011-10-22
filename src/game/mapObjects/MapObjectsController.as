@@ -154,6 +154,7 @@ import flash.display.Sprite;
 					removeEnemyTank(enemyTank);
 					showBamOnTank(new Point(enemyTank.originX, enemyTank.originY));
 					dispatchEvent(new DamageObjectEvent(DamageObjectEvent.DAMANGE_ENEMY_TANK, enemyTank));
+					break;
 				}
 			}
 		}
@@ -162,6 +163,7 @@ import flash.display.Sprite;
 			for each (var stone:Stone in _stones) {
 				if (bullet.hitTestObject(stone)) {
 					removeBullet(bullet);
+					break;
 				}
 			}
 		}
@@ -172,6 +174,7 @@ import flash.display.Sprite;
 					removeBullet(bullet);
 					if (brick.damaged) { removeBrick(brick);
 					} else { brick.damage(); }
+					break;
 				}
 			}
 		}
