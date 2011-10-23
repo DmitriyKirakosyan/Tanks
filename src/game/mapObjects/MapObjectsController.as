@@ -83,6 +83,10 @@ public class MapObjectsController extends EventDispatcher implements IController
 					}
 				}
 			}
+
+			//TODO debug
+			addMedKit(new Point(0, 0));
+			trace("drawObjects");
 		}
 		
 		public function addBullet(bullet:Bullet):void {
@@ -188,11 +192,12 @@ public class MapObjectsController extends EventDispatcher implements IController
 			}
 		}
 		private function checkHitPlayerTank(bullet:Bullet):void {
-			if (_playerTankKilled) { return; }
-			if (!_playerTank) { return; }
-			if (_playerTank != bullet.selfTank &&
-					bullet.hitTestObject(_playerTank)) {
-				
+			if (_playerTankKilled || !_playerTank) { return; }
+
+			checkHitMedKit();
+
+			if (_playerTank != bullet.selfTank && bullet.hitTestObject(_playerTank)) {
+				startMedKitDropTimer();
 				_playerTank.tankDamage();
 				removeBullet(bullet);
 				if(_playerTank.liveTab.scaleX <= 0) {
@@ -234,7 +239,7 @@ public class MapObjectsController extends EventDispatcher implements IController
 		}
 		public function onMedKitTimer(event:TimerEvent):void{
 			timerMedKit.removeEventListener(TimerEvent.TIMER, onMedKitTimer);
-			addMedKit(new Point(Math.random()*14, Math.random()*14));
+			addMedKit(new Point(14, 14));
 			timerMedKit.reset();
 			timerMedKit.stop();
 		}
