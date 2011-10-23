@@ -15,9 +15,7 @@ import menu.TankPodium;
 		public function Main() {
 			container = new Sprite(); 
 			this.addChild(container);
-			const paper:PaperView = new PaperView();
-			container.addChild(paper);
-			
+
 			new SceneController(container);
 		}
 

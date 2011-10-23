@@ -22,6 +22,7 @@ import game.tank.TankVO;
 import state.UserState;
 
 public class TankPodium extends EventDispatcher implements IScene{
+	private var _paper:PaperView;
 	private var _tank:Tank;
 	private var _defaultTankPoint:Point;
 	private var _dragBackTween:TweenMax;
@@ -32,6 +33,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 	private var _playBtnTxt:TextField;
 
 	public function TankPodium(container:Sprite) {
+		_paper = new PaperView();
 		_tank = new Tank(new TankVO());
 		_container = container;
 		_tank.x = MapMatrix.MATRIX_WIDTH/2;
@@ -42,6 +44,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 
 	public function open():void {
 		trace("menu open");
+		_container.addChild(_paper);
 		_container.addChild(_tank);
 		_tank.rotation = 0;
 		rotateTank();
@@ -54,6 +57,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 		removeListeners();
 		TweenMax.killTweensOf(_tank);
 		_container.removeChild(_tank);
+		_container.removeChild(_paper);
 	}
 
 	/* Internal functions */

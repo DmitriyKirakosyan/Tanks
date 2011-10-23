@@ -15,8 +15,7 @@ package game.tank {
 	import game.events.TankEvent;
 	import game.matrix.MapMatrix;
 
-	public class TankController extends EventDispatcher
-															implements IControllerWithTime{
+	public class TankController extends EventDispatcher implements IControllerWithTime{
 		public var tank:Tank;
 		
 		private var _scaleTime:Number;
@@ -29,13 +28,11 @@ package game.tank {
 		private var _startY:Number = 300;
 		
 		private var _movingTimeline:TimelineMax;
-		
+
 		private var _autoAttackTimer:Timer;
 		private var _targetTank:Tank; //for autoattack mode only
 		
 		private var _bulletPoint:Point; //coz waiting for gun rotate
-		
-		private var _moving:Boolean; //true - tank moving now, false - else
 		
 		public static const LEFT_ROT:int = -90;
 		public static const RIGHT_ROT:int = 90;
@@ -44,7 +41,6 @@ package game.tank {
 		public static const DOWN_ROT_MINUS:int =-180;
 		
 		public function TankController(container:Sprite, mapMatrix:MapMatrix):void {
-			_moving = false;
 			_scaleTime = 1;
 
 			_movingTimeline = new TimelineMax();

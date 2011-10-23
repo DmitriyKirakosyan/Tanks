@@ -16,8 +16,13 @@ import flash.display.Sprite;
 	import game.tank.Bullet;
 	import game.tank.Tank;
 
-	public class MapObjectsController extends EventDispatcher implements IControllerWithTime{
+import tilemap.Tile;
+
+import tilemap.TileMap;
+
+public class MapObjectsController extends EventDispatcher implements IControllerWithTime{
 		private var _mapMatrix:MapMatrix;
+		private var _tileMap:TileMap;
 		private var _container:Sprite;
 		private var _stones:Vector.<Stone>;
 		private var _bricks:Vector.<Brick>;
@@ -43,10 +48,14 @@ import flash.display.Sprite;
 		/*API*/
 
 		public function init():void {
+			_tileMap = new TileMap(MapMatrix.MATRIX_WIDTH, MapMatrix.MATRIX_HEIGHT);
+			_container.addChildAt(_tileMap, 0);
 			drawObjects();
 		}
 
 		public function remove():void {
+			_container.removeChild(_tileMap);
+			_tileMap.remove();
 			removeBricks();
 			removeStones();
 			_playerTankKilled = false;
