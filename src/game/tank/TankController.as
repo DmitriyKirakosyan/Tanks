@@ -53,6 +53,25 @@ package game.tank {
 			_mapMatrix = mapMatrix;
 		}
 		
+		public function init(tankVO:TankVO, player:Boolean = false):void {
+			tank = new Tank(tankVO, player);
+			_container.addChild(tank);
+			if (player) {
+				tank.x = _mapMatrix.getMatrixPoint(new Point(_startX, _startY)).x;
+				tank.y = _mapMatrix.getMatrixPoint(new Point(_startX, _startY)).y;
+			}
+		}
+
+		public function remove():void {
+			TweenMax.killTweensOf(tank);
+			tank.killTweens();
+			_movingTimeline.kill();
+			if (_autoAttackTimer && _autoAttackTimer.running) { _autoAttackTimer.stop(); }
+			if (_container.contains(tank)) {
+				_container.removeChild(tank);
+			}
+		}
+
 		public function get tankTimeline():TimelineMax { return _movingTimeline; }
 		
 		public function scaleTime(value:Number):void {
@@ -121,25 +140,6 @@ package game.tank {
 			tank.gunController.gunRotation(_mapMatrix.getMatrixPoint((new Point(point.x, point.y))));
 		}
 
-		public function init(tankVO:TankVO, player:Boolean = false):void {
-			tank = new Tank(tankVO, player);
-			_container.addChild(tank);
-			if (player) {
-				tank.x = _mapMatrix.getMatrixPoint(new Point(_startX, _startY)).x;
-				tank.y = _mapMatrix.getMatrixPoint(new Point(_startX, _startY)).y;
-			}
-		}
-
-		public function remove():void {
-			TweenMax.killTweensOf(tank);
-			tank.killTweens();
-			_movingTimeline.kill();
-			if (_autoAttackTimer && _autoAttackTimer.running) { _autoAttackTimer.stop(); }
-			if (_container.contains(tank)) {
-				_container.removeChild(tank);
-			}
-		}
-		
 		private function onGunRotateComplete(event:GunRotateCompleteEvent):void {
 			tank.gunController.removeEventListener(GunRotateCompleteEvent.COMPLETE,
 																						onGunRotateComplete);

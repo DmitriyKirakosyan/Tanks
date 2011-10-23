@@ -12,6 +12,8 @@ import game.MapObject;
 		public function Stone(point:Point) {
 			super();
 			_view = new StoneView();
+			_view.x -= _view.width/2;
+			_view.y -= _view.height/2;
 			this.x = point.x;
 			this.y = point.y;
 			this.addChild(_view);

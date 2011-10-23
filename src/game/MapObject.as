@@ -3,6 +3,8 @@ package game {
 
 	public class MapObject extends Sprite {
 		public function MapObject() {
+			super();
+			drawRectangle();
 		}
 
 		override public function set x(value:Number):void {
@@ -18,5 +20,10 @@ package game {
 		public function get originY():Number { return super.y; }
 		public function set originX(value:Number):void { super.x = value; }
 		public function set originY(value:Number):void { super.y = value; }
+
+		private function drawRectangle():void {
+			this.graphics.lineStyle(1, 0xffffff);
+			this.graphics.drawRect(-GameController.CELL/2, -GameController.CELL/2, GameController.CELL, GameController.CELL);
+		}
 	}
 }
