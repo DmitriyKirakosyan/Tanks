@@ -8,6 +8,7 @@
 package game.tank {
 public class TankVO {
 	public var tankBase:uint;
+	public var destroyMethod:uint;
 
 	public static const DEFAULT_BASE:uint = 0;
 	public static const BRICK_BASE:uint = 1;

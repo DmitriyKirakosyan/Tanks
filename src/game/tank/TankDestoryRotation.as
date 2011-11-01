@@ -35,12 +35,7 @@ public class TankDestoryRotation extends TankDestroyMethod{
     }
 
     private function onBamComplete():void {
-        tank.removeChild(tank.gun);
-        tank.removeChild(tank.tankBase);
-        tank.gun.x = 0; tank.gun.y = 0;
-        tank.alpha = 1;
-        tank.gun.rotation = 0;
-        tank.tankBase.rotation = 0;
+        dispatchEvent(new TankDestoryEvent(TankDestoryEvent.DESTORY_COMPLETE));
     }
 
 }

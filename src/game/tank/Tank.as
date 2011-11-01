@@ -65,7 +65,9 @@ import game.MapObject;
 		}
 		
 		public function bam():void {
-            if (_destroyMethod) { _destroyMethod.destroy(); }
+			_destroyMethod = TankDestroyMethodFactory.createRandomMethod(this);
+			_destroyMethod.addEventListener(TankDestoryEvent.DESTORY_COMPLETE, onDestroyComplete);
+			_destroyMethod.destroy();
 		}
 
 		public function set speedup(value:Number):void {
@@ -78,6 +80,12 @@ import game.MapObject;
 		public function killTweens():void {
 			TweenMax.killTweensOf(tankBase);
 			TweenMax.killTweensOf(gun);
+		}
+
+		/* Internal functions */
+
+		private function onDestroyComplete(event:TankDestoryEvent):void {
+			trace("[Tank.onDestroyComplete] me destroed");
 		}
 
 		

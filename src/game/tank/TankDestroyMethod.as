@@ -4,7 +4,9 @@
  * Time: 5:05 PM
  */
 package game.tank {
-public class TankDestroyMethod {
+import flash.events.EventDispatcher;
+
+public class TankDestroyMethod extends EventDispatcher{
     private var _tank:Tank;
 
     public function TankDestroyMethod(tank:Tank):void {
