@@ -16,12 +16,13 @@ import game.MapObject;
 
 		private var _vo:TankVO;
 
+        private var _destroyMethod:TankDestroyMethod;
+
 		private var _player:Boolean;
 		
 		private var _speedup:Number = 0;
 		private var maxSpeedup:Number = .5;
 
-		private var _bamTimeline:TimelineMax;
 
 		public var liveTab:LiveTab;
 
@@ -29,6 +30,8 @@ import game.MapObject;
 			_player = player;
 			gun = new GunView();
 			_vo = vo;
+
+            _destroyMethod = new TankDestoryRotation(this);
 			
 			liveTab = new LiveTab();
 			this.addChild(liveTab);
@@ -62,31 +65,7 @@ import game.MapObject;
 		}
 		
 		public function bam():void {
-			_bamTimeline = new TimelineMax({onComplete : onBamComplete});
-			_bamTimeline.insert(
-				new TweenMax(tankBase, 2, {x : tankBase.x + Math.random()*80-40,
-																	y : tankBase.y + Math.random()*80-40,
-																	rotation : tankBase.rotation + Math.random()*100})
-			);
-			_bamTimeline.insert(
-				new TweenMax(gun, 1.5, {x : gun.x + Math.random()*400-200,
-																y : tankBase.y + Math.random()*400-200,
-																rotation : tankBase.rotation + Math.random()*300})
-			);
-			_bamTimeline.append(
-				new TweenMax(this, 1.5, {alpha : 0})
-			);
-		}
-
-		private function onBamComplete():void {
-			this.removeChild(gun);
-			this.removeChild(tankBase);
-			gun.x = 0; gun.y = 0;
-			this.alpha = 1;
-			gun.rotation = 0;
-			tankBase.x = 0;
-			tankBase.y = 0;
-			tankBase.rotation = 0;
+            if (_destroyMethod) { _destroyMethod.destroy(); }
 		}
 
 		public function set speedup(value:Number):void {

@@ -43,7 +43,6 @@ public class TankPodium extends EventDispatcher implements IScene{
 	}
 
 	public function open():void {
-		trace("menu open");
 		_container.addChild(_paper);
 		_container.addChild(_tank);
 		_tank.rotation = 0;
