@@ -89,9 +89,9 @@ package game.tank {
 		}
 		
 		public function bam():void {
+            TweenMax.killTweensOf(tank);
+            if (_autoAttackTimer) { _autoAttackTimer.stop(); }
 			tank.bam();
-			TweenMax.killTweensOf(tank);
-			if (_autoAttackTimer) { _autoAttackTimer.stop(); }
 		}
 		
 		public function readyForMoving():void {

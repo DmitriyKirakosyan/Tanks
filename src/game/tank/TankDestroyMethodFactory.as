@@ -15,7 +15,9 @@ public class TankDestroyMethodFactory {
 	public static function createMethodById(methodId:uint, tank:Tank):TankDestroyMethod {
 		var result:TankDestroyMethod;
 		switch (methodId) {
-			case 0 : result = new TankDestoryRotation(tank);
+			case 0 :
+                result = new TankDestoryRotation(tank);
+                break;
 
 			default : result = new TankDestroyFlash(tank);
 		}
