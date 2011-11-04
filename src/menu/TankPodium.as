@@ -9,6 +9,7 @@ import flash.events.EventDispatcher;
 import flash.events.MouseEvent;
 import flash.filters.BlurFilter;
 import flash.geom.Point;
+import flash.sampler._setSamplerCallback;
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 
@@ -23,7 +24,17 @@ import state.UserState;
 
 public class TankPodium extends EventDispatcher implements IScene{
 	private var _paper:PaperView;
+
+	//tank switching
 	private var _tank:Tank;
+	private var _tankSwitchLeftBtn:Sprite;
+	private var _tankSwitchRightBtn:Sprite;
+
+	//weapon switching
+	private var _weapon:Sprite;
+	private var _weaponSwitchLeftBtn:Sprite;
+	private var _weaponSwitchRightBtn:Sprite;
+
 	private var _defaultTankPoint:Point;
 	private var _dragBackTween:TweenMax;
 	private var _dragTank:Boolean;
@@ -33,18 +44,29 @@ public class TankPodium extends EventDispatcher implements IScene{
 	private var _playBtnTxt:TextField;
 
 	public function TankPodium(container:Sprite) {
+		_container = container;
 		_paper = new PaperView();
 		_tank = new Tank(new TankVO());
-		_container = container;
 		_tank.x = MapMatrix.MATRIX_WIDTH/2;
 		_tank.y = MapMatrix.MATRIX_HEIGHT/2;
+		createTankSwitchBtns();
+		createWeapon();
+		createWeaponSwitchBtns();
 		_defaultTankPoint = new Point(_tank.x, _tank.y);
 		createPlayBtn()
 	}
 
 	public function open():void {
 		_container.addChild(_paper);
+
 		_container.addChild(_tank);
+		_container.addChild(_tankSwitchLeftBtn);
+		_container.addChild(_tankSwitchRightBtn);
+
+		_container.addChild(_weapon);
+		_container.addChild(_weaponSwitchLeftBtn);
+		_container.addChild(_weaponSwitchRightBtn);
+
 		_tank.rotation = 0;
 		rotateTank();
 		addPlayBtn();
@@ -56,6 +78,13 @@ public class TankPodium extends EventDispatcher implements IScene{
 		removeListeners();
 		TweenMax.killTweensOf(_tank);
 		_container.removeChild(_tank);
+		_container.removeChild(_tankSwitchLeftBtn);
+		_container.removeChild(_tankSwitchRightBtn);
+
+		_container.removeChild(_weapon);
+		_container.removeChild(_weaponSwitchLeftBtn);
+		_container.removeChild(_weaponSwitchRightBtn);
+
 		_container.removeChild(_paper);
 	}
 
@@ -65,12 +94,22 @@ public class TankPodium extends EventDispatcher implements IScene{
 		_container.addEventListener(MouseEvent.MOUSE_DOWN, onTankMouseDown);
 		_container.addEventListener(MouseEvent.MOUSE_UP, onTankMouseUp);
 		_container.addEventListener(MouseEvent.MOUSE_MOVE, onTankMouseMove);
+		for each (var switchBtn:Sprite in [_tankSwitchLeftBtn, _tankSwitchRightBtn, _weaponSwitchLeftBtn, _weaponSwitchRightBtn]) {
+			switchBtn.addEventListener(MouseEvent.MOUSE_OVER, onSwitchBtnMouseOver);
+			switchBtn.addEventListener(MouseEvent.MOUSE_OUT, onSwitchBtnMouseOut);
+			switchBtn.addEventListener(MouseEvent.CLICK, onSwitchBtnClick);
+		}
 	}
 	
 	private function removeListeners():void {
 		_container.removeEventListener(MouseEvent.MOUSE_DOWN, onTankMouseDown);
 		_container.removeEventListener(MouseEvent.MOUSE_UP, onTankMouseUp);
 		_container.removeEventListener(MouseEvent.MOUSE_MOVE, onTankMouseMove);
+		for each (var switchBtn:Sprite in [_tankSwitchLeftBtn, _tankSwitchRightBtn, _weaponSwitchLeftBtn, _weaponSwitchRightBtn]) {
+			switchBtn.removeEventListener(MouseEvent.MOUSE_OVER, onSwitchBtnMouseOver);
+			switchBtn.removeEventListener(MouseEvent.MOUSE_OUT, onSwitchBtnMouseOut);
+			switchBtn.removeEventListener(MouseEvent.CLICK, onSwitchBtnClick);
+		}
 	}
 
 	private function createPlayBtn():void {
@@ -92,6 +131,28 @@ public class TankPodium extends EventDispatcher implements IScene{
 		_playBtn.addEventListener(MouseEvent.CLICK, onPlayBtnClick);
 	}
 
+	private function createTankSwitchBtns():void {
+		_tankSwitchLeftBtn = new Sprite();
+		_tankSwitchRightBtn = new Sprite();
+		for each (var switchBtn:Sprite in [_tankSwitchLeftBtn, _tankSwitchRightBtn]) {
+			switchBtn.graphics.beginFill(0x123f56);
+			switchBtn.graphics.drawRect(-10, -30, 20, 60);
+			switchBtn.graphics.endFill();
+			switchBtn.y = _tank.originY;
+		}
+		_tankSwitchLeftBtn.x = _tank.originX - 100;
+		_tankSwitchRightBtn.x = _tank.originX + 100;
+	}
+
+	private function createWeapon():void {
+		_weapon = new Sprite();
+	}
+
+	private function createWeaponSwitchBtns():void {
+		_weaponSwitchLeftBtn = new Sprite();
+		_weaponSwitchRightBtn = new Sprite();
+	}
+
 	private function onPlayBtnMouseOver(event:MouseEvent):void {
 		TweenMax.to(_playBtn, .4, {glowFilter:{color:0x91e600, alpha:1, blurX:10, strength : 4, blurY:10}});
 	}
@@ -102,6 +163,20 @@ public class TankPodium extends EventDispatcher implements IScene{
 	private function onPlayBtnClick(event:MouseEvent):void {
 		UserState.instance.tankVO.tankBase = _tank.vo.tankBase;
 		switchScene();
+	}
+
+	private function onSwitchBtnClick(event:MouseEvent):void {
+		if (event.target == _tankSwitchLeftBtn || event.target == _tankSwitchRightBtn) {
+			switchTanks(event.target == _tankSwitchLeftBtn ? -1 : 1);
+		}
+	}
+
+	private function onSwitchBtnMouseOver(event:MouseEvent):void {
+		event.target["alpha"] = .4;
+	}
+
+	private function onSwitchBtnMouseOut(event:MouseEvent):void {
+		event.target["alpha"] = 1;
 	}
 
 	private function addPlayBtn():void {
@@ -128,8 +203,11 @@ public class TankPodium extends EventDispatcher implements IScene{
 		}
 	}
 
-	private function switchTanks():void {
-		const coef:int = _tank.x > _defaultTankPoint.x ? 1 : -1;
+	private function switchTanks(direction:uint = 0):void {
+		var coef:int;
+		if (direction != 0) { coef = direction; } else {
+			coef = _tank.x > _defaultTankPoint.x ? 1 : -1;
+		}
 		TweenMax.killTweensOf(_tank.gun);
 		TweenMax.killTweensOf(_tank.tankBase);
 		TweenMax.to(_tank,  .3, {originX : _tank.originX + coef * 60, scaleX : 4, scaleY : .1, blurFilter:{blurX:20}, alpha : 0, ease:Linear.easeOut, onComplete : onTankShiftComplete});

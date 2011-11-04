@@ -3,7 +3,9 @@
  * Date: 11/1/11
  * Time: 11:51 PM
  */
-package game.tank {
+package game.tank.tank_destraction {
+import game.tank.*;
+
 import com.greensock.TweenMax;
 
 public class TankDestroyFlash extends TankDestroyMethod{

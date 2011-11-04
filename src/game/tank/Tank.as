@@ -8,8 +8,11 @@ import flash.geom.Point;
 
 import game.GameController;
 import game.MapObject;
+import game.tank.tank_destraction.TankDestoryEvent;
+import game.tank.tank_destraction.TankDestroyMethod;
+import game.tank.tank_destraction.TankDestroyMethodFactory;
 
-	public class Tank extends MapObject {
+public class Tank extends MapObject {
 		public var gun:GunView;
 		public var tankBase:Sprite;
 		public var gunController:GunController;
@@ -31,8 +34,6 @@ import game.MapObject;
 			gun = new GunView();
 			_vo = vo;
 
-            _destroyMethod = new TankDestoryRotation(this);
-			
 			liveTab = new LiveTab();
 			this.addChild(liveTab);
 			

@@ -5,7 +5,9 @@
  * Time: 5:11 PM
  * To change this template use File | Settings | File Templates.
  */
-package game.tank {
+package game.tank.tank_destraction {
+import game.tank.*;
+
 import com.greensock.TimelineMax;
 import com.greensock.TweenMax;
 

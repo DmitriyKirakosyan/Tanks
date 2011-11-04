@@ -3,7 +3,9 @@
  * Date: 11/1/11
  * Time: 11:49 PM
  */
-package game.tank {
+package game.tank.tank_destraction {
+import game.tank.*;
+
 public class TankDestroyMethodFactory {
 	private static var _numMethods:uint = 2;
 
@@ -15,9 +17,8 @@ public class TankDestroyMethodFactory {
 		var result:TankDestroyMethod;
 		switch (methodId) {
 			case 0 :
-                result = new TankDestoryRotation(tank);
-                break;
-
+								result = new TankDestoryRotation(tank);
+								break;
 			default : result = new TankDestroyFlash(tank);
 		}
 		return result;
