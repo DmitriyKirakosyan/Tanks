@@ -54,8 +54,7 @@ package game.drawing {
 			removePath();
 			_path = new Vector.<Point>();
 			createNewPathPart();
-			_path.push(_mapMatrix.getMatrixPoint(new Point(_currentMousePoint.x, 
-																											_currentMousePoint.y)));
+			_path.push(_mapMatrix.getMatrixPoint(new Point(_currentMousePoint.x, _currentMousePoint.y)));
 			//_drawingContainer.graphics.moveTo(_currentMousePoint.x, _currentMousePoint.y);
 			_drawing = true;
 		}

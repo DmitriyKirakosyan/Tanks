@@ -10,6 +10,7 @@ package game.events {
 		public function TankShotingEvent(type : String, bullet:Bullet) {
 			super(type);
 			this.bullet = bullet;
+			//TODO трейс на эту ф-цию срабатывает при выстреле вражеского танка 2 раза
 		}
 	}
 }

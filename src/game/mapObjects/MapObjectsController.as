@@ -1,9 +1,9 @@
 package game.mapObjects {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Bounce;
-import com.greensock.easing.Linear;
+	import com.greensock.easing.Linear;
 
-import flash.display.Sprite;
+	import flash.display.Sprite;
 	import flash.events.EventDispatcher;
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
@@ -15,10 +15,11 @@ import flash.display.Sprite;
 	import game.matrix.MatrixItemIds;
 	import game.tank.Bullet;
 	import game.tank.Tank;
+	import game.mapObjects.Buttons;
 
-import tilemap.Tile;
-
-import tilemap.TileMap;
+	import tilemap.Tile;
+ 
+	import tilemap.TileMap;
 
 public class MapObjectsController extends EventDispatcher implements IControllerWithTime{
 		private var _mapMatrix:MapMatrix;
@@ -31,12 +32,12 @@ public class MapObjectsController extends EventDispatcher implements IController
 		private var _playerTank:Tank;
 		
 		private var medKit:MedKit;
-
+		private var timerMedKit:Timer;
+	
 		private var _playerTankKilled:Boolean = false;
 		
 		private var _scaleTime:Number;
 		
-		private var timerMedKit:Timer;
 		
 		public function MapObjectsController(matrix:MapMatrix, container:Sprite):void {
 			super();
@@ -73,7 +74,6 @@ public class MapObjectsController extends EventDispatcher implements IController
 		
 		public function drawObjects():void {
 			if (!_mapMatrix || !_mapMatrix.matrix) { return; }
-			
 			for (var i:int = 0; i < MapMatrix.MATRIX_WIDTH; ++i) {
 				for (var j:int = 0; j < MapMatrix.MATRIX_HEIGHT; ++j) {
 					if (_mapMatrix.matrix[i][j] == MatrixItemIds.STONE) {
@@ -83,10 +83,6 @@ public class MapObjectsController extends EventDispatcher implements IController
 					}
 				}
 			}
-
-			//TODO debug
-			addMedKit(new Point(0, 0));
-			trace("drawObjects");
 		}
 		
 		public function addBullet(bullet:Bullet):void {
@@ -101,6 +97,8 @@ public class MapObjectsController extends EventDispatcher implements IController
 			if (!_enemyTanks) { _enemyTanks = new Vector.<Tank>(); }
 			_enemyTanks.push(tank);
 		}
+		
+		public function get enemyTanks():Vector.<Tank> { return _enemyTanks;}
 		
 		public function addPlayerTank(tank:Tank):void {
 			_playerTank = tank;
@@ -159,18 +157,18 @@ public class MapObjectsController extends EventDispatcher implements IController
 		}
 
 		private function checkHitEnemyTank(bullet:Bullet):void {
-			if (!_enemyTanks) { return; }
 			for each (var enemyTank:Tank in _enemyTanks) {
 				if (enemyTank != bullet.selfTank && 
-						bullet.hitTestObject(enemyTank)) {
+					bullet.hitTestObject(enemyTank)) {
 					removeBullet(bullet);
 					removeEnemyTank(enemyTank);
 					showBamOnTank(new Point(enemyTank.originX, enemyTank.originY));
-					dispatchEvent(new DamageObjectEvent(DamageObjectEvent.DAMANGE_ENEMY_TANK, enemyTank));
+					dispatchEvent(new DamageObjectEvent(DamageObjectEvent.DAMAGE_ENEMY_TANK, enemyTank));
 					break;
 				}
 			}
 		}
+				
 		private function checkHitStone(bullet:Bullet):void {
 			if (!_stones) { return; }
 			for each (var stone:Stone in _stones) {
@@ -197,14 +195,14 @@ public class MapObjectsController extends EventDispatcher implements IController
 			checkHitMedKit();
 
 			if (_playerTank != bullet.selfTank && bullet.hitTestObject(_playerTank)) {
-				startMedKitDropTimer();
 				_playerTank.tankDamage();
+				startMedKitDropTimer();
 				removeBullet(bullet);
 				if(_playerTank.liveTab.scaleX <= 0) {
 					_playerTank.liveTab.scaleX = 0;
 					_playerTankKilled = true;
 					showBamOnTank(new Point(_playerTank.originX, _playerTank.originY));
-					dispatchEvent(new DamageObjectEvent(DamageObjectEvent.DAMANGE_PLAYER_TANK, _playerTank));
+					dispatchEvent(new DamageObjectEvent(DamageObjectEvent.DAMAGE_PLAYER_TANK, _playerTank));
 				}
 			}
 		}
@@ -224,43 +222,42 @@ public class MapObjectsController extends EventDispatcher implements IController
 			removeBullet(bullet);
 		}
 		private function removeBullet(bullet:Bullet):void {
-			trace("removeBullet");
 			if (_container.contains(bullet)) { _container.removeChild(bullet); }
 			bullet.remove();
 			const index:int = _bullets.indexOf(bullet);
 			if (index >= 0) { _bullets.splice(index, 1); }
 		}
 
-		public function startMedKitDropTimer():void{
-			timerMedKit = new Timer(Math.round(Math.random()*1000 + 1000), 1);
+		private function startMedKitDropTimer():void{
+			if (timerMedKit) {
+				timerMedKit.removeEventListener(TimerEvent.TIMER, onMedKitTimer);
+			}
+			timerMedKit = new Timer(Math.round(Math.random()*1000) + 1000);
 			timerMedKit.addEventListener(TimerEvent.TIMER, onMedKitTimer);
 			timerMedKit.start();
-			trace("[MapObjectsController] MedKitTimerStart");
 		}
-		public function onMedKitTimer(event:TimerEvent):void{
+		private function onMedKitTimer(event:TimerEvent):void{
+			addMedKit();
 			timerMedKit.removeEventListener(TimerEvent.TIMER, onMedKitTimer);
-			addMedKit(new Point(14, 14));
-			timerMedKit.reset();
 			timerMedKit.stop();
+			timerMedKit = null;
 		}
-		private function addMedKit(mPoint:Point):void{
-			medKit = new MedKit(_mapMatrix.getStageRectangle(mPoint));
+		private function addMedKit():void{
+			medKit = new MedKit(_mapMatrix.getRandomPoint());
 			_container.addChild(medKit);
 		}
-		
 		private function checkHitMedKit():void {
 			if (!medKit) {return;}
 			if (_playerTank.hitTestObject(medKit)){
-				removeMedKit(medKit);
 				_playerTank.updateLive();
-				trace("[MapObjectsController] checkHitMedKit has Done");
-			}
+				removeMedKit();
+				medKit = null;
+			} 
 		}
 		
-		private function removeMedKit(medKit:MedKit):void{
+		private function removeMedKit():void{
 			if (_container.contains(medKit)) { _container.removeChild(medKit); }
-			medKit.removeMedKit();
-			trace("[MapObjectsController.removeMedKit] RemoveMedKit");
+			medKit.removeMedKitInt();
 		}
 		
 		private function removeBrick(brick:Brick):void {

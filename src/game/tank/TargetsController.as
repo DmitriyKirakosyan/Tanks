@@ -1,4 +1,6 @@
 package game.tank {
+	import flash.filters.GlowFilter;
+	import flash.events.MouseEvent;
 	import game.IControllerWithTime;
 	import game.events.TankShotingEvent;
 	import game.events.TankEvent;
@@ -15,14 +17,15 @@ import pathfinder.Pathfinder;
 	
 	import game.matrix.MapMatrix;
 
-	public class TargetsController extends EventDispatcher
-																implements IControllerWithTime{
+	public class TargetsController extends EventDispatcher implements IControllerWithTime{
 		private var _timer:Timer;
 		private var _enemyes:Vector.<TankController>;
 		private var _container:Sprite;
 		private var _mapMatrix:MapMatrix;
 		
+		
 		private var _playerTank:Tank;
+		
 		
 		public function TargetsController(container:Sprite, mapMatrix:MapMatrix) {
 			_container = container;
@@ -30,6 +33,7 @@ import pathfinder.Pathfinder;
 			_enemyes = new Vector.<TankController>();
 			initTimer();
 		}
+		
 
 		public function addPlayerTank(tank:Tank):void {
 			_playerTank = tank;
@@ -49,12 +53,16 @@ import pathfinder.Pathfinder;
 			return tanks;
 		}
 		
+		public function get enemyes():Vector.<Tank> { return getEnemyTanks(); }
+		public function get enemyesController():Vector.<TankController> { return _enemyes; }
+		
 		public function killEnemyTank(tank:Tank):void {
 			for  (var i:int = 0; i < _enemyes.length; ++i) {
 				if (_enemyes[i].tank == tank) {
 					_enemyes[i].bam();
 					removeEnemyTankListeners(_enemyes[i]);
 					_enemyes.splice(i, 1);
+					tank.removeChild(tank.liveTab);
 					break;
 				}
 			}
@@ -67,7 +75,7 @@ import pathfinder.Pathfinder;
 
 		public function remove():void {
 			_timer.stop();
-			for each (var enemy:TankController in _enemyes) {
+			for each (var enemy:TankController in enemyes) {
 				enemy.remove();
 			}
 			_enemyes = new Vector.<TankController>();
@@ -105,15 +113,14 @@ import pathfinder.Pathfinder;
 		
 		private function moveEnemyTank(enemyTankController:TankController):void {
 			const toPoint:Point = new Point(int(Math.random()*MapMatrix.MATRIX_WIDTH),
-																			int(Math.random()*MapMatrix.MATRIX_HEIGHT));
+																		int(Math.random()*MapMatrix.MATRIX_HEIGHT));
 			const path:Vector.<Point> = 
-					Pathfinder.getPath(new Point(enemyTankController.tank.x, enemyTankController.tank.y),
-															toPoint);
+				Pathfinder.getPath(new Point(enemyTankController.tank.x, enemyTankController.tank.y),
+														toPoint);
 			addPathToEnemyTankController(path, enemyTankController);
-		}
-		
-		private function addPathToEnemyTankController(path:Vector.<Point>,
-																									enemyTankController:TankController):void {
+		}	
+	
+		private function addPathToEnemyTankController(path:Vector.<Point>, enemyTankController:TankController):void {
 			enemyTankController.readyForMoving();
 			for each (var point:Point in path) {
 				enemyTankController.addPointToMovePath(point);
@@ -121,7 +128,7 @@ import pathfinder.Pathfinder;
 		}
 		
 		private function createTargetforTimer (event:TimerEvent):void {
-			if (_enemyes.length <5 && Math.random() < .5) {
+			if (_enemyes.length < 5 && Math.random() < .5) {
 				createTarget();
 			}
 		}
@@ -136,7 +143,6 @@ import pathfinder.Pathfinder;
 		}
 	}
 }
-
 
 
 

@@ -1,4 +1,6 @@
 package game {
+import game.Debug.DebugController;
+import game.events.TankEvent;
 import flash.events.EventDispatcher;
 
 import game.events.DamageObjectEvent;
@@ -21,8 +23,6 @@ import pathfinder.Pathfinder;
 
 import state.UserState;
 
-import state.UserState;
-
 public class GameController extends EventDispatcher implements IScene{
 		private var _container:Sprite;
 		private var _tankController:TankController;
@@ -32,6 +32,8 @@ public class GameController extends EventDispatcher implements IScene{
 		private var _mapObjectsController:MapObjectsController;
 		private var _mouseDrawController:MouseDrawController;
 		private var _timeController:TimeController;
+		private var _debugController:DebugController;
+		
 		
 		public static const CELL:int = 40;
 		
@@ -70,6 +72,7 @@ public class GameController extends EventDispatcher implements IScene{
 			_mapObjectsController = new MapObjectsController(_mapMatrix, _container);
 			_tankMovementListener = new TankMovementListener(_tankController, _mapObjectsController, _mouseDrawController);
 			_timeController = new TimeController(_container);
+			_debugController = new DebugController(_container);
 			initTimeController();
 		}
 		
@@ -93,8 +96,8 @@ public class GameController extends EventDispatcher implements IScene{
 			_mouseDrawController.addEventListener(DrawingControllerEvent.NEW_MOVE_POINT, onNewMovePoint);
 			_mouseDrawController.addEventListener(DrawingControllerEvent.DRAWING_COMPLETE, onDrawingComplete);
 			_mapObjectsController.addEventListener(MineBamEvent.BAM, onMineBam);
-			_mapObjectsController.addEventListener(DamageObjectEvent.DAMANGE_ENEMY_TANK, onEnemyDamage);
-			_mapObjectsController.addEventListener(DamageObjectEvent.DAMANGE_PLAYER_TANK, onPlayerDamage);
+			_mapObjectsController.addEventListener(DamageObjectEvent.DAMAGE_ENEMY_TANK, onEnemyDamage);
+			_mapObjectsController.addEventListener(DamageObjectEvent.DAMAGE_PLAYER_TANK, onPlayerDamage);
 			_tankController.addEventListener(TankShotingEvent.WAS_SHOT, onTankShot);
 			_targetsController.addEventListener(TankShotingEvent.WAS_SHOT, onTankShot);
 			_targetsController.addEventListener(TargetsControllerEvent.NEW_TANK, onNewEnemyTank);
@@ -110,13 +113,12 @@ public class GameController extends EventDispatcher implements IScene{
 			_mouseDrawController.removeEventListener(DrawingControllerEvent.NEW_MOVE_POINT, onNewMovePoint);
 			_mouseDrawController.removeEventListener(DrawingControllerEvent.DRAWING_COMPLETE, onDrawingComplete);
 			_mapObjectsController.removeEventListener(MineBamEvent.BAM, onMineBam);
-			_mapObjectsController.removeEventListener(DamageObjectEvent.DAMANGE_PLAYER_TANK, onPlayerDamage);
-			_mapObjectsController.removeEventListener(DamageObjectEvent.DAMANGE_ENEMY_TANK, onEnemyDamage);
+			_mapObjectsController.removeEventListener(DamageObjectEvent.DAMAGE_PLAYER_TANK, onPlayerDamage);
+			_mapObjectsController.removeEventListener(DamageObjectEvent.DAMAGE_ENEMY_TANK, onEnemyDamage);
 			_tankController.removeEventListener(TankShotingEvent.WAS_SHOT, onTankShot);
 			_targetsController.removeEventListener(TankShotingEvent.WAS_SHOT, onTankShot);
 			_targetsController.removeEventListener(TargetsControllerEvent.NEW_TANK, onNewEnemyTank);
 			_container.removeEventListener(MouseEvent.CLICK, onStageClick);
-			
 		}
 		
 		/* event handlers */
@@ -171,5 +173,10 @@ public class GameController extends EventDispatcher implements IScene{
 		private function onNewEnemyTank(event:TargetsControllerEvent):void {
 			_mapObjectsController.addEnemyTank(event.tank);
 		}
+		
+		private function onTankAddController(event:MouseEvent):void {
+			_debugController.tankAddController(_targetsController);
+		}
+		
 	}
 }

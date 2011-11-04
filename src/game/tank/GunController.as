@@ -29,18 +29,17 @@ package game.tank {
 				gunRot = angle;
 			}
 			else {
+				//TODO возможно здесь баг с поворотом
 				gunRot = 180 - angle;
 			}
 			TweenMax.to(_gun, 0.4, {rotation : gunRot, onComplete: function():void {
 					dispatchEvent(new GunRotateCompleteEvent(GunRotateCompleteEvent.COMPLETE));
 				}
-			
 			});
 		}
 		
 		public function getBulletPoint():Point {
 			var angle:Number = (-_gun.rotation + 90);
-			trace("angle : " + angle);
 			var endX:Number = Math.cos(angle/180 * Math.PI) * _gunLength;
 			var endY:Number = -Math.sin(angle/180 * Math.PI) * _gunLength;
 			return new Point(_tank.originX + endX, _tank.originY + endY);

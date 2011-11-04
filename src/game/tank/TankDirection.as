@@ -59,13 +59,13 @@ package game.tank {
 				tank.tankBase.rotation = -180;
 			}
 			TweenMax.to(tank.tankBase, 0.5, {rotation : _rotation, 
-																				onComplete : function():void {
-																											if (_rotation == TankController.DOWN_ROT_MINUS) {
-																												_rotation = TankController.DOWN_ROT_PLUS;
-																												tank.tankBase.rotation = _rotation;
-																											}
-																										}
-																					});
+																	onComplete : function():void {
+																		if (_rotation == TankController.DOWN_ROT_MINUS) {
+																			_rotation = TankController.DOWN_ROT_PLUS;
+																			tank.tankBase.rotation = _rotation;
+																		}
+																	}
+																});
 		}
 		
 		public function tickPoint(point:Point):Point {

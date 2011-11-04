@@ -1,4 +1,5 @@
 package game.tank {
+	import flash.geom.ColorTransform;
 	import game.events.GunRotateCompleteEvent;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
@@ -34,6 +35,7 @@ package game.tank {
 		
 		private var _bulletPoint:Point; //coz waiting for gun rotate
 		
+		
 		public static const LEFT_ROT:int = -90;
 		public static const RIGHT_ROT:int = 90;
 		public static const UP_ROT:int = 0;
@@ -49,12 +51,17 @@ package game.tank {
 			_mapMatrix = mapMatrix;
 		}
 		
+		public function get movingTimeline():TimelineMax { return _movingTimeline; }
+		
 		public function init(tankVO:TankVO, player:Boolean = false):void {
 			tank = new Tank(tankVO, player);
 			_container.addChild(tank);
 			if (player) {
+				var colorTank:ColorTransform = new ColorTransform;
+				colorTank.color = 0x0000ff;
 				tank.x = _mapMatrix.getMatrixPoint(new Point(_startX, _startY)).x;
 				tank.y = _mapMatrix.getMatrixPoint(new Point(_startX, _startY)).y;
+				tank.tankBase.transform.colorTransform = colorTank;
 			}
 		}
 
@@ -83,10 +90,12 @@ package game.tank {
 		
 		public function setAutoAttack(targetTank:Tank):void {
 			_targetTank = targetTank;
-			_autoAttackTimer = new Timer(Math.random() * 3000 + 4000);
+			_autoAttackTimer = new Timer(Math.random() * 1000 + 1000);
 			_autoAttackTimer.addEventListener(TimerEvent.TIMER, onAutoAttackTimer);
 			_autoAttackTimer.start();
 		}
+		
+		public function get autoAttackTimer():Timer { return _autoAttackTimer; }
 		
 		public function bam():void {
             TweenMax.killTweensOf(tank);
@@ -114,6 +123,7 @@ package game.tank {
 		
 		/* Internal functions */
 		
+		//TODO
 		private function onAutoAttackTimer(event:TimerEvent):void {
 			if (_targetTank) {
 				shot(new Point(_targetTank.originX, _targetTank.originY));
@@ -136,15 +146,13 @@ package game.tank {
 			tank.gunController.gunRotation(_mapMatrix.getMatrixPoint((new Point(point.x, point.y))));
 		}
 
-		private function onGunRotateComplete(event:GunRotateCompleteEvent):void {
-			tank.gunController.removeEventListener(GunRotateCompleteEvent.COMPLETE,
-																						onGunRotateComplete);
+		public function onGunRotateComplete(event:GunRotateCompleteEvent):void {
+			tank.gunController.removeEventListener(GunRotateCompleteEvent.COMPLETE,onGunRotateComplete);
 			const stageTankPoint:Point = new Point(tank.originX, tank.originY);
 			const bullet:Bullet = new Bullet(tank);
 			bullet.moveTo(_bulletPoint);
 			_container.addChild(bullet);
 			dispatchEvent(new TankShotingEvent(TankShotingEvent.WAS_SHOT, bullet));
 		}
-		
-}
+	}
 }

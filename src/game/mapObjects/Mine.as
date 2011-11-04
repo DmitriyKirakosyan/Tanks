@@ -80,7 +80,6 @@ public class Mine extends MapObject{
 		/* Internal functions */
 		private function bam():void {
 			dispatchEvent(new Event(Event.CONNECT));
-			trace("BAM");
 			showBam();
 		}
 		

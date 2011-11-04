@@ -13,9 +13,8 @@ public class Bullet extends Sprite {
 
 		private var _tailPeriodCounter:int;
 
-		private var _tail:BulletTail;
 
-		private const SPEED_COEF:Number = 200;
+		private var speedCoef:Number = 200;
 		private const TAIL_PERIOD:int = 1;
 		
 		public function Bullet(selfTank:Tank):void {
@@ -39,7 +38,9 @@ public class Bullet extends Sprite {
 		public function get timeToTail():Boolean { return _tailPeriodCounter == 0; }
 		
 		public function moveTo(point:Point):void {
-			_speed = Math.sqrt(Math.pow(this.x-point.x, 2) + Math.pow(this.y - point.y, 2)) / SPEED_COEF;
+			if (_selfTank.isPlayer) { speedCoef = 200; }
+			else { speedCoef = 100; }		
+			_speed = Math.sqrt(Math.pow(this.x-point.x, 2) + Math.pow(this.y - point.y, 2)) / speedCoef;
 			trace(_speed);
 			_tween = new TweenMax(this, _speed, {x : point.x, y : point.y, ease : Linear.easeNone} );
 		}
@@ -73,6 +74,5 @@ public class Bullet extends Sprite {
 			sprite.graphics.drawCircle(0,0,2);
 			sprite.graphics.endFill();
 		}
-
 	}
 }

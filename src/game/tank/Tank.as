@@ -16,21 +16,23 @@ public class Tank extends MapObject {
 		public var gun:GunView;
 		public var tankBase:Sprite;
 		public var gunController:GunController;
-
+		public var liveTab:LiveTab;
+		
+		public var tankUseMouse:Boolean = false;
+		
 		private var _vo:TankVO;
 
         private var _destroyMethod:TankDestroyMethod;
 
-		private var _player:Boolean;
+		private var _isPlayer:Boolean;
 		
 		private var _speedup:Number = 0;
 		private var maxSpeedup:Number = .5;
 
 
-		public var liveTab:LiveTab;
-
+		
 		public function Tank(vo:TankVO, player:Boolean = false) {
-			_player = player;
+			_isPlayer = player;
 			gun = new GunView();
 			_vo = vo;
 
@@ -45,10 +47,14 @@ public class Tank extends MapObject {
 				brickView.x -= brickView.width/2; brickView.y -= brickView.height/2;
 				tankBase.addChild(brickView);
 			}
+			
+			liveTab = new LiveTab();
+			this.addChild(liveTab);
 			this.addChild(tankBase);
 			this.addChild(gun);
 			gunController = new GunController(gun, this);
 		}
+		
 		
 		public function tankDamage():void{
 			this.liveTab.scaleX -= .5;
@@ -70,6 +76,8 @@ public class Tank extends MapObject {
 			_destroyMethod.addEventListener(TankDestoryEvent.DESTORY_COMPLETE, onDestroyComplete);
 			_destroyMethod.destroy();
 		}
+
+		public function get isPlayer():Boolean {return _isPlayer;}
 
 		public function set speedup(value:Number):void {
 			if (_speedup < maxSpeedup) { _speedup+= .05; }
