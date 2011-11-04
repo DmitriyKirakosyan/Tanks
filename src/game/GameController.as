@@ -173,10 +173,6 @@ public class GameController extends EventDispatcher implements IScene{
 		private function onNewEnemyTank(event:TargetsControllerEvent):void {
 			_mapObjectsController.addEnemyTank(event.tank);
 		}
-		
-		private function onTankAddController(event:MouseEvent):void {
-			_debugController.tankAddController(_targetsController);
-		}
-		
+
 	}
 }

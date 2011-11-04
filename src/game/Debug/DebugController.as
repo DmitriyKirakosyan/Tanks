@@ -24,7 +24,7 @@ package game.Debug {
 		//	mapMatrix = new MapMatrix(_container);
 		//	targetController = new TargetsController(container, mapMatrix);
 		}
-		
+/*
 		public function tankAddController(controller:TargetsController):void {
 			if (!stopAddTank) {
 				controller.timerAddTank.stop(); stopAddTank = true;
@@ -32,7 +32,7 @@ package game.Debug {
 			else if (stopAddTank) { controller.timerAddTank.start(); stopAddTank = false;
 				trace("StartTankAdd"); }
 		}
-		
+
 		public function tankMoveController(controller:TargetsController):void {
 			if (!tankDrag) {
 				tankDrag = true;
@@ -56,7 +56,8 @@ package game.Debug {
 		private function tankMoveOFF(event:MouseEvent):void {
 			targetController.tankStartMoving();
 		}
-		
+		*/
+
 //		private function onDragTankButton(event:MouseEvent):void {
 			
 //			_debugController.tankMoveController(_targetsController);
