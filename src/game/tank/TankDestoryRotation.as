@@ -30,7 +30,7 @@ public class TankDestoryRotation extends TankDestroyMethod{
                                                             rotation : tank.tankBase.rotation + Math.random()*300})
         );
         _bamTimeline.append(
-            new TweenMax(this, 1.5, {alpha : 0})
+            new TweenMax(tank, 1.5, {alpha : 0})
         );
     }
 
