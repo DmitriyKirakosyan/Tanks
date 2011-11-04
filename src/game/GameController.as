@@ -5,6 +5,7 @@ import flash.events.EventDispatcher;
 
 import game.events.DamageObjectEvent;
 import game.events.SceneEvent;
+import game.tank.TankMovementListener;
 
 import pathfinder.Pathfinder;
 	import game.tank.Tank;

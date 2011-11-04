@@ -1,4 +1,4 @@
-package game {
+package game.tank {
 	import game.drawing.MouseDrawController;
 	import game.mapObjects.MapObjectsController;
 	import game.events.TankEvent;

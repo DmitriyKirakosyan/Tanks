@@ -13,7 +13,7 @@ import game.tank.tank_destraction.TankDestroyMethod;
 import game.tank.tank_destraction.TankDestroyMethodFactory;
 
 public class Tank extends MapObject {
-		public var gun:GunView;
+		public var gun:TankGun;
 		public var tankBase:Sprite;
 		public var gunController:GunController;
 		public var liveTab:LiveTab;
@@ -22,32 +22,23 @@ public class Tank extends MapObject {
 		
 		private var _vo:TankVO;
 
-        private var _destroyMethod:TankDestroyMethod;
+		private var _destroyMethod:TankDestroyMethod;
 
 		private var _isPlayer:Boolean;
 		
 		private var _speedup:Number = 0;
 		private var maxSpeedup:Number = .5;
 
-
-		
 		public function Tank(vo:TankVO, player:Boolean = false) {
 			_isPlayer = player;
-			gun = new GunView();
 			_vo = vo;
 
 			liveTab = new LiveTab();
 			this.addChild(liveTab);
-			
-			if (vo.tankBase == 0) {
-				tankBase = new TankBaseView();
-			} else {
-				tankBase = new Sprite();
-				const brickView:BricksView = new BricksView();
-				brickView.x -= brickView.width/2; brickView.y -= brickView.height/2;
-				tankBase.addChild(brickView);
-			}
-			
+
+			createTankBase();
+			gun = new TankGun(_vo.weaponType);
+
 			liveTab = new LiveTab();
 			this.addChild(liveTab);
 			this.addChild(tankBase);
@@ -92,6 +83,17 @@ public class Tank extends MapObject {
 		}
 
 		/* Internal functions */
+
+		private function createTankBase():void {
+			if (_vo.tankBase == 0) {
+				tankBase = new TankBaseView();
+			} else {
+				tankBase = new Sprite();
+				const brickView:BricksView = new BricksView();
+				brickView.x -= brickView.width/2; brickView.y -= brickView.height/2;
+				tankBase.addChild(brickView);
+			}
+		}
 
 		private function onDestroyComplete(event:TankDestoryEvent):void {
 			trace("[Tank.onDestroyComplete] me destroed");

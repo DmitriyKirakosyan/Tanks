@@ -9,10 +9,10 @@ package game.tank {
 		public var gunRot:int;
 
 		private var _tank:Tank;
-		private var _gun:GunView;
+		private var _gun:TankGun;
 		private var _gunLength:Number;
 		
-		public function GunController(gun:GunView, tank:Tank) {
+		public function GunController(gun:TankGun, tank:Tank) {
 			_gun = gun;
 			_gunLength = _gun.height;
 			_tank = tank;
