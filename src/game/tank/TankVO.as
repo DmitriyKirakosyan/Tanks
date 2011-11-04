@@ -13,5 +13,13 @@ public class TankVO {
 
 	public static const DEFAULT_BASE:uint = 0;
 	public static const BRICK_BASE:uint = 1;
+
+	public function getClone():TankVO {
+		var res:TankVO = new TankVO();
+		res.tankBase = this.tankBase;
+		res.destroyMethod = this.destroyMethod;
+		res.weaponType = this.weaponType;
+		return res;
+	}
 }
 }

@@ -18,6 +18,7 @@ import game.events.SceneEvent;
 import game.matrix.MapMatrix;
 
 import game.tank.Tank;
+import game.tank.TankGun;
 import game.tank.TankVO;
 
 import state.UserState;
@@ -31,13 +32,18 @@ public class TankPodium extends EventDispatcher implements IScene{
 	private var _tankSwitchRightBtn:Sprite;
 
 	//weapon switching
-	private var _weapon:Sprite;
+	private var _weapon:TankGun;
 	private var _weaponSwitchLeftBtn:Sprite;
 	private var _weaponSwitchRightBtn:Sprite;
 
 	private var _defaultTankPoint:Point;
 	private var _dragBackTween:TweenMax;
 	private var _dragTank:Boolean;
+
+	private var _defaultWeaponPoint:Point;
+	private var _dragWeaponBackTween:TweenMax;
+	private var _dragWeapon:Boolean;
+
 	private var _container:Sprite;
 
 	private var _playBtn:Sprite;
@@ -53,6 +59,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 		createWeapon();
 		createWeaponSwitchBtns();
 		_defaultTankPoint = new Point(_tank.x, _tank.y);
+		_defaultWeaponPoint = new Point(_weapon.x, _weapon.y);
 		createPlayBtn()
 	}
 
@@ -67,9 +74,6 @@ public class TankPodium extends EventDispatcher implements IScene{
 		_container.addChild(_weaponSwitchLeftBtn);
 		_container.addChild(_weaponSwitchRightBtn);
 
-		_tank.rotation = 0;
-		rotateTank();
-		rotateWeapon();
 		addPlayBtn();
 		addListeners();
 	}
@@ -146,8 +150,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 	}
 
 	private function createWeapon():void {
-		_weapon = new Sprite();
-		_weapon.addChild(new GunView());
+		_weapon = new TankGun();
 		_weapon.y = _tank.originY + 100;
 		_weapon.x = _tank.originX;
 	}
@@ -173,13 +176,15 @@ public class TankPodium extends EventDispatcher implements IScene{
 	}
 
 	private function onPlayBtnClick(event:MouseEvent):void {
-		UserState.instance.tankVO.tankBase = _tank.vo.tankBase;
+		UserState.instance.tankVO = _tank.vo.getClone();
 		switchScene();
 	}
 
 	private function onSwitchBtnClick(event:MouseEvent):void {
 		if (event.target == _tankSwitchLeftBtn || event.target == _tankSwitchRightBtn) {
 			switchTanks(event.target == _tankSwitchLeftBtn ? -1 : 1);
+		} else {
+			switchWeapons(event.target == _weaponSwitchLeftBtn ? -1 : 1);
 		}
 	}
 
@@ -222,7 +227,8 @@ public class TankPodium extends EventDispatcher implements IScene{
 		}
 		TweenMax.killTweensOf(_tank.gun);
 		TweenMax.killTweensOf(_tank.tankBase);
-		TweenMax.to(_tank,  .3, {originX : _tank.originX + coef * 60, scaleX : 4, scaleY : .1, blurFilter:{blurX:20}, alpha : 0, ease:Linear.easeOut, onComplete : onTankShiftComplete});
+		TweenMax.to(_tank,  .3, {originX : _tank.originX + coef * 60, scaleX : 4, scaleY : .1, blurFilter:{blurX:20},
+															alpha : 0, ease:Linear.easeOut, onComplete : onTankShiftComplete});
 	}
 
 	private function onTankShiftComplete():void {
@@ -230,6 +236,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 		const vo:TankVO = new TankVO();
 		const point:Point = new Point(_tank.x,  _tank.y);
 		vo.tankBase = _tank.vo.tankBase == 0 ? 1 : 0;
+		vo.weaponType = _weapon.type;
 		_tank = new Tank(vo);
 		const distance:Number = Math.abs(_defaultTankPoint.x -point.x);
 		_tank.x = point.x < _defaultTankPoint.x ? point.x + 2*distance :point.x - 2 * distance;
@@ -238,28 +245,44 @@ public class TankPodium extends EventDispatcher implements IScene{
 		_tank.scaleX = 4;
 		_tank.scaleY = .1; _tank.y = point.y;
 		_container.addChild(_tank);
-		TweenMax.to(_tank,  .3, {x : _defaultTankPoint.x, scaleX : 1, scaleY : 1, alpha : 1, ease:Linear.easeIn, blurFilter:{blurX:0}, onComplete : function():void { _tank.filters = []; }});
+		TweenMax.to(_tank,  .3, {x : _defaultTankPoint.x, scaleX : 1, scaleY : 1, alpha : 1, ease:Linear.easeIn,
+															blurFilter:{blurX:0}, onComplete : function():void { _tank.filters = []; }});
+	}
+
+	private function switchWeapons(direction:uint = 0):void {
+		var coef:int;
+		if (direction != 0) { coef = direction; } else {
+			coef = _tank.x > _defaultWeaponPoint.x ? 1 : -1;
+		}
+		TweenMax.killTweensOf(_weapon);
+		TweenMax.to(_weapon,  .3, {x : _weapon.x + coef * 60, scaleX : 4, scaleY : .1, blurFilter:{blurX:20},
+															alpha : 0, ease:Linear.easeOut, onComplete : onWeaponShiftComplete});
+	}
+
+	private function onWeaponShiftComplete():void {
+		if (_container.contains(_weapon)) { _container.removeChild(_weapon); }
+		const point:Point = new Point(_weapon.x,  _weapon.y);
+		var weaponType:uint;
+		if (_weapon.type == TankGun.ROCKET) { weaponType = TankGun.MINIGUN;
+		} else if (_weapon.type == TankGun.MINIGUN) { weaponType = TankGun.FIREGUN;
+		} else { weaponType = TankGun.ROCKET; }
+		_weapon = new TankGun(weaponType);
+		const distance:Number = Math.abs(_defaultWeaponPoint.x -point.x);
+		_weapon.x = point.x < _defaultWeaponPoint.x ? point.x + 2*distance :point.x - 2 * distance;
+		_weapon.alpha = 0;
+		_weapon.filters = [new BlurFilter(20)];
+		_weapon.scaleX = 4;
+		_weapon.scaleY = .1; _weapon.y = point.y;
+		_container.addChild(_weapon);
+		_tank.updateWeaponType(weaponType);
+		TweenMax.to(_weapon,  .3, {x : _defaultWeaponPoint.x, scaleX : 1, scaleY : 1, alpha : 1, ease:Linear.easeIn,
+															blurFilter:{blurX:0}, onComplete : function():void { _weapon.filters = []; }});
 	}
 
 	private function onTankMouseMove(event:MouseEvent):void {
 			if (_dragTank) {
 				_tank.originX = event.stageX;
 			}
-	}
-
-	private function rotateTank():void {
-		var timeline:TimelineMax = new TimelineMax({repeat : -1});
-		timeline.insert(new TweenMax(_tank.gun, 1.6, { rotation : 180, ease : Linear.easeNone, onComplete : function():void {_tank.gun.rotation = -180;}}));
-		const length:Number = timeline.duration;
-		timeline.insert(new TweenMax(_tank.gun,  1.6, { rotation : 0 , ease : Linear.easeNone}), length);
-		timeline.insert(new TweenMax(_tank.tankBase,  1.6, { rotation : 0 , ease : Linear.easeNone}), length);
-		timeline.insert(new TweenMax(_tank.tankBase, 1.6, { rotation : 180, ease : Linear.easeNone, onComplete : function():void {_tank.tankBase.rotation = -180;}}));
-	}
-	private function rotateWeapon():void {
-		var timeline:TimelineMax = new TimelineMax({repeat : -1});
-		timeline.insert(new TweenMax(_weapon, 1.6, { rotation : 180, ease : Linear.easeNone, onComplete : function():void {_weapon.rotation = -180;}}));
-		const length:Number = timeline.duration;
-		timeline.insert(new TweenMax(_weapon,  1.6, { rotation : 0 , ease : Linear.easeNone}), length);
 	}
 
 	private function switchScene():void {

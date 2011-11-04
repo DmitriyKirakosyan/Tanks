@@ -19,7 +19,7 @@ public class UserState {
 
 	public function get tankVO():TankVO { return _tankVO; }
 	public function set tankVO(value:TankVO):void {
-		_tankVO = tankVO;
+		_tankVO = value;
 	}
 }
 }

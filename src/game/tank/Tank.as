@@ -45,7 +45,16 @@ public class Tank extends MapObject {
 			this.addChild(gun);
 			gunController = new GunController(gun, this);
 		}
-		
+
+		public function updateWeaponType(weaponType:uint):void {
+			if (_vo.weaponType != weaponType) {
+				_vo.weaponType = weaponType;
+				TweenMax.killTweensOf(gun);
+				removeChild(gun);
+				gun = new TankGun(weaponType);
+				addChild(gun);
+			}
+		}
 		
 		public function tankDamage():void{
 			this.liveTab.scaleX -= .5;
