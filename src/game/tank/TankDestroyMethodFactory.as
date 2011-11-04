@@ -5,11 +5,10 @@
  */
 package game.tank {
 public class TankDestroyMethodFactory {
-	private static var _numMethods:uint;
+	private static var _numMethods:uint = 2;
 
 	public function TankDestroyMethodFactory() {
 		super();
-		_numMethods = 2;
 	}
 
 	public static function createMethodById(methodId:uint, tank:Tank):TankDestroyMethod {
