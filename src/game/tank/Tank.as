@@ -1,12 +1,8 @@
 package game.tank {
-import com.greensock.TimelineMax;
 import com.greensock.TweenMax;
 
 import flash.display.Sprite;
-import flash.geom.ColorTransform;
-import flash.geom.Point;
 
-import game.GameController;
 import game.MapObject;
 import game.tank.tank_destraction.TankDestoryEvent;
 import game.tank.tank_destraction.TankDestroyMethod;
@@ -80,6 +76,7 @@ public class Tank extends MapObject {
 		public function get isPlayer():Boolean {return _isPlayer;}
 
 		public function set speedup(value:Number):void {
+			value; //TODO refact it
 			if (_speedup < maxSpeedup) { _speedup+= .05; }
 		}
 		public function get speedup():Number { return _speedup; }
@@ -105,6 +102,7 @@ public class Tank extends MapObject {
 		}
 
 		private function onDestroyComplete(event:TankDestoryEvent):void {
+			_destroyMethod.removeEventListener(TankDestoryEvent.DESTORY_COMPLETE, onDestroyComplete);
 			trace("[Tank.onDestroyComplete] me destroed");
 		}
 

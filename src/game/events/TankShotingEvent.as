@@ -6,6 +6,7 @@ package game.events {
 		public var bullet:Bullet;
 		
 		public static const WAS_SHOT:String = "wasShot";
+		public static const CANT_SHOT:String = "cantShot";
 		
 		public function TankShotingEvent(type : String, bullet:Bullet) {
 			super(type);

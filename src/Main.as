@@ -1,11 +1,8 @@
 package {
-	import flash.display.Sprite;
-	import flash.events.MouseEvent;
-	
-	import game.GameController;
-import game.SceneController;
+import flash.display.Sprite;
 
-import menu.TankPodium;
+import game.GameController;
+import game.SceneController;
 
 [SWF(width=600, height=600, frameRate=25)]
 	public class Main extends Sprite {

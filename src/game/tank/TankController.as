@@ -35,6 +35,7 @@ package game.tank {
 		
 		private var _bulletPoint:Point; //coz waiting for gun rotate
 		
+		private var _canShot:Boolean;
 		
 		public static const LEFT_ROT:int = -90;
 		public static const RIGHT_ROT:int = 90;
@@ -63,9 +64,11 @@ package game.tank {
 				tank.y = _mapMatrix.getMatrixPoint(new Point(_startX, _startY)).y;
 				tank.tankBase.transform.colorTransform = colorTank;
 			}
+			_canShot = true;
 		}
 
 		public function remove():void {
+			_canShot = false;
 			TweenMax.killTweensOf(tank);
 			tank.killTweens();
 			_movingTimeline.kill();
@@ -148,11 +151,14 @@ package game.tank {
 
 		public function onGunRotateComplete(event:GunRotateCompleteEvent):void {
 			tank.gunController.removeEventListener(GunRotateCompleteEvent.COMPLETE,onGunRotateComplete);
-			const stageTankPoint:Point = new Point(tank.originX, tank.originY);
-			const bullet:Bullet = new Bullet(tank);
-			bullet.moveTo(_bulletPoint);
-			_container.addChild(bullet);
-			dispatchEvent(new TankShotingEvent(TankShotingEvent.WAS_SHOT, bullet));
+			if (_canShot) {
+				const bullet:Bullet = new Bullet(tank);
+				bullet.moveTo(_bulletPoint);
+				_container.addChild(bullet);
+				dispatchEvent(new TankShotingEvent(TankShotingEvent.WAS_SHOT, bullet));
+			} else {
+				dispatchEvent(new TankShotingEvent(TankShotingEvent.CANT_SHOT, null));
+			}
 		}
 	}
 }

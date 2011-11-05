@@ -24,7 +24,7 @@ public class TankDestroyMethodFactory {
 		return result;
 	}
 
-	public static function createRandomMethod(tank):TankDestroyMethod {
+	public static function createRandomMethod(tank:Tank):TankDestroyMethod {
 		return createMethodById(Math.random()*_numMethods, tank);
 	}
 }

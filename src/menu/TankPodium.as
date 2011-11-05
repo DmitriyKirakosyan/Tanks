@@ -1,6 +1,5 @@
 
 package menu {
-import com.greensock.TimelineMax;
 import com.greensock.TweenMax;
 import com.greensock.easing.Linear;
 
@@ -9,7 +8,6 @@ import flash.events.EventDispatcher;
 import flash.events.MouseEvent;
 import flash.filters.BlurFilter;
 import flash.geom.Point;
-import flash.sampler._setSamplerCallback;
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 
@@ -41,8 +39,6 @@ public class TankPodium extends EventDispatcher implements IScene{
 	private var _dragTank:Boolean;
 
 	private var _defaultWeaponPoint:Point;
-	private var _dragWeaponBackTween:TweenMax;
-	private var _dragWeapon:Boolean;
 
 	private var _container:Sprite;
 
@@ -60,7 +56,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 		createWeaponSwitchBtns();
 		_defaultTankPoint = new Point(_tank.x, _tank.y);
 		_defaultWeaponPoint = new Point(_weapon.x, _weapon.y);
-		createPlayBtn()
+		createPlayBtn();
 	}
 
 	public function open():void {
