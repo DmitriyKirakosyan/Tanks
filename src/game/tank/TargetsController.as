@@ -16,7 +16,7 @@ import flash.utils.Timer;
 	
 	public class TargetsController extends EventDispatcher implements IControllerWithTime{
 		private var _timer:Timer;
-		private var _enemyes:Vector.<TankController>;
+		private var _enemyControllers:Vector.<TankController>;
 		private var _container:Sprite;
 		private var _mapMatrix:MapMatrix;
 		
@@ -27,7 +27,7 @@ import flash.utils.Timer;
 		public function TargetsController(container:Sprite, mapMatrix:MapMatrix) {
 			_container = container;
 			_mapMatrix = mapMatrix;
-			_enemyes = new Vector.<TankController>();
+			_enemyControllers = new Vector.<TankController>();
 			initTimer();
 		}
 		
@@ -37,28 +37,28 @@ import flash.utils.Timer;
 		}
 		
 		public function scaleTime(value:Number):void {
-			for each (var tankController:TankController in _enemyes) {
+			for each (var tankController:TankController in _enemyControllers) {
 				tankController.scaleTime(value);
 			}
 		}
 		
 		public function getEnemyTanks():Vector.<Tank> {
 			const tanks:Vector.<Tank> = new Vector.<Tank>();
-			for each (var tankController:TankController in _enemyes) {
+			for each (var tankController:TankController in _enemyControllers) {
 				tanks.push(tankController.tank);
 			}
 			return tanks;
 		}
 		
 		public function get enemyes():Vector.<Tank> { return getEnemyTanks(); }
-		public function get enemyesController():Vector.<TankController> { return _enemyes; }
+		public function get enemyesController():Vector.<TankController> { return _enemyControllers; }
 		
 		public function killEnemyTank(tank:Tank):void {
-			for  (var i:int = 0; i < _enemyes.length; ++i) {
-				if (_enemyes[i].tank == tank) {
-					_enemyes[i].bam();
-					removeEnemyTankListeners(_enemyes[i]);
-					_enemyes.splice(i, 1);
+			for  (var i:int = 0; i < _enemyControllers.length; ++i) {
+				if (_enemyControllers[i].tank == tank) {
+					_enemyControllers[i].bam();
+					removeEnemyTankListeners(_enemyControllers[i]);
+					_enemyControllers.splice(i, 1);
 					tank.removeChild(tank.liveTab);
 					break;
 				}
@@ -72,10 +72,10 @@ import flash.utils.Timer;
 
 		public function remove():void {
 			_timer.stop();
-			for each (var enemy:TankController in enemyes) {
+			for each (var enemy:TankController in _enemyControllers) {
 				enemy.remove();
 			}
-			_enemyes = new Vector.<TankController>();
+			_enemyControllers = new Vector.<TankController>();
 		}
 		
 		/* Internal functions */
@@ -88,7 +88,7 @@ import flash.utils.Timer;
 			enemyTank.tank.x = rndX;
 			enemyTank.tank.y = rndY;
 			enemyTank.setAutoAttack(_playerTank);
-			_enemyes.push(enemyTank);
+			_enemyControllers.push(enemyTank);
 			moveEnemyTank(enemyTank);
 			enemyTank.addEventListener(TankEvent.MOVING_COMPLETE, onEnemyMovingComplete);
 			enemyTank.addEventListener(TankShotingEvent.WAS_SHOT, onEnemyShotEvent);
@@ -125,7 +125,7 @@ import flash.utils.Timer;
 		}
 		
 		private function createTargetforTimer (event:TimerEvent):void {
-			if (_enemyes.length < 5 && Math.random() < .5) {
+			if (_enemyControllers.length < 5 && Math.random() < .5) {
 				createTarget();
 			}
 		}
