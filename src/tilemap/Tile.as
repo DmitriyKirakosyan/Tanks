@@ -1,12 +1,7 @@
 package tilemap {
-	import flash.display.Bitmap;
-	import flash.display.BitmapData;
-	import flash.display.Sprite;
-	import flash.filters.BlurFilter;
+import flash.display.Sprite;
 
 import game.GameController;
-
-import game.mapObjects.Stone;
 
 public class Tile extends Sprite {
 

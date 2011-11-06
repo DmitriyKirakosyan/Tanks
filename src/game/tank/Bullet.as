@@ -1,6 +1,5 @@
 package game.tank {
 import com.greensock.easing.Linear;
-import com.greensock.events.TweenEvent;
 
 import flash.geom.Point;
 import com.greensock.TweenMax;
@@ -18,7 +17,6 @@ public class Bullet extends Sprite {
 		private const TAIL_PERIOD:int = 1;
 		
 		public function Bullet(selfTank:Tank):void {
-			var view:BulletView = new BulletView();
 			_tailPeriodCounter = 0;
 			_selfTank = selfTank;
 			drawBulletPointOn(this, 0xf0002f);

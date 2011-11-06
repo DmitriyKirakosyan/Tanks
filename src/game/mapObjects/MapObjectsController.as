@@ -15,9 +15,6 @@ package game.mapObjects {
 	import game.matrix.MatrixItemIds;
 	import game.tank.Bullet;
 	import game.tank.Tank;
-	import game.mapObjects.Buttons;
-
-	import tilemap.Tile;
  
 	import tilemap.TileMap;
 

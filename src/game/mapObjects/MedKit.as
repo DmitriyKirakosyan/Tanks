@@ -1,15 +1,12 @@
 package game.mapObjects {
 
-import com.greensock.TimelineMax;
 import com.greensock.TweenMax;
 import com.greensock.easing.Back;
 
 import flash.display.Sprite;
 import flash.events.Event;
-import flash.geom.Rectangle;
 import flash.geom.Point;
 import game.MapObject;
-import game.tank.Tank;
 
 public class MedKit extends MapObject {
 		

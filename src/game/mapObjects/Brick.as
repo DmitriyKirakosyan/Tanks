@@ -1,6 +1,6 @@
 package game.mapObjects {
-	import flash.geom.Rectangle;
 	import flash.geom.Point;
+
 	import game.MapObject;
 
 	public class Brick extends MapObject {

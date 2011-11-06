@@ -7,7 +7,6 @@ package game.mapObjects {
 	import com.greensock.TweenMax;
 	import game.GameController;
 	import flash.geom.Point;
-	import flash.display.Sprite;
 
 import game.MapObject;
 
@@ -45,7 +44,6 @@ public class Mine extends MapObject{
 			this.graphics.beginFill(0xaa0f00);
 			this.graphics.drawCircle(0, 0, 2);
 			this.graphics.endFill();
-			const mine:Sprite = this;
 			const numbersText:TextField = new TextField();
 			_tween = new TweenMax(
 					this, .5, {alpha : 0, repeat : 5, yoyo: true, onComplete : 

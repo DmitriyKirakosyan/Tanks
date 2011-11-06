@@ -1,9 +1,5 @@
 package game.mapObjects {
-	import flash.display.CapsStyle;
-	import flash.display.Graphics;
 	import flash.display.Sprite;
-	import game.MapObject;
-
 
 	public class Buttons extends Sprite {
 		

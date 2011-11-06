@@ -1,22 +1,19 @@
 package game.tank {
-	import flash.filters.GlowFilter;
-	import flash.events.MouseEvent;
-	import game.IControllerWithTime;
-	import game.events.TankShotingEvent;
-	import game.events.TankEvent;
-	import flash.geom.Point;
 
+import game.IControllerWithTime;
+import game.events.TankShotingEvent;
+import game.events.TankEvent;
 import game.tank.TankController;
-
+import game.matrix.MapMatrix;
 import pathfinder.Pathfinder;
-	import game.events.TargetsControllerEvent;
-	import flash.events.EventDispatcher;
-	import flash.display.Sprite;
-	import flash.events.TimerEvent;
-	import flash.utils.Timer;
-	
-	import game.matrix.MapMatrix;
+import game.events.TargetsControllerEvent;
 
+import flash.geom.Point;
+import flash.events.EventDispatcher;
+import flash.display.Sprite;
+import flash.events.TimerEvent;
+import flash.utils.Timer;
+	
 	public class TargetsController extends EventDispatcher implements IControllerWithTime{
 		private var _timer:Timer;
 		private var _enemyes:Vector.<TankController>;

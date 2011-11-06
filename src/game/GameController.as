@@ -1,28 +1,25 @@
 package game {
 import game.Debug.DebugController;
-import game.events.TankEvent;
-import flash.events.EventDispatcher;
-
 import game.events.DamageObjectEvent;
 import game.events.SceneEvent;
 import game.tank.TankMovementListener;
-
 import pathfinder.Pathfinder;
-	import game.tank.Tank;
-	import game.events.TargetsControllerEvent;
-	import game.events.TankShotingEvent;
-	import flash.geom.Point;
-	import flash.events.MouseEvent;
-	import game.events.MineBamEvent;
-	import game.mapObjects.MapObjectsController;
-	import game.events.DrawingControllerEvent;
-	import game.drawing.MouseDrawController;
-	import game.matrix.MapMatrix;
-	import flash.display.Sprite;
-	import game.tank.TankController;
-	import game.tank.TargetsController;
-
+import game.tank.Tank;
+import game.events.TargetsControllerEvent;
+import game.events.TankShotingEvent;
+import game.events.MineBamEvent;
+import game.mapObjects.MapObjectsController;
+import game.events.DrawingControllerEvent;
+import game.drawing.MouseDrawController;
+import game.matrix.MapMatrix;
+import game.tank.TankController;
+import game.tank.TargetsController;
 import state.UserState;
+
+import flash.events.EventDispatcher;
+import flash.geom.Point;
+import flash.events.MouseEvent;
+import flash.display.Sprite;
 
 public class GameController extends EventDispatcher implements IScene{
 		private var _container:Sprite;

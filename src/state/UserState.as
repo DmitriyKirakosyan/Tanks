@@ -1,5 +1,4 @@
 package state {
-import game.tank.Tank;
 import game.tank.TankVO;
 
 public class UserState {

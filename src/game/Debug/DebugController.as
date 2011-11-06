@@ -1,25 +1,20 @@
 package game.Debug {
-	import game.matrix.MapMatrix;
-	import game.tank.TankController;
-	import flash.events.MouseEvent;
-	import game.tank.TargetsController;
 	import flash.display.Sprite;
-	import game.GameController;
 	import flash.events.EventDispatcher;
 
 
 
 	public class DebugController extends EventDispatcher {
 		
-		private var gameController:GameController;
-		private var targetController:TargetsController;
-		private var _container:Sprite;
-		private var mapMatrix:MapMatrix;
-		private var stopAddTank:Boolean = false;
-		private var tankDrag:Boolean = false;
+//		private var gameController:GameController;
+//		private var targetController:TargetsController;
+//		private var _container:Sprite;
+//		private var mapMatrix:MapMatrix;
+//		private var stopAddTank:Boolean = false;
+//		private var tankDrag:Boolean = false;
 		
 		public function DebugController(container:Sprite):void {
-			_container = container;
+		//	_container = container;
 		//	gameController = new GameController(container);
 		//	mapMatrix = new MapMatrix(_container);
 		//	targetController = new TargetsController(container, mapMatrix);

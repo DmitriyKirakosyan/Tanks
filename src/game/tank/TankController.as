@@ -156,6 +156,7 @@ package game.tank {
 				bullet.moveTo(_bulletPoint);
 				_container.addChild(bullet);
 				dispatchEvent(new TankShotingEvent(TankShotingEvent.WAS_SHOT, bullet));
+				_canShot = false;
 			} else {
 				dispatchEvent(new TankShotingEvent(TankShotingEvent.CANT_SHOT, null));
 			}

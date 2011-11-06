@@ -96,14 +96,6 @@ package game.drawing {
 			_currentPathPart.graphics.endFill();
 		}
 		
-		private function drawRectangle():void {
-			_container.graphics.beginFill(0xffffff, .0);
-			_container.graphics.drawRect(0, 0, 
-													MapMatrix.MATRIX_WIDTH * cellWidth,
-													MapMatrix.MATRIX_HEIGHT * cellWidth);	
-			_container.graphics.endFill();
-		}
-		
 		private function onMouseMove(event:MouseEvent):void {
 			if (_drawing) {
 				const point:Point = new Point(event.stageX, event.stageY);
