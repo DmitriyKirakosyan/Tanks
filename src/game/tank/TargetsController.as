@@ -55,9 +55,6 @@ import flash.utils.Timer;
 			return tanks;
 		}
 		
-		public function get enemyes():Vector.<Tank> { return getEnemyTanks(); }
-		public function get enemyesController():Vector.<TankController> { return _enemyControllers; }
-		
 		public function killEnemyTank(tank:Tank):void {
 			for  (var i:int = 0; i < _enemyControllers.length; ++i) {
 				if (_enemyControllers[i].tank == tank) {
@@ -86,7 +83,7 @@ import flash.utils.Timer;
 		/* For Debug */
 		
 		public function get enemyes():Vector.<Tank> { return getEnemyTanks(); }
-		public function get enemyesController():Vector.<TankController> { return _enemyes; }
+		public function get enemyesController():Vector.<TankController> { return _enemyControllers; }
 		public function get timerAddTank():Timer { return _timer; } 				//stop Add EnemyTanks
 		public function get playerTank():Tank { return _playerTank; }
 		public function set moveEnemy(value:TankController):void { moveEnemyTank(value); }
@@ -96,10 +93,13 @@ import flash.utils.Timer;
 		
 		//TODO укоротить ф-цию, разобраться с появлением танков
 		private function createTarget():void {
-			_random = Math.random();
-			trace(_random);
+			//_random = Math.random();
+			//trace(_random);
 			var enemyTank:TankController = new TankController(_container, _mapMatrix);
 			enemyTank.init(new TankVO());
+			var rndX:int = Math.random() * MapMatrix.MATRIX_WIDTH;
+			var rndY:int = Math.random() * MapMatrix.MATRIX_HEIGHT;
+			/*
 			var rndX:int;
 			var rndY:int;
 			if (_random <= .25) {
@@ -118,6 +118,7 @@ import flash.utils.Timer;
 				rndX = 15;
 				rndY = Math.random() * MapMatrix.MATRIX_HEIGHT;
 			}
+			*/
 			enemyTank.tank.x = rndX;
 			enemyTank.tank.y = rndY;
 			enemyTank.setAutoAttack(_playerTank);
@@ -143,8 +144,8 @@ import flash.utils.Timer;
 		
 		//TODO укоротить ф-цию, разобраться как для каждого танка свою такую ф-цию определить
 		private function moveEnemyTank(enemyTankController:TankController):void {
-			var toPoint:Point;
-			toPoint = new Point(int(Math.random()*MapMatrix.MATRIX_WIDTH),
+
+			const toPoint:Point = new Point(int(Math.random()*MapMatrix.MATRIX_WIDTH),
 																		int(Math.random()*MapMatrix.MATRIX_HEIGHT));
 			const path:Vector.<Point> = 
 				Pathfinder.getPath(new Point(enemyTankController.tank.x, enemyTankController.tank.y),
