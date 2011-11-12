@@ -95,7 +95,7 @@ public class MapObjectsController extends EventDispatcher implements IController
 			_enemyTanks.push(tank);
 		}
 		
-		public function get enemyTanks():Vector.<Tank> { return _enemyTanks;}
+		public function get enemyTanks():Vector.<Tank> { return _enemyTanks;}  //TODO where she's using???
 		
 		public function addPlayerTank(tank:Tank):void {
 			_playerTank = tank;

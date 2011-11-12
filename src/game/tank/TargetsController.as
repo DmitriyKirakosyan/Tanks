@@ -1,5 +1,7 @@
 package game.tank {
-
+import game.events.TankShotingEvent;
+import game.events.TankEvent;
+import game.IControllerWithTime;
 import game.IControllerWithTime;
 import game.events.TankShotingEvent;
 import game.events.TankEvent;
@@ -22,6 +24,9 @@ import flash.utils.Timer;
 		
 		
 		private var _playerTank:Tank;
+		
+		private var _random:Number;
+		private var _firstMove:Boolean = true;
 		
 		
 		public function TargetsController(container:Sprite, mapMatrix:MapMatrix) {
@@ -78,13 +83,41 @@ import flash.utils.Timer;
 			_enemyControllers = new Vector.<TankController>();
 		}
 		
+		/* For Debug */
+		
+		public function get enemyes():Vector.<Tank> { return getEnemyTanks(); }
+		public function get enemyesController():Vector.<TankController> { return _enemyes; }
+		public function get timerAddTank():Timer { return _timer; } 				//stop Add EnemyTanks
+		public function get playerTank():Tank { return _playerTank; }
+		public function set moveEnemy(value:TankController):void { moveEnemyTank(value); }
+		
 		/* Internal functions */
 		
+		
+		//TODO укоротить ф-цию, разобраться с появлением танков
 		private function createTarget():void {
+			_random = Math.random();
+			trace(_random);
 			var enemyTank:TankController = new TankController(_container, _mapMatrix);
 			enemyTank.init(new TankVO());
-			var rndX:int = Math.random() * MapMatrix.MATRIX_WIDTH;
-			var rndY:int = Math.random() * MapMatrix.MATRIX_HEIGHT;
+			var rndX:int;
+			var rndY:int;
+			if (_random <= .25) {
+				rndX = Math.random() * MapMatrix.MATRIX_WIDTH;
+				rndY = -1;
+			}
+			if (_random > .25 && _random <= .5) {
+				rndX = Math.random() * MapMatrix.MATRIX_WIDTH;
+				rndY = 15;
+			}
+			if (_random > .5 && _random <= .75) {
+				rndX = -1;
+				rndY = Math.random() * MapMatrix.MATRIX_HEIGHT;
+			}
+			if (_random > .75) {
+				rndX = 15;
+				rndY = Math.random() * MapMatrix.MATRIX_HEIGHT;
+			}
 			enemyTank.tank.x = rndX;
 			enemyTank.tank.y = rndY;
 			enemyTank.setAutoAttack(_playerTank);
@@ -94,7 +127,6 @@ import flash.utils.Timer;
 			enemyTank.addEventListener(TankShotingEvent.WAS_SHOT, onEnemyShotEvent);
 			dispatchEvent(new TargetsControllerEvent(TargetsControllerEvent.NEW_TANK, enemyTank.tank));
 		}
-		
 		private function removeEnemyTankListeners(enemyTankController:TankController):void {
 			enemyTankController.removeEventListener(TankShotingEvent.WAS_SHOT, onEnemyShotEvent);
 			enemyTankController.removeEventListener(TankEvent.MOVING_COMPLETE, onEnemyMovingComplete);
@@ -108,12 +140,15 @@ import flash.utils.Timer;
 			dispatchEvent(new TankShotingEvent(TankShotingEvent.WAS_SHOT, event.bullet));
 		}
 		
+		
+		//TODO укоротить ф-цию, разобраться как для каждого танка свою такую ф-цию определить
 		private function moveEnemyTank(enemyTankController:TankController):void {
-			const toPoint:Point = new Point(int(Math.random()*MapMatrix.MATRIX_WIDTH),
+			var toPoint:Point;
+			toPoint = new Point(int(Math.random()*MapMatrix.MATRIX_WIDTH),
 																		int(Math.random()*MapMatrix.MATRIX_HEIGHT));
 			const path:Vector.<Point> = 
 				Pathfinder.getPath(new Point(enemyTankController.tank.x, enemyTankController.tank.y),
-														toPoint);
+													toPoint);
 			addPathToEnemyTankController(path, enemyTankController);
 		}	
 	

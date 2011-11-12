@@ -101,7 +101,7 @@ package game.tank {
 		
 		public function setAutoAttack(targetTank:Tank):void {
 			_targetTank = targetTank;
-			_autoAttackTimer = new Timer(Math.random() * 1000 + 1000);
+			_autoAttackTimer = new Timer(Math.random() * 5000 + 1000);  //TODO Auto attack
 			_autoAttackTimer.addEventListener(TimerEvent.TIMER, onAutoAttackTimer);
 			_autoAttackTimer.start();
 		}
@@ -141,7 +141,6 @@ package game.tank {
 
 		/* Internal functions */
 		
-		//TODO
 		private function onAutoAttackTimer(event:TimerEvent):void {
 			if (_targetTank) {
 				shot(new Point(_targetTank.originX, _targetTank.originY));

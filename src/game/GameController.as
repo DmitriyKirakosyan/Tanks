@@ -1,4 +1,6 @@
 package game {
+import flash.events.TimerEvent;
+import flash.utils.Timer;
 import game.Debug.DebugController;
 import game.events.DamageObjectEvent;
 import game.events.SceneEvent;
@@ -48,6 +50,7 @@ public class GameController extends EventDispatcher implements IScene{
 			_mapObjectsController.addPlayerTank(_tankController.tank);
 			initMapObjectsController();
 			addListeners();
+			_debugController.open();
 		}
 
 		public function remove():void {
@@ -57,7 +60,18 @@ public class GameController extends EventDispatcher implements IScene{
 			_tankController.remove();
 			_targetsController.remove();
 			_mapObjectsController.remove();
+			_debugController.close();
 		}
+		
+		/* For debug */
+		
+		public function get mapObjectsController():MapObjectsController { return _mapObjectsController; }
+		
+		public function get targetsController():TargetsController { return _targetsController; }
+		
+		public function get container():Sprite { return _container; }
+		
+		/* Inits */
 		
 		private function initControllers():void {
 			_mapMatrix = new MapMatrix(_container);
@@ -70,7 +84,7 @@ public class GameController extends EventDispatcher implements IScene{
 			_mapObjectsController = new MapObjectsController(_mapMatrix, _container);
 			_tankMovementListener = new TankMovementListener(_tankController, _mapObjectsController, _mouseDrawController);
 			_timeController = new TimeController(_container);
-			_debugController = new DebugController(_container);
+			_debugController = new DebugController(_container, this);
 			initTimeController();
 		}
 		
@@ -171,6 +185,5 @@ public class GameController extends EventDispatcher implements IScene{
 		private function onNewEnemyTank(event:TargetsControllerEvent):void {
 			_mapObjectsController.addEnemyTank(event.tank);
 		}
-
 	}
 }

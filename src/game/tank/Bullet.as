@@ -39,7 +39,6 @@ public class Bullet extends Sprite {
 			if (_selfTank.isPlayer) { speedCoef = 200; }
 			else { speedCoef = 100; }		
 			_speed = Math.sqrt(Math.pow(this.x-point.x, 2) + Math.pow(this.y - point.y, 2)) / speedCoef;
-			trace(_speed);
 			_tween = new TweenMax(this, _speed, {x : point.x, y : point.y, ease : Linear.easeNone} );
 		}
 		
