@@ -82,9 +82,9 @@ import flash.utils.Timer;
 		
 		/* For Debug */
 		
-		public function get enemyes():Vector.<Tank> { return getEnemyTanks(); }
-		public function get enemyesController():Vector.<TankController> { return _enemyControllers; }
-		public function get timerAddTank():Timer { return _timer; } 				//stop Add EnemyTanks
+		public function get enemies():Vector.<Tank> { return getEnemyTanks(); }
+		public function get enemyControllers():Vector.<TankController> { return _enemyControllers; }
+		public function get timerAddTank():Timer { return _timer; }
 		public function get playerTank():Tank { return _playerTank; }
 		public function set moveEnemy(value:TankController):void { moveEnemyTank(value); }
 		

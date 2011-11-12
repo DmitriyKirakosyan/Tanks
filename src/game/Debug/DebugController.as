@@ -63,8 +63,8 @@ package game.Debug {
 			_buttons.stopAddTankButton.addEventListener(MouseEvent.CLICK, tankAddController);
 			_buttons.dragTankButton.addEventListener(MouseEvent.CLICK, enemyTankMoveController);
 			_playerTank = _gameController.targetsController.playerTank;
-			_enemies = _gameController.targetsController.enemyes;
-			_enemiesController = _gameController.targetsController.enemyesController;
+			_enemies = _gameController.targetsController.enemies;
+			_enemiesController = _gameController.targetsController.enemyControllers;
 		}
 		private function removeButtons():void {
 			if (_debugContainer.contains(_container)) {
@@ -130,7 +130,7 @@ package game.Debug {
 		}
 		
 		private function stopTank(tank:Tank):void {
-			for each (var tankController:TankController in _gameController.targetsController.enemyesController) {
+			for each (var tankController:TankController in _gameController.targetsController.enemyControllers) {
 				if (tank == tankController.tank) {
 					tankController.movingTimeline.vars["onComplete"] = null;
 					tankController.movingTimeline.killTweensOf(tank);
