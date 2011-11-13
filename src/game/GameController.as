@@ -47,7 +47,6 @@ public class GameController extends EventDispatcher implements IScene{
 			_targetsController.init();
 			_targetsController.addPlayerTank(_tankController.tank);
 			_mapObjectsController.init();
-			_mapObjectsController.addPlayerTank(_tankController.tank);
 			initMapObjectsController();
 			addListeners();
 			_debugController.open();
@@ -94,7 +93,7 @@ public class GameController extends EventDispatcher implements IScene{
 			_timeController.add_controller(_targetsController);
 		}
 		private function initMapObjectsController():void {
-			_mapObjectsController.drawObjects();
+			_mapObjectsController.addPlayerTank(_tankController.tank);
 			if (_targetsController) {
 				const enemyTanks:Vector.<Tank> = _targetsController.getEnemyTanks();
 				for each (var tank:Tank in enemyTanks) {

@@ -69,7 +69,7 @@ public class MapObjectsController extends EventDispatcher implements IController
 			}
 		}
 		
-		public function drawObjects():void {
+		private function drawObjects():void {
 			if (!_mapMatrix || !_mapMatrix.matrix) { return; }
 			for (var i:int = 0; i < MapMatrix.MATRIX_WIDTH; ++i) {
 				for (var j:int = 0; j < MapMatrix.MATRIX_HEIGHT; ++j) {
