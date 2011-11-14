@@ -57,8 +57,12 @@ public class MapMatrix {
 			}
 		}
 		
-		public function cleanCell(x:int, y:int):void {
+		public function clearCell(x:int, y:int):void {
 			_matrix[x][y] = MatrixItemIds.EMPTY;
+		}
+
+		public function isFreeCell(mPoint:Point):Boolean {
+			return _matrix[mPoint.x][mPoint.y] == MatrixItemIds.EMPTY;
 		}
 
 		public function remove():void {

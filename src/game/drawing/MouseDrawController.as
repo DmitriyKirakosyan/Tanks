@@ -99,12 +99,17 @@ package game.drawing {
 		private function onMouseMove(event:MouseEvent):void {
 			if (_drawing) {
 				const point:Point = new Point(event.stageX, event.stageY);
-				_currentMousePoint = point;
-				drawPoint(point);
-				if (newPoint(point)) {
-					addPointToPath(point);
-					createNewPathPart();
-					dispatchEvent(new DrawingControllerEvent(DrawingControllerEvent.NEW_MOVE_POINT));
+				const matrixPoint:Point = _mapMatrix.getMatrixPoint(point);
+				if (_mapMatrix.isFreeCell(matrixPoint)) {
+					_currentMousePoint = point;
+					drawPoint(point);
+					if (newPoint(point)) {
+						addPointToPath(point);
+						createNewPathPart();
+						dispatchEvent(new DrawingControllerEvent(DrawingControllerEvent.NEW_MOVE_POINT));
+					}
+				} else {
+					_drawing = false;
 				}
 			}
 		}
