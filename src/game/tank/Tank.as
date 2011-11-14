@@ -30,9 +30,6 @@ public class Tank extends MapObject {
 		_isPlayer = player;
 		_vo = vo;
 
-		liveTab = new LiveTab();
-		this.addChild(liveTab);
-
 		createTankBase();
 		gun = new TankGun(_vo.weaponType);
 
