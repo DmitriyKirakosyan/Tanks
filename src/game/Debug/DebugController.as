@@ -108,7 +108,6 @@ package game.Debug {
 		private function tankMoveON(event:MouseEvent):void {
 			for each (var enemy:Tank in _enemies) {
 				if (enemy.hitTestPoint(_container.mouseX, _container.mouseY)) {
-					enemy.tankUseMouse = true;
 					_playerTank = enemy;
 					stopTank(enemy);
 					_gameController.container.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
@@ -119,7 +118,6 @@ package game.Debug {
 		}
 		private function tankMoveOFF(event:MouseEvent):void {
 			_playerTank.filters = null;
-			_playerTank.tankUseMouse = false;
 			_gameController.container.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove); //TODO
 			playTank(_playerTank);
 		}
@@ -130,7 +128,7 @@ package game.Debug {
 		}
 		
 		private function stopTank(tank:Tank):void {
-			for each (var tankController:TankController in _gameController.targetsController.enemyControllers) {
+			for each (var tankController:TankController in _enemiesController) {
 				if (tank == tankController.tank) {
 					tankController.movingTimeline.vars["onComplete"] = null;
 					tankController.movingTimeline.killTweensOf(tank);

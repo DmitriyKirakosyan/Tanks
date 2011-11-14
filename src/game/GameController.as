@@ -65,9 +65,7 @@ public class GameController extends EventDispatcher implements IScene{
 		/* For debug */
 		
 		public function get mapObjectsController():MapObjectsController { return _mapObjectsController; }
-		
 		public function get targetsController():TargetsController { return _targetsController; }
-		
 		public function get container():Sprite { return _container; }
 		
 		/* Inits */
