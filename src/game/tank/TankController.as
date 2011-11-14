@@ -69,7 +69,7 @@ package game.tank {
 			}
 			_reloadController.reloadBar.y = tank.originY + 30;
 			_reloadController.reloadBar.x = tank.originX - tank.width/2;
-			_container.addChild(_reloadController.reloadBar);
+			tank.addReloadController(_reloadController.reloadBar);
 			_container.addChild(tank);
 			_canShot = true;
 		}
@@ -92,6 +92,9 @@ package game.tank {
 			_scaleTime = value;
 			if (_movingTimeline) {
 				_movingTimeline.timeScale = value;
+			}
+			if (_reloadController.reloading) {
+				_reloadController.scaleTime(value);
 			}
 		}
 		
@@ -168,6 +171,7 @@ package game.tank {
 				_reloadController.addEventListener(Event.COMPLETE, onReloadComplete);
 			} else {
 				dispatchEvent(new TankShotingEvent(TankShotingEvent.CANT_SHOT, null));
+				trace("can not shot [TankController.onGunRotateComplete]");
 			}
 		}
 		

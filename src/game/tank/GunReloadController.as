@@ -1,22 +1,38 @@
 package game.tank {
 	import com.greensock.TweenLite;
 	import com.bit101.components.ProgressBar;
-	import flash.display.Sprite;
+import com.greensock.TweenMax;
+
+import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	public class GunReloadController extends EventDispatcher{
 		
 		private var _reloadBar:ProgressBar;
+		private var _reloading:Boolean;
+		private var _reloadTween:TweenMax;
 		
 		public function GunReloadController():void {
 			super();
+			_reloading = false;
 			createReloadBar();
 		}
 		
 		/* API */
+
+		public function get reloading():Boolean { return _reloading; }
+
+		public function scaleTime(value:Number):void {
+			if (_reloadTween) { _reloadTween.timeScale = value; }
+		}
 		
 		public function reload():void {
-			TweenLite.to(_reloadBar, 2, { value : 100, onComplete : onReloadComplete });
+			_reloading = true;
+			if (_reloadTween) {
+				_reloadTween.vars["onComplete"] = null;
+				TweenMax.killTweensOf(_reloadBar);
+			}
+			_reloadTween = new TweenMax(_reloadBar, 2, { value : 100, onComplete : onReloadComplete })
 		}
 		
 		public function get reloadBar():Sprite {
@@ -26,6 +42,7 @@ package game.tank {
 		/* Internal functions */
 		
 		private function onReloadComplete():void {
+			_reloading = false;
 			_reloadBar.value = 0;
 			dispatchEvent(new Event(Event.COMPLETE));
 		}
