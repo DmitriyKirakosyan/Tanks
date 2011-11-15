@@ -4,23 +4,29 @@
  * Time: 2:25 PM
  */
 package game.mapObjects {
+import com.adobe.serialization.json.JSON;
+
 import flash.display.Sprite;
 import flash.events.MouseEvent;
 import flash.geom.Point;
+import flash.net.FileReference;
 
 import game.mapObjects.MapObject;
+import game.matrix.MapMatrix;
 
 public class MapEditor {
 	private var _objectsController:MapObjectsController;
 	private var _container:Sprite;
 
 	private var _draggingContainer:Sprite;
+	private var _mapMatrix:MapMatrix;
 
 	private var _draggingObject:MapObject;
 
-	public function MapEditor(container:Sprite, objectsController:MapObjectsController) {
+	public function MapEditor(container:Sprite, objectsController:MapObjectsController, mapMatrix:MapMatrix) {
 		super();
 		_objectsController = objectsController;
+		_mapMatrix = mapMatrix;
 		_container = container;
 		_draggingContainer = new Sprite();
 	}
@@ -31,6 +37,11 @@ public class MapEditor {
 
 	public function takeStone():void {
 		takeObject(new Stone(new Point(0, 0)));
+	}
+
+	public function saveMap():void {
+		var fileReference:FileReference;
+		fileReference.save(JSON.encode(_mapMatrix.matrix), "map");
 	}
 
 	/* Internal functions */

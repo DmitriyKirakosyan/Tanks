@@ -4,6 +4,7 @@ import flash.utils.Timer;
 import game.Debug.DebugController;
 import game.events.DamageObjectEvent;
 import game.events.SceneEvent;
+import game.mapObjects.MapEditor;
 import game.tank.TankMovementListener;
 import pathfinder.Pathfinder;
 import game.tank.Tank;
@@ -25,6 +26,7 @@ import flash.display.Sprite;
 
 public class GameController extends EventDispatcher implements IScene{
 		private var _container:Sprite;
+		private var _mapEditor:MapEditor;
 		private var _tankController:TankController;
 		private var _tankMovementListener:TankMovementListener;
 		private var _targetsController:TargetsController;
@@ -65,6 +67,7 @@ public class GameController extends EventDispatcher implements IScene{
 		/* For debug */
 		
 		public function get mapObjectsController():MapObjectsController { return _mapObjectsController; }
+		public function get mapEditor():MapEditor { return _mapEditor; }
 		public function get targetsController():TargetsController { return _targetsController; }
 		public function get container():Sprite { return _container; }
 		
@@ -82,6 +85,7 @@ public class GameController extends EventDispatcher implements IScene{
 			_tankMovementListener = new TankMovementListener(_tankController, _mapObjectsController, _mouseDrawController);
 			_timeController = new TimeController(_container);
 			_debugController = new DebugController(_container, this);
+			_mapEditor = new MapEditor(_container, _mapObjectsController, _mapMatrix);
 			initTimeController();
 		}
 		
