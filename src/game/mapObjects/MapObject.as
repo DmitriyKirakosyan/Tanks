@@ -1,4 +1,5 @@
-package game {
+package game.mapObjects {
+import game.*;
 	import flash.display.Sprite;
 
 	public class MapObject extends Sprite {
@@ -20,6 +21,11 @@ package game {
 		public function get originY():Number { return super.y; }
 		public function set originX(value:Number):void { super.x = value; }
 		public function set originY(value:Number):void { super.y = value; }
+
+		public function correctMapPosition():void {
+			x = int (x);
+			y = int (y);
+		}
 
 		private function drawRectangle():void {
 			this.graphics.lineStyle(1, 0xffffff);

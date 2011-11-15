@@ -10,7 +10,7 @@ package game.mapObjects {
 	import flash.utils.Timer;
 	
 	import game.IControllerWithTime;
-import game.MapObject;
+import game.mapObjects.MapObject;
 import game.events.DamageObjectEvent;
 	import game.matrix.MapMatrix;
 	import game.matrix.MatrixItemIds;
@@ -86,6 +86,19 @@ public class MapObjectsController extends EventDispatcher implements IController
 					}
 				}
 			}
+		}
+
+		public function putBrick(brick:Brick):void {
+			brick.correctMapPosition();
+			if (!_bricks) { _bricks = new Vector.<Brick>(); }
+			_bricks.push(brick);
+			_container.addChild(brick);
+		}
+		public function putStone(stone:Stone):void {
+			stone.correctMapPosition();
+			if (!_stones) { _stones = new Vector.<Stone>(); }
+			_stones.push(stone);
+			_container.addChild(stone);
 		}
 		
 		public function addBullet(bullet:Bullet):void {
@@ -267,7 +280,7 @@ public class MapObjectsController extends EventDispatcher implements IController
 			if (index >= 0) { _bricks.splice(index, 1); }
 		}
 
-		private function removeElementFromMap(element:MapObject) {
+		private function removeElementFromMap(element:MapObject):void {
 			if (_container.contains(element)) { _container.removeChild(element); }
 			_mapMatrix.clearCell(element.x,  element.y);
 		}

@@ -1,7 +1,7 @@
 package game.mapObjects {
 import flash.geom.Point;
 
-import game.MapObject;
+import game.mapObjects.MapObject;
 
 	public class Stone extends MapObject {
 		private var _view:StoneView;

@@ -1,5 +1,5 @@
 package game.events {
-	import game.MapObject;
+	import game.mapObjects.MapObject;
 	import flash.events.Event;
 
 	public class DamageObjectEvent extends Event {

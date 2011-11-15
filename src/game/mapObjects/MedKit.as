@@ -6,7 +6,7 @@ import com.greensock.easing.Back;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.geom.Point;
-import game.MapObject;
+import game.mapObjects.MapObject;
 
 public class MedKit extends MapObject {
 		

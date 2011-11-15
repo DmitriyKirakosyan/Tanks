@@ -3,7 +3,7 @@ import com.greensock.TweenMax;
 
 import flash.display.Sprite;
 
-import game.MapObject;
+import game.mapObjects.MapObject;
 import game.tank.tank_destraction.TankDestoryEvent;
 import game.tank.tank_destraction.TankDestroyMethod;
 import game.tank.tank_destraction.TankDestroyMethodFactory;

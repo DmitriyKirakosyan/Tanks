@@ -8,7 +8,7 @@ package game.mapObjects {
 	import game.GameController;
 	import flash.geom.Point;
 
-import game.MapObject;
+import game.mapObjects.MapObject;
 
 public class Mine extends MapObject{
 		private var _distance:int;
