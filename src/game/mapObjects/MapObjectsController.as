@@ -10,7 +10,8 @@ package game.mapObjects {
 	import flash.utils.Timer;
 	
 	import game.IControllerWithTime;
-	import game.events.DamageObjectEvent;
+import game.MapObject;
+import game.events.DamageObjectEvent;
 	import game.matrix.MapMatrix;
 	import game.matrix.MatrixItemIds;
 	import game.tank.Bullet;
@@ -110,7 +111,7 @@ public class MapObjectsController extends EventDispatcher implements IController
 		}
 		private function removeStones():void {
 			for each (var stone:Stone in _stones) {
-				if (_container.contains(stone)) { _container.removeChild(stone); }
+				 removeElementFromMap(stone);
 				_stones= new Vector.<Stone>();
 			}
 		}
@@ -124,7 +125,7 @@ public class MapObjectsController extends EventDispatcher implements IController
 		}
 		private function removeBricks():void {
 			for each (var brick:Brick in _bricks) {
-				if (_container.contains(brick)) { _container.removeChild(brick); }
+				removeElementFromMap(brick);
 				_bricks = new Vector.<Brick>();
 			}
 		}
@@ -256,12 +257,15 @@ public class MapObjectsController extends EventDispatcher implements IController
 		}
 		
 		private function removeBrick(brick:Brick):void {
-			if (_container.contains(brick)) { _container.removeChild(brick); }
+			removeElementFromMap(brick);
 			const index:int = _bricks.indexOf(brick);
 			if (index >= 0) { _bricks.splice(index, 1); }
-			_mapMatrix.clearCell(brick.x,  brick.y);
 		}
-		
+
+		private function removeElementFromMap(element:MapObject) {
+			if (_container.contains(element)) { _container.removeChild(element); }
+			_mapMatrix.clearCell(element.x,  element.y);
+		}
 		
 		/* enemy tanks functions */
 		private function removeEnemyTank(tank:Tank):void {
