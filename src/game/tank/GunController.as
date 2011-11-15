@@ -8,6 +8,8 @@ package game.tank {
 	public class GunController extends EventDispatcher{
 		public var gunRot:int;
 
+		private var _rotating:Boolean;
+
 		private var _tank:Tank;
 		private var _gun:TankGun;
 		private var _gunLength:Number;
@@ -17,6 +19,8 @@ package game.tank {
 			_gunLength = _gun.height;
 			_tank = tank;
 		}
+
+		public function get rotating():Boolean { return _rotating; }
 		
 		public function removeTween():void {
 			TweenMax.killTweensOf(_gun);
@@ -32,7 +36,9 @@ package game.tank {
 				//TODO возможно здесь баг с поворотом
 				gunRot = 180 - angle;
 			}
+			_rotating = true;
 			TweenMax.to(_gun, 0.4, {rotation : gunRot, onComplete: function():void {
+					_rotating = false;
 					dispatchEvent(new GunRotateCompleteEvent(GunRotateCompleteEvent.COMPLETE));
 				}
 			});

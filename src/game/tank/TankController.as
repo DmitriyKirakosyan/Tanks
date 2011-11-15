@@ -36,7 +36,7 @@ package game.tank {
 		private var _autoAttackTimer:Timer;
 		private var _targetTank:Tank; //for autoattack mode only
 		
-		private var _bulletPoint:Point; //coz waiting for gun rotate
+		private var _bulletPoint:Point; // waiting for gun rotate
 		
 		private var _canShot:Boolean;
 		
@@ -137,7 +137,10 @@ package game.tank {
 		
 		public function shot(point:Point):void {
 			_bulletPoint = point;
-			tank.gunController.removeTween();
+			if (tank.gunController.rotating) {
+				tank.gunController.removeTween();
+				tank.gunController.removeEventListener(GunRotateCompleteEvent.COMPLETE, onGunRotateComplete);
+			}
 			tank.gunController.addEventListener(GunRotateCompleteEvent.COMPLETE, onGunRotateComplete);
 			tank.gunController.gunRotation(_mapMatrix.getMatrixPoint((new Point(point.x, point.y))));
 		}

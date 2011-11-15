@@ -259,6 +259,7 @@ public class MapObjectsController extends EventDispatcher implements IController
 			if (_container.contains(brick)) { _container.removeChild(brick); }
 			const index:int = _bricks.indexOf(brick);
 			if (index >= 0) { _bricks.splice(index, 1); }
+			_mapMatrix.clearCell(brick.x,  brick.y);
 		}
 		
 		
