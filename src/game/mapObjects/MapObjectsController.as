@@ -52,6 +52,11 @@ public class MapObjectsController extends EventDispatcher implements IController
 			drawObjects();
 		}
 
+		public function removeMapObjects():void {
+			removeBricks();
+			removeStones();
+		}
+
 		public function remove():void {
 			_container.removeChild(_tileMap);
 			_tileMap.remove();
