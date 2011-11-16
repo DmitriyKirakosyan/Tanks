@@ -10,23 +10,24 @@ public class Bullet extends Sprite {
 	private var _speed:Number;
 	private var _selfTank:Tank;
 
-	private var _tailPeriodCounter:int;
+	private var _bulletEffect:BulletEffect;
 
 	private var _container:Sprite;
 
 
 	private var speedCoef:Number = 200;
-	private const TAIL_PERIOD:int = 1;
 
 	public function Bullet(selfTank:Tank):void {
-		_tailPeriodCounter = 0;
 		_selfTank = selfTank;
+		_bulletEffect = BulletEffect.createTailEffect(this);
 		drawBulletPointOn(this, 0xf0002f);
 		this.rotation = selfTank.gunController.gunRot;
 		const bulletPoint:Point = selfTank.gunController.getBulletPoint();
 		this.x = bulletPoint.x;
 		this.y = bulletPoint.y;
 	}
+
+	public function get container():Sprite { return _container; }
 
 	public function get selfTank():Tank { return _selfTank; }
 
@@ -35,28 +36,8 @@ public class Bullet extends Sprite {
 	}
 
 	public function updateEffect():void {
-		tickTailPeriod();
-		if (timeToTail) { drawTail(); }
+		_bulletEffect.updateEffect();
 	}
-
-	private function drawTail():void {
-		var bulletTailPart:Sprite = new Sprite();
-		this.drawBulletPointOn(bulletTailPart);
-		bulletTailPart.x = this.x;
-		bulletTailPart.y = this.y;
-		bulletTailPart.scaleX = bulletTailPart.scaleY = .1;
-		bulletTailPart.alpha = .6;
-		_container.addChild(bulletTailPart);
-		TweenMax.to(bulletTailPart, 1.5, { scaleX : 3, scaleY : 3, alpha : 0, ease : Linear.easeNone,
-									onComplete: function():void { _container.removeChild(bulletTailPart); } });
-	}
-
-	private function tickTailPeriod():void {
-		_tailPeriodCounter++;
-		if (_tailPeriodCounter >= TAIL_PERIOD) { _tailPeriodCounter = 0; }
-	}
-
-	public function get timeToTail():Boolean { return _tailPeriodCounter == 0; }
 
 	public function moveTo(point:Point):void {
 		if (_selfTank.isPlayer) { speedCoef = 200; }
