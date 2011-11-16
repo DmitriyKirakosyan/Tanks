@@ -46,7 +46,7 @@ public class MapEditor {
 
 	/* Internal functions */
 
-	private function takeObject(object:MapObject) {
+	private function takeObject(object:MapObject):void {
 		_draggingObject = object;
 		_container.addChild(_draggingContainer);
 		_draggingContainer.addChild(_draggingObject);

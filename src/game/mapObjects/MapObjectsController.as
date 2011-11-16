@@ -107,6 +107,7 @@ public class MapObjectsController extends EventDispatcher implements IController
 			bullet.scaleTime(_scaleTime);
 			bullet.onComplete(onBulletComplete);
 			bullet.onUpdate(onBulletUpdate);
+			bullet.setContainer(_container);
 		}
 		
 		public function addEnemyTank(tank:Tank):void {
@@ -150,24 +151,11 @@ public class MapObjectsController extends EventDispatcher implements IController
 		
 		/* bullet functions */
 		private function onBulletUpdate(bullet:Bullet):void {
-			bullet.tickTailPeriod();
-			if (bullet.timeToTail) { drawBulletTail(bullet); }
+			bullet.updateEffect();
 			checkHitEnemyTank(bullet);
 			checkHitStone(bullet);
 			checkHitBrick(bullet);
 			checkHitPlayerTank(bullet);
-		}
-
-		private function drawBulletTail(bullet:Bullet):void {
-			var bulletTailPart:Sprite = new Sprite();
-			bullet.drawBulletPointOn(bulletTailPart);
-			bulletTailPart.x = bullet.x;
-			bulletTailPart.y = bullet.y;
-			bulletTailPart.scaleX = bulletTailPart.scaleY = .1;
-			bulletTailPart.alpha = .6;
-			_container.addChild(bulletTailPart);
-			TweenMax.to(bulletTailPart, 1.5, { scaleX : 3, scaleY : 3, alpha : 0, ease : Linear.easeNone,
-										onComplete: function():void { _container.removeChild(bulletTailPart); } });
 		}
 
 		private function checkHitEnemyTank(bullet:Bullet):void {
