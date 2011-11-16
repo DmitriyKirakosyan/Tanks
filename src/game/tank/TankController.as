@@ -48,7 +48,6 @@ package game.tank {
 		
 		public function TankController(container:Sprite, mapMatrix:MapMatrix):void {
 			_scaleTime = 1;
-
 			_movingTimeline = new TimelineMax();
 			_reloadController = new GunReloadController();
 			_direction = new TankDirection(TankDirection.UP_DIR);
@@ -112,8 +111,8 @@ package game.tank {
 		public function get autoAttackTimer():Timer { return _autoAttackTimer; }
 		
 		public function bam():void {
-            TweenMax.killTweensOf(tank);
-            if (_autoAttackTimer) { _autoAttackTimer.stop(); }
+			TweenMax.killTweensOf(tank);
+			if (_autoAttackTimer) { _autoAttackTimer.stop(); }
 			tank.bam();
 		}
 		
@@ -165,7 +164,7 @@ package game.tank {
 		private function onGunRotateComplete(event:GunRotateCompleteEvent):void {
 			tank.gunController.removeEventListener(GunRotateCompleteEvent.COMPLETE,onGunRotateComplete);
 			if (_canShot) {
-				const bullet:Bullet = new Bullet(tank);
+				const bullet:Bullet = tank.isPlayer ? Bullet.createTailRocketBullet(tank) : new Bullet(tank);
 				bullet.moveTo(_bulletPoint);
 				_container.addChild(bullet);
 				dispatchEvent(new TankShotingEvent(TankShotingEvent.WAS_SHOT, bullet));
