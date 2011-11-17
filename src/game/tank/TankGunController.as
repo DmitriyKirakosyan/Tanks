@@ -20,11 +20,10 @@ import game.events.GunRotateCompleteEvent;
 		private var _gunLength:Number;
 		
 		public function TankGunController(type:uint, tank:Tank) {
-			_gun = gun;
-			_type = type;
-			_gunLength = _gun.height;
 			_tank = tank;
+			_type = type;
 			_gun = new TankGun(type);
+			_gunLength = _gun.height;
 			_reloadController = new GunReloadController(reloadSpeed);
 			_reloadController.reloadBar.y = tank.originY + 30;
 			_reloadController.reloadBar.x = tank.originX - tank.width/2;
@@ -55,7 +54,7 @@ import game.events.GunRotateCompleteEvent;
 			TweenMax.killTweensOf(_gun);
 		}
 		
-		public function rotateGun (point:Point):void {
+		public function rotateGun(point:Point):void {
 			var angle:int = Math.asin((point.x - _tank.x)/(Math.sqrt((point.x - _tank.x)*(point.x - _tank.x) +
 							(point.y - _tank.y)*(point.y - _tank.y))))*180/Math.PI;
 			if (point.y < _tank.y) {
