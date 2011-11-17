@@ -17,18 +17,20 @@ public class Bullet extends Sprite {
 
 	private var speedCoef:Number = 200;
 
-	// bullet types
-	public static const TAIL_ROCKET:uint = 0;
-	public static const ROCKET:uint = 1;
-
 	public static function createTailRocketBullet(selfTank:Tank):Bullet {
-		return new Bullet(selfTank,  TAIL_ROCKET);
+		return new Bullet(selfTank,  TankGun.TAIL_ROCKET);
+	}
+	public static function createMinigunBullet(selfTank:Tank):Bullet {
+		return new Bullet(selfTank, TankGun.MINIGUN);
+	}
+	public static function createRocketBullet(selfTank:Tank):Bullet {
+		return new Bullet(selfTank);
 	}
 
-	public function Bullet(selfTank:Tank, type:uint = ROCKET):void {
+	public function Bullet(selfTank:Tank, type:uint = TankGun.ROCKET):void {
 		_type = type;
 		_selfTank = selfTank;
-		if (type == TAIL_ROCKET) { _bulletEffect = BulletEffect.createTailEffect(this); }
+		if (type == TankGun.TAIL_ROCKET) { _bulletEffect = BulletEffect.createTailEffect(this); }
 		drawBulletPointOn(this, 0xf0002f);
 		this.rotation = selfTank.gunController.gunRot;
 		const bulletPoint:Point = selfTank.gunController.getBulletPoint();

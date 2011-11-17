@@ -42,6 +42,7 @@ public class BulletEffect {
 	/* Internal functions */
 
 	private function drawTail():void {
+		if (!_bullet.container) { return; }
 		var bulletTailPart:Sprite = new Sprite();
 		_bullet.drawBulletPointOn(bulletTailPart);
 		bulletTailPart.x = _bullet.x;

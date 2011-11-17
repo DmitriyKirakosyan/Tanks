@@ -9,9 +9,8 @@ import game.tank.tank_destraction.TankDestroyMethod;
 import game.tank.tank_destraction.TankDestroyMethodFactory;
 
 public class Tank extends MapObject {
-	public var gun:TankGun;
 	public var tankBase:Sprite;
-	public var gunController:GunController;
+	private var _gunController:TankGunController;
 	public var liveTab:LiveTab;
 	public var reloadBar:Sprite;
 
@@ -31,13 +30,12 @@ public class Tank extends MapObject {
 		_vo = vo;
 
 		createTankBase();
-		gun = new TankGun(_vo.weaponType);
+		_gunController = new TankGunController(_vo.weaponType, this);
 
 		liveTab = new LiveTab();
 		this.addChild(liveTab);
 		this.addChild(tankBase);
-		this.addChild(gun);
-		gunController = new GunController(gun, this);
+		this.addChild(_gunController.gun);
 	}
 
 	public function addReloadController(reloadBar:Sprite):void {
@@ -50,10 +48,9 @@ public class Tank extends MapObject {
 	public function updateWeaponType(weaponType:uint):void {
 		if (_vo.weaponType != weaponType) {
 			_vo.weaponType = weaponType;
-			TweenMax.killTweensOf(gun);
-			removeChild(gun);
-			gun = new TankGun(weaponType);
-			addChild(gun);
+			removeChild(_gunController.gun);
+			_gunController.updateGun(weaponType);
+			addChild(_gunController.gun);
 		}
 	}
 
@@ -66,10 +63,20 @@ public class Tank extends MapObject {
 	}
 
 	public function get vo():TankVO { return _vo; }
+	public function get isPlayer():Boolean {return _isPlayer;}
+	public function set speedup(value:Number):void {
+		value; //TODO refact it
+		if (_speedup < maxSpeedup) { _speedup+= .05; }
+	}
+	public function get speedup():Number { return _speedup; }
+
+	public function get gunController():TankGunController {
+		return _gunController;
+	}
 
 	public function remove():void {
-		if (this.contains(tankBase)) this.removeChild(tankBase);
-		if (this.contains(gun)) this.removeChild(gun);
+		if (this.contains(tankBase)) { this.removeChild(tankBase); } else { trace("remove but tankBase not contains [Tank.remove]"); }
+		if (this.contains(_gunController.gun)) { this.removeChild(_gunController.gun); }
 		if (reloadBar && this.contains(reloadBar)) { this.removeChild(reloadBar); }
 	}
 
@@ -79,19 +86,13 @@ public class Tank extends MapObject {
 		_destroyMethod.destroy();
 	}
 
-	public function get isPlayer():Boolean {return _isPlayer;}
 
-	public function set speedup(value:Number):void {
-		value; //TODO refact it
-		if (_speedup < maxSpeedup) { _speedup+= .05; }
-	}
-	public function get speedup():Number { return _speedup; }
 
 	public function updateSpeedup():void { _speedup = 0; }
 
 	public function killTweens():void {
 		TweenMax.killTweensOf(tankBase);
-		TweenMax.killTweensOf(gun);
+		_gunController.killGunTweens();
 	}
 
 	/* Internal functions */
@@ -102,7 +103,8 @@ public class Tank extends MapObject {
 		} else {
 			tankBase = new Sprite();
 			const brickView:BricksView = new BricksView();
-			brickView.x -= brickView.width/2; brickView.y -= brickView.height/2;
+			brickView.x -= brickView.width/2;
+			brickView.y -= brickView.height/2;
 			tankBase.addChild(brickView);
 		}
 	}

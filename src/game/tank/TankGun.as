@@ -9,9 +9,10 @@ import flash.display.Sprite;
 public class TankGun extends Sprite{
 	private var _type:uint;
 
-	public static const ROCKET:uint = 0;
-	public static const MINIGUN:uint = 1;
-	public static const FIREGUN:uint = 2;
+	// types
+	public static const TAIL_ROCKET:uint = 0;
+	public static const ROCKET:uint = 1;
+	public static const MINIGUN:uint = 2;
 
 	public function TankGun(weaponType:uint = ROCKET) {
 		super();

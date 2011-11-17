@@ -141,7 +141,7 @@ package game.tank {
 				tank.gunController.removeEventListener(GunRotateCompleteEvent.COMPLETE, onGunRotateComplete);
 			}
 			tank.gunController.addEventListener(GunRotateCompleteEvent.COMPLETE, onGunRotateComplete);
-			tank.gunController.gunRotation(_mapMatrix.getMatrixPoint((new Point(point.x, point.y))));
+			tank.gunController.rotateGun(_mapMatrix.getMatrixPoint((new Point(point.x, point.y))));
 		}
 
 		/* Internal functions */
@@ -164,7 +164,7 @@ package game.tank {
 		private function onGunRotateComplete(event:GunRotateCompleteEvent):void {
 			tank.gunController.removeEventListener(GunRotateCompleteEvent.COMPLETE,onGunRotateComplete);
 			if (_canShot) {
-				const bullet:Bullet = tank.isPlayer ? Bullet.createTailRocketBullet(tank) : new Bullet(tank);
+				const bullet:Bullet = tank.gunController.createBullet();
 				bullet.moveTo(_bulletPoint);
 				_container.addChild(bullet);
 				dispatchEvent(new TankShotingEvent(TankShotingEvent.WAS_SHOT, bullet));

@@ -5,8 +5,10 @@ package game.tank {
 	
 	import flash.geom.Point;
 
-	public class GunController extends EventDispatcher{
+	public class TankGunController extends EventDispatcher{
 		public var gunRot:int;
+
+		private var _type:uint;
 
 		private var _rotating:Boolean;
 
@@ -14,10 +16,23 @@ package game.tank {
 		private var _gun:TankGun;
 		private var _gunLength:Number;
 		
-		public function GunController(gun:TankGun, tank:Tank) {
+		public function TankGunController(type:uint, tank:Tank) {
 			_gun = gun;
+			_type = type;
 			_gunLength = _gun.height;
 			_tank = tank;
+			_gun = new TankGun(type);
+		}
+
+		public function get gun():TankGun { return _gun; }
+
+		public function updateGun(weaponType:uint):void {
+			TweenMax.killTweensOf(_gun);
+			_gun = new TankGun(weaponType);
+		}
+
+		public function killGunTweens():void {
+			TweenMax.killTweensOf(_gun);
 		}
 
 		public function get rotating():Boolean { return _rotating; }
@@ -26,7 +41,7 @@ package game.tank {
 			TweenMax.killTweensOf(_gun);
 		}
 		
-		public function gunRotation (point:Point):void {
+		public function rotateGun (point:Point):void {
 			var angle:int = Math.asin((point.x - _tank.x)/(Math.sqrt((point.x - _tank.x)*(point.x - _tank.x) +
 							(point.y - _tank.y)*(point.y - _tank.y))))*180/Math.PI;
 			if (point.y < _tank.y) {
@@ -49,6 +64,14 @@ package game.tank {
 			var endX:Number = Math.cos(angle/180 * Math.PI) * _gunLength;
 			var endY:Number = -Math.sin(angle/180 * Math.PI) * _gunLength;
 			return new Point(_tank.originX + endX, _tank.originY + endY);
+		}
+
+		public function createBullet():Bullet {
+			switch (_type) {
+				case TankGun.TAIL_ROCKET : return Bullet.createTailRocketBullet(_tank);
+				case TankGun.MINIGUN : return Bullet.createMinigunBullet(_tank);
+			}
+			return Bullet.createRocketBullet(_tank);
 		}
 	}
 }
