@@ -31,7 +31,6 @@ package game.tank {
 		
 		private var _movingTimeline:TimelineMax;
 		
-		private var _reloadController:GunReloadController;
 		private var _gunController:TankGunController;
 
 		private var _autoAttackTimer:Timer;
@@ -50,7 +49,6 @@ package game.tank {
 		public function TankController(container:Sprite, mapMatrix:MapMatrix):void {
 			_scaleTime = 1;
 			_movingTimeline = new TimelineMax();
-			_reloadController = new GunReloadController();
 			_direction = new TankDirection(TankDirection.UP_DIR);
 			_container = container;
 			_mapMatrix = mapMatrix;
@@ -71,9 +69,7 @@ package game.tank {
 			if (player) {
 				highlightPlayerTank();
 			}
-			_reloadController.reloadBar.y = tank.originY + 30;
-			_reloadController.reloadBar.x = tank.originX - tank.width/2;
-			tank.addReloadController(_reloadController.reloadBar);
+			tank.addReloadBar(_gunController.reloadController.reloadBar);
 			_container.addChild(tank);
 			_canShot = true;
 		}
@@ -87,7 +83,6 @@ package game.tank {
 			if (_container.contains(tank)) {
 				_container.removeChild(tank);
 			}
-			_container.removeChild(_reloadController.reloadBar);
 		}
 
 		public function get tankTimeline():TimelineMax { return _movingTimeline; }
@@ -97,9 +92,7 @@ package game.tank {
 			if (_movingTimeline) {
 				_movingTimeline.timeScale = value;
 			}
-			if (_reloadController.reloading) {
-				_reloadController.scaleTime(value);
-			}
+			_gunController.scaleTime(value);
 		}
 		
 		public function isPointOnTank(point:Point):Boolean {
@@ -174,8 +167,8 @@ package game.tank {
 				_container.addChild(bullet);
 				dispatchEvent(new TankShotingEvent(TankShotingEvent.WAS_SHOT, bullet));
 				_canShot = false;
-				_reloadController.reload();
-				_reloadController.addEventListener(Event.COMPLETE, onReloadComplete);
+				_gunController.reloadController.reload();
+				_gunController.reloadController.addEventListener(Event.COMPLETE, onReloadComplete);
 			} else {
 				dispatchEvent(new TankShotingEvent(TankShotingEvent.CANT_SHOT, null));
 				trace("can not shot [TankController.onGunRotateComplete]");
@@ -183,7 +176,7 @@ package game.tank {
 		}
 		
 		private function onReloadComplete(event:Event):void {
-			_reloadController.removeEventListener(Event.COMPLETE, onReloadComplete);
+			_gunController.reloadController.removeEventListener(Event.COMPLETE, onReloadComplete);
 			_canShot = true;
 		}
 

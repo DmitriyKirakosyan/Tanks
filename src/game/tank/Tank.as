@@ -49,7 +49,7 @@ public class Tank extends MapObject {
 		_gun = null;
 	}
 
-	public function addReloadController(reloadBar:Sprite):void {
+	public function addReloadBar(reloadBar:Sprite):void {
 		this.reloadBar = reloadBar;
 		reloadBar.x = this.x - this.width/2;
 		reloadBar.y = this.y + 20;

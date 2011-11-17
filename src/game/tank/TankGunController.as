@@ -1,14 +1,17 @@
 package game.tank {
-	import game.events.GunRotateCompleteEvent;
+import game.IControllerWithTime;
+import game.events.GunRotateCompleteEvent;
 	import flash.events.EventDispatcher;
 	import com.greensock.TweenMax;
 	
 	import flash.geom.Point;
 
-	public class TankGunController extends EventDispatcher{
+	public class TankGunController extends EventDispatcher implements IControllerWithTime {
 		public var gunRot:int;
 
 		private var _type:uint;
+
+		private var _reloadController:GunReloadController;
 
 		private var _rotating:Boolean;
 
@@ -22,9 +25,20 @@ package game.tank {
 			_gunLength = _gun.height;
 			_tank = tank;
 			_gun = new TankGun(type);
+			_reloadController = new GunReloadController(reloadSpeed);
+			_reloadController.reloadBar.y = tank.originY + 30;
+			_reloadController.reloadBar.x = tank.originX - tank.width/2;
+		}
+
+		public function scaleTime(value:Number):void {
+			if (_reloadController.reloading) {
+				_reloadController.scaleTime(value);
+			}
 		}
 
 		public function get gun():TankGun { return _gun; }
+
+		public function get reloadController():GunReloadController { return _reloadController; }
 
 		public function updateGun(type:uint):void {
 			TweenMax.killTweensOf(_gun);
@@ -84,6 +98,10 @@ package game.tank {
 			result.setPosition(getBulletPoint());
 			result.rotation = _gun.rotation;
 			return result;
+		}
+
+		private function get reloadSpeed():Number {
+			return _type == TankGun.MINIGUN ? 10 : _type == TankGun.TAIL_ROCKET ? 2 : 4;
 		}
 	}
 }

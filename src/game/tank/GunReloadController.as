@@ -1,5 +1,4 @@
 package game.tank {
-	import com.greensock.TweenLite;
 	import com.bit101.components.ProgressBar;
 import com.greensock.TweenMax;
 
@@ -11,10 +10,13 @@ import flash.display.Sprite;
 		private var _reloadBar:ProgressBar;
 		private var _reloading:Boolean;
 		private var _reloadTween:TweenMax;
+
+		private var _speed:Number;
 		
-		public function GunReloadController():void {
+		public function GunReloadController(reloadSpeed:Number):void {
 			super();
 			_reloading = false;
+			_speed = reloadSpeed;
 			createReloadBar();
 		}
 		
@@ -32,7 +34,7 @@ import flash.display.Sprite;
 				_reloadTween.vars["onComplete"] = null;
 				TweenMax.killTweensOf(_reloadBar);
 			}
-			_reloadTween = new TweenMax(_reloadBar, 2, { value : 100, onComplete : onReloadComplete })
+			_reloadTween = new TweenMax(_reloadBar, 1/_speed, { value : 100, onComplete : onReloadComplete });
 		}
 		
 		public function get reloadBar():Sprite {
