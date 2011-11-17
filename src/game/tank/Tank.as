@@ -9,8 +9,8 @@ import game.tank.tank_destraction.TankDestroyMethod;
 import game.tank.tank_destraction.TankDestroyMethodFactory;
 
 public class Tank extends MapObject {
+	public var _gun:TankGun;
 	public var tankBase:Sprite;
-	private var _gunController:TankGunController;
 	public var liveTab:LiveTab;
 	public var reloadBar:Sprite;
 
@@ -30,12 +30,23 @@ public class Tank extends MapObject {
 		_vo = vo;
 
 		createTankBase();
-		_gunController = new TankGunController(_vo.weaponType, this);
 
 		liveTab = new LiveTab();
 		this.addChild(liveTab);
 		this.addChild(tankBase);
-		this.addChild(_gunController.gun);
+	}
+
+	public function get gun():TankGun {
+		return _gun;
+	}
+
+	public function addGun(gun:TankGun):void {
+		_gun = gun;
+		this.addChild(gun);
+	}
+	public function removeGun():void {
+		if (_gun && this.contains(_gun)) { this.removeChild(_gun); }
+		_gun = null;
 	}
 
 	public function addReloadController(reloadBar:Sprite):void {
@@ -43,15 +54,6 @@ public class Tank extends MapObject {
 		reloadBar.x = this.x - this.width/2;
 		reloadBar.y = this.y + 20;
 		addChild(reloadBar);
-	}
-
-	public function updateWeaponType(weaponType:uint):void {
-		if (_vo.weaponType != weaponType) {
-			_vo.weaponType = weaponType;
-			removeChild(_gunController.gun);
-			_gunController.updateGun(weaponType);
-			addChild(_gunController.gun);
-		}
 	}
 
 	public function tankDamage():void{
@@ -70,13 +72,9 @@ public class Tank extends MapObject {
 	}
 	public function get speedup():Number { return _speedup; }
 
-	public function get gunController():TankGunController {
-		return _gunController;
-	}
-
 	public function remove():void {
 		if (this.contains(tankBase)) { this.removeChild(tankBase); } else { trace("remove but tankBase not contains [Tank.remove]"); }
-		if (this.contains(_gunController.gun)) { this.removeChild(_gunController.gun); }
+		if (this.contains(_gun)) { this.removeChild(_gun); }
 		if (reloadBar && this.contains(reloadBar)) { this.removeChild(reloadBar); }
 	}
 
@@ -92,7 +90,6 @@ public class Tank extends MapObject {
 
 	public function killTweens():void {
 		TweenMax.killTweensOf(tankBase);
-		_gunController.killGunTweens();
 	}
 
 	/* Internal functions */

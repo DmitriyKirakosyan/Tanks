@@ -32,10 +32,11 @@ public class Bullet extends Sprite {
 		_selfTank = selfTank;
 		if (type == TankGun.TAIL_ROCKET) { _bulletEffect = BulletEffect.createTailEffect(this); }
 		drawBulletPointOn(this, 0xf0002f);
-		this.rotation = selfTank.gunController.gunRot;
-		const bulletPoint:Point = selfTank.gunController.getBulletPoint();
-		this.x = bulletPoint.x;
-		this.y = bulletPoint.y;
+	}
+
+	public function setPosition(point:Point):void {
+		this.x = point.x;
+		this.y = point.y;
 	}
 
 	public function get container():Sprite { return _container; }

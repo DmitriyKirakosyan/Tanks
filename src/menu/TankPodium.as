@@ -260,7 +260,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 		const point:Point = new Point(_weapon.x,  _weapon.y);
 		var weaponType:uint;
 		if (_weapon.type == TankGun.ROCKET) { weaponType = TankGun.MINIGUN;
-		} else if (_weapon.type == TankGun.MINIGUN) { weaponType = TankGun.FIREGUN;
+		} else if (_weapon.type == TankGun.MINIGUN) { weaponType = TankGun.TAIL_ROCKET;
 		} else { weaponType = TankGun.ROCKET; }
 		_weapon = new TankGun(weaponType);
 		const distance:Number = Math.abs(_defaultWeaponPoint.x -point.x);
@@ -270,7 +270,8 @@ public class TankPodium extends EventDispatcher implements IScene{
 		_weapon.scaleX = 4;
 		_weapon.scaleY = .1; _weapon.y = point.y;
 		_container.addChild(_weapon);
-		_tank.updateWeaponType(weaponType);
+		_tank.removeGun();
+		_tank.addGun(new TankGun(weaponType));
 		TweenMax.to(_weapon,  .3, {x : _defaultWeaponPoint.x, scaleX : 1, scaleY : 1, alpha : 1, ease:Linear.easeIn,
 															blurFilter:{blurX:0}, onComplete : function():void { _weapon.filters = []; }});
 	}

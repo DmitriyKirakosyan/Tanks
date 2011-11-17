@@ -26,9 +26,9 @@ package game.tank {
 
 		public function get gun():TankGun { return _gun; }
 
-		public function updateGun(weaponType:uint):void {
+		public function updateGun(type:uint):void {
 			TweenMax.killTweensOf(_gun);
-			_gun = new TankGun(weaponType);
+			_gun = new TankGun(type);
 		}
 
 		public function killGunTweens():void {
@@ -64,6 +64,13 @@ package game.tank {
 			var endX:Number = Math.cos(angle/180 * Math.PI) * _gunLength;
 			var endY:Number = -Math.sin(angle/180 * Math.PI) * _gunLength;
 			return new Point(_tank.originX + endX, _tank.originY + endY);
+		}
+
+		public function updateWeaponType(type:uint):void {
+			if (_type != type) {
+				_type = type;
+				updateGun(type);
+			}
 		}
 
 		public function createBullet():Bullet {
