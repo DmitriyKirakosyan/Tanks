@@ -59,7 +59,7 @@ package game.tank {
 			});
 		}
 		
-		public function getBulletPoint():Point {
+		private function getBulletPoint():Point {
 			var angle:Number = (-_gun.rotation + 90);
 			var endX:Number = Math.cos(angle/180 * Math.PI) * _gunLength;
 			var endY:Number = -Math.sin(angle/180 * Math.PI) * _gunLength;
@@ -74,11 +74,16 @@ package game.tank {
 		}
 
 		public function createBullet():Bullet {
+			var result:Bullet;
 			switch (_type) {
-				case TankGun.TAIL_ROCKET : return Bullet.createTailRocketBullet(_tank);
-				case TankGun.MINIGUN : return Bullet.createMinigunBullet(_tank);
+				case TankGun.TAIL_ROCKET : result = Bullet.createTailRocketBullet(_tank); break;
+				case TankGun.MINIGUN : result = Bullet.createMinigunBullet(_tank); break;
+
+				default : result = Bullet.createRocketBullet(_tank);
 			}
-			return Bullet.createRocketBullet(_tank);
+			result.setPosition(getBulletPoint());
+			result.rotation = _gun.rotation;
+			return result;
 		}
 	}
 }

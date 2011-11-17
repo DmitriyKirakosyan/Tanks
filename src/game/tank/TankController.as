@@ -171,8 +171,6 @@ package game.tank {
 			if (_canShot) {
 				const bullet:Bullet = _gunController.createBullet();
 				bullet.moveTo(_bulletPoint);
-				bullet.setPosition(_gunController.getBulletPoint());
-				bullet.rotation = _gunController.gunRot;
 				_container.addChild(bullet);
 				dispatchEvent(new TankShotingEvent(TankShotingEvent.WAS_SHOT, bullet));
 				_canShot = false;
