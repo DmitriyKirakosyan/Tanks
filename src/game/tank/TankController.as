@@ -38,8 +38,6 @@ package game.tank {
 		
 		private var _bulletPoint:Point; // waiting for gun rotate
 		
-		private var _canShot:Boolean;
-		
 		public static const LEFT_ROT:int = -90;
 		public static const RIGHT_ROT:int = 90;
 		public static const UP_ROT:int = 0;
@@ -71,11 +69,9 @@ package game.tank {
 			}
 			tank.addReloadBar(_gunController.reloadController.reloadBar);
 			_container.addChild(tank);
-			_canShot = true;
 		}
 
 		public function remove():void {
-			_canShot = false;
 			TweenMax.killTweensOf(tank);
 			tank.killTweens();
 			_movingTimeline.kill();
@@ -131,22 +127,36 @@ package game.tank {
 						onStartParams : [point]}));
 			_movingTimeline.play();
 		}
-		
-		public function shot(point:Point):void {
-			_bulletPoint = point;
-			if (_gunController.rotating) {
-				_gunController.removeTween();
-				_gunController.removeEventListener(GunRotateCompleteEvent.COMPLETE, onGunRotateComplete);
+
+		public function setTarget(point:Point = null, rotateGun:Boolean = true):void {
+			if (point) { _bulletPoint = point; }
+			if (!_bulletPoint) { return; }
+			if (rotateGun) {
+				if (_gunController.rotating) {
+					_gunController.removeTween();
+					_gunController.removeEventListener(GunRotateCompleteEvent.COMPLETE, onGunRotateComplete);
+				}
+				_gunController.rotateGun(_mapMatrix.getMatrixPoint((new Point(point.x, point.y))));
 			}
-			_gunController.addEventListener(GunRotateCompleteEvent.COMPLETE, onGunRotateComplete);
-			_gunController.rotateGun(_mapMatrix.getMatrixPoint((new Point(point.x, point.y))));
+		}
+		
+		public function shot():void {
+			if (_gunController.rotating) {
+				if (!_gunController.hasEventListener(GunRotateCompleteEvent.COMPLETE)) {
+					_gunController.addEventListener(GunRotateCompleteEvent.COMPLETE, onGunRotateComplete);
+				}
+			} else {
+				if (_bulletPoint && !_gunController.reloadController.reloading) {
+					ejectBullet();
+				}
+			}
 		}
 
 		/* Internal functions */
 		
 		private function onAutoAttackTimer(event:TimerEvent):void {
 			if (_targetTank) {
-				shot(new Point(_targetTank.originX, _targetTank.originY));
+				setTarget(new Point(_targetTank.originX, _targetTank.originY));
 			}
 		}
 		
@@ -161,23 +171,26 @@ package game.tank {
 		
 		private function onGunRotateComplete(event:GunRotateCompleteEvent):void {
 			_gunController.removeEventListener(GunRotateCompleteEvent.COMPLETE,onGunRotateComplete);
-			if (_canShot) {
-				const bullet:Bullet = _gunController.createBullet();
-				bullet.moveTo(_bulletPoint);
-				_container.addChild(bullet);
-				dispatchEvent(new TankShotingEvent(TankShotingEvent.WAS_SHOT, bullet));
-				_canShot = false;
-				_gunController.reloadController.reload();
-				_gunController.reloadController.addEventListener(Event.COMPLETE, onReloadComplete);
+			if (!_gunController.reloadController.reloading) {
+	 			ejectBullet();
 			} else {
 				dispatchEvent(new TankShotingEvent(TankShotingEvent.CANT_SHOT, null));
 				trace("can not shot [TankController.onGunRotateComplete]");
 			}
 		}
+
+		private function ejectBullet() {
+			const bullet:Bullet = _gunController.createBullet();
+			bullet.moveTo(_bulletPoint);
+			_container.addChild(bullet);
+			dispatchEvent(new TankShotingEvent(TankShotingEvent.WAS_SHOT, bullet));
+			_gunController.reloadController.reload();
+			_gunController.reloadController.addEventListener(Event.COMPLETE, onReloadComplete);
+		}
 		
 		private function onReloadComplete(event:Event):void {
 			_gunController.reloadController.removeEventListener(Event.COMPLETE, onReloadComplete);
-			_canShot = true;
+			dispatchEvent(new TankShotingEvent(TankShotingEvent.RELOAD_COMPLETE, null));
 		}
 
 		private function highlightPlayerTank():void {

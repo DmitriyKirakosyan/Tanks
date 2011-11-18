@@ -36,8 +36,8 @@ import game.events.GunRotateCompleteEvent;
 			}
 		}
 
+		public function get rotating():Boolean { return _rotating; }
 		public function get gun():TankGun { return _gun; }
-
 		public function get reloadController():GunReloadController { return _reloadController; }
 
 		public function updateGun(type:uint):void {
@@ -49,8 +49,7 @@ import game.events.GunRotateCompleteEvent;
 			TweenMax.killTweensOf(_gun);
 		}
 
-		public function get rotating():Boolean { return _rotating; }
-		
+
 		public function removeTween():void {
 			TweenMax.killTweensOf(_gun);
 		}
