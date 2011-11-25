@@ -14,15 +14,15 @@ import flash.display.Sprite;
 public class BulletEffect {
 	private var _bullet:Bullet;
 	private var _tailPeriodCounter:int;
+	private var _tailPeriod:int;
 	private var _effectType:uint;
 
 	private static const ROCKET_TAIL_EFFECT:uint = 0;
 	private static const MINIGUN_TAIL_EFFECT:uint = 1;
 
-	private static const TAIL_PERIOD:int = 1;
-
 	public function BulletEffect(bullet:Bullet, effectType:uint) {
 		_tailPeriodCounter = 0;
+		_tailPeriod = effectType == ROCKET_TAIL_EFFECT ? 1 : 3;
 		_effectType = effectType;
 		_bullet = bullet;
 	}
@@ -77,7 +77,7 @@ public class BulletEffect {
 
 	private function tickTailPeriod():void {
 		_tailPeriodCounter++;
-		if (_tailPeriodCounter >= TAIL_PERIOD) { _tailPeriodCounter = 0; }
+		if (_tailPeriodCounter >= _tailPeriod) { _tailPeriodCounter = 0; }
 	}
 
 	public function get timeToTail():Boolean { return _tailPeriodCounter == 0; }
