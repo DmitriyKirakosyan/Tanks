@@ -30,7 +30,7 @@ public class Bullet extends Sprite {
 	public function Bullet(selfTank:Tank, type:uint = TankGun.ROCKET):void {
 		_type = type;
 		_selfTank = selfTank;
-		if (type == TankGun.TAIL_ROCKET) { _bulletEffect = BulletEffect.createTailEffect(this); }
+		_bulletEffect = createBulletEffect();
 		drawBulletPointOn(this, 0xf0002f);
 	}
 
@@ -86,6 +86,15 @@ public class Bullet extends Sprite {
 		sprite.graphics.beginFill(color);
 		sprite.graphics.drawCircle(0,0,2);
 		sprite.graphics.endFill();
+	}
+
+	/* Internal functions */
+
+	private function createBulletEffect():BulletEffect {
+		if (_type == TankGun.TAIL_ROCKET) { return BulletEffect.createRocketTailEffect(this);
+		} else if (_type == TankGun.MINIGUN) { return BulletEffect.createMinigunTailEffect(this); }
+
+		return null;
 	}
 }
 }
