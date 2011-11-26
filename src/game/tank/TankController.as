@@ -129,14 +129,14 @@ package game.tank {
 		}
 
 		public function setTarget(point:Point = null, rotateGun:Boolean = true):void {
-			if (point) { _bulletPoint = point; }
+			if (point) { _bulletPoint = point; } //if point is null then we need to shot to same target (_bulletPoint)
 			if (!_bulletPoint) { return; }
 			if (rotateGun) {
 				if (_gunController.rotating) {
 					_gunController.removeTween();
 					_gunController.removeEventListener(GunRotateCompleteEvent.COMPLETE, onGunRotateComplete);
 				}
-				_gunController.rotateGun(_mapMatrix.getMatrixPoint((new Point(point.x, point.y))));
+				_gunController.rotateGun(_mapMatrix.getMatrixPoint((new Point(_bulletPoint.x, _bulletPoint.y))));
 			}
 		}
 		

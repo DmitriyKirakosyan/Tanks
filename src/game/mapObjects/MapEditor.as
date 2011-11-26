@@ -75,6 +75,8 @@ public class MapEditor {
 	private function sendObjectToObjectsController():void {
 		if (_draggingObject is Brick) {
 			_objectsController.putBrick(_draggingObject as Brick);
+		} else if (_draggingObject is Stone) {
+			_objectsController.putStone(_draggingObject as Stone);
 		}
 	}
 }
