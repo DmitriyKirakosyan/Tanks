@@ -1,6 +1,4 @@
 package game {
-import flash.events.TimerEvent;
-import flash.utils.Timer;
 import game.Debug.DebugController;
 import game.events.DamageObjectEvent;
 import game.events.SceneEvent;

@@ -62,6 +62,9 @@ package game.Debug {
 			_debugContainer.addChild(_container);
 			_buttons.stopAddTankButton.addEventListener(MouseEvent.CLICK, tankAddController);
 			_buttons.dragTankButton.addEventListener(MouseEvent.CLICK, enemyTankMoveController);
+			_buttons.removeMapObjButton.addEventListener(MouseEvent.CLICK, removeMapObjects);
+			_buttons.addBrickBtn.addEventListener(MouseEvent.CLICK, addBrick);
+			_buttons.addStoneBtm.addEventListener(MouseEvent.CLICK, addStone);
 			_playerTank = _gameController.targetsController.playerTank;
 			_enemies = _gameController.targetsController.enemies;
 			_enemiesController = _gameController.targetsController.enemyControllers;
@@ -71,9 +74,28 @@ package game.Debug {
 				_debugContainer.removeChild(_container);
 				_buttons.stopAddTankButton.removeEventListener(MouseEvent.CLICK, tankAddController);
 				_buttons.dragTankButton.removeEventListener(MouseEvent.CLICK, enemyTankMoveController);
+				_buttons.removeMapObjButton.removeEventListener(MouseEvent.CLICK, removeMapObjects);
+				_buttons.addBrickBtn.removeEventListener(MouseEvent.CLICK, addBrick);
+				_buttons.addStoneBtm.removeEventListener(MouseEvent.CLICK, addStone);
 			}
 		}
+		/*Delete Map Objects*/
+		private function removeMapObjects(event:MouseEvent):void {
+			_gameController.mapObjectsController.removeMapObjects();
+		}
 		
+		private function addBrick(event:MouseEvent):void {
+			event.stopPropagation();
+			_gameController.mapEditor.takeBrick();
+		}
+		private function addStone(event:MouseEvent):void {
+			event.stopPropagation();
+			_gameController.mapEditor.takeStone();
+		}
+
+		//TODO сделать кнопку для saveMap() и пофиг на выдает ошибку "null"
+
+
 		/* Add Enemy or Not */
 		private function tankAddController(event:MouseEvent):void {
 			if (!_stopAddTank) {

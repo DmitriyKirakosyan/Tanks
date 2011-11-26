@@ -13,4 +13,4 @@
 	at game.tank::TargetsController/remove()[C:\Users\телемакс\Dropbox\Tanks\src\game\tank\TargetsController.as:77]
 
 после попытки управления танком после смерти такая херь вылезает
-5)
+5)при удалении кирпича на нем остается действие прерывания пути для игрока
