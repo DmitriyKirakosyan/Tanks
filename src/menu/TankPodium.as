@@ -271,7 +271,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 		_weapon.scaleY = .1; _weapon.y = point.y;
 		_container.addChild(_weapon);
 		_tank.removeGun();
-		_tank.addGun(new TankGun(weaponType));
+		_tank.updateGun(weaponType);
 		TweenMax.to(_weapon,  .3, {x : _defaultWeaponPoint.x, scaleX : 1, scaleY : 1, alpha : 1, ease:Linear.easeIn,
 															blurFilter:{blurX:0}, onComplete : function():void { _weapon.filters = []; }});
 	}

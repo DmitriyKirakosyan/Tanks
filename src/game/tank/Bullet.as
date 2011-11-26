@@ -48,7 +48,7 @@ public class Bullet extends Sprite {
 	}
 
 	public function updateEffect():void {
-		_bulletEffect.updateEffect();
+		if (_bulletEffect) { _bulletEffect.updateEffect(); }
 	}
 
 	public function moveTo(point:Point):void {

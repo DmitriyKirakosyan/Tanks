@@ -57,13 +57,12 @@ package game.tank {
 		public function updateWeaponType(weaponType:uint):void {
 			tank.removeGun();
 			_gunController.updateWeaponType(weaponType);
-			tank.addGun(_gunController.gun);
+			tank.updateGun(weaponType);
 		}
 
 		public function init(tankVO:TankVO, player:Boolean = false):void {
 			tank = new Tank(tankVO, player);
 			_gunController = new TankGunController(tankVO.weaponType, tank);
-			tank.addGun(_gunController.gun);
 			if (player) {
 				highlightPlayerTank();
 			}

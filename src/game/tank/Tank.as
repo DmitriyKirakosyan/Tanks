@@ -30,6 +30,7 @@ public class Tank extends MapObject {
 		_vo = vo;
 
 		createTankBase();
+		addGun(new TankGun(vo.weaponType));
 
 		liveTab = new LiveTab();
 		this.addChild(liveTab);
@@ -40,9 +41,9 @@ public class Tank extends MapObject {
 		return _gun;
 	}
 
-	public function addGun(gun:TankGun):void {
-		_gun = gun;
-		this.addChild(gun);
+	public function updateGun(weaponType:uint):void {
+		_vo.weaponType = weaponType;
+		addGun(new TankGun(weaponType));
 	}
 	public function removeGun():void {
 		if (_gun && this.contains(_gun)) { this.removeChild(_gun); }
@@ -93,6 +94,11 @@ public class Tank extends MapObject {
 	}
 
 	/* Internal functions */
+
+	private function addGun(gun:TankGun):void {
+		_gun = gun;
+		this.addChild(gun);
+	}
 
 	private function createTankBase():void {
 		if (_vo.tankBase == 0) {
