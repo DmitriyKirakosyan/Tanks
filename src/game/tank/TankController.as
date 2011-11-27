@@ -25,6 +25,7 @@ package game.tank {
 		private var _direction:TankDirection;
 		private var _container:Sprite;
 		private var _mapMatrix:MapMatrix;
+		private var _wannaShot:Boolean;
 		
 		private var _startX:Number = 300;
 		private var _startY:Number = 300;
@@ -46,6 +47,7 @@ package game.tank {
 		
 		public function TankController(container:Sprite, mapMatrix:MapMatrix):void {
 			_scaleTime = 1;
+			_wannaShot = true;
 			_movingTimeline = new TimelineMax();
 			_direction = new TankDirection(TankDirection.UP_DIR);
 			_container = container;
@@ -53,6 +55,7 @@ package game.tank {
 		}
 		
 		public function get movingTimeline():TimelineMax { return _movingTimeline; }
+		public function get wannaShot():Boolean { return _wannaShot; }
 		
 		public function updateWeaponType(weaponType:uint):void {
 			tank.removeGun();
@@ -62,7 +65,7 @@ package game.tank {
 
 		public function init(tankVO:TankVO, player:Boolean = false):void {
 			tank = new Tank(tankVO, player);
-			_gunController = new TankGunController(tankVO.weaponType, tank);
+			_gunController = new TankGunController(tank);
 			if (player) {
 				highlightPlayerTank();
 			}
@@ -132,11 +135,10 @@ package game.tank {
 			if (!_bulletPoint) { return; }
 			if (rotateGun) {
 				if (_gunController.rotating) {
-					trace("im rotating [TankController.setTarget]");
 					_gunController.removeTween();
 					_gunController.removeEventListener(GunRotateCompleteEvent.COMPLETE, onGunRotateComplete);
 				}
-				_gunController.rotateGun(_mapMatrix.getMatrixPoint((new Point(_bulletPoint.x, _bulletPoint.y))));
+				_gunController.rotateGun(_mapMatrix.getMatrixPoint(_bulletPoint));
 			}
 		}
 		
@@ -186,10 +188,12 @@ package game.tank {
 			dispatchEvent(new TankShotingEvent(TankShotingEvent.WAS_SHOT, bullet));
 			_gunController.reloadController.reload();
 			_gunController.reloadController.addEventListener(Event.COMPLETE, onReloadComplete);
+			_wannaShot = false;
 		}
 		
 		private function onReloadComplete(event:Event):void {
 			_gunController.reloadController.removeEventListener(Event.COMPLETE, onReloadComplete);
+			_wannaShot = true;
 			dispatchEvent(new TankShotingEvent(TankShotingEvent.RELOAD_COMPLETE, null));
 		}
 

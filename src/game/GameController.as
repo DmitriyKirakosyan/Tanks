@@ -1,4 +1,6 @@
 package game {
+import flash.events.Event;
+
 import game.Debug.DebugController;
 import game.events.DamageObjectEvent;
 import game.events.SceneEvent;
@@ -35,11 +37,14 @@ public class GameController extends EventDispatcher implements IScene{
 		private var _debugController:DebugController;
 		private var _mouseDown:Boolean;
 
+		private var _pointUnderMouse:Point;
+
 		public static const CELL:int = 40;
 		
-		public function GameController(c:Sprite):void {
+		public function GameController(container:Sprite):void {
 			_mouseDown = false;
-			_container = c;
+			_container = container;
+			_pointUnderMouse = new Point();
 			initControllers();
 		}
 
@@ -112,7 +117,7 @@ public class GameController extends EventDispatcher implements IScene{
 			_mapObjectsController.addEventListener(DamageObjectEvent.DAMAGE_ENEMY_TANK, onEnemyDamage);
 			_mapObjectsController.addEventListener(DamageObjectEvent.DAMAGE_PLAYER_TANK, onPlayerDamage);
 			_tankController.addEventListener(TankShotingEvent.WAS_SHOT, onTankShot);
-			_tankController.addEventListener(TankShotingEvent.RELOAD_COMPLETE, onTankRelaodComplete);
+			_tankController.addEventListener(TankShotingEvent.RELOAD_COMPLETE, onTankReloadComplete);
 			_targetsController.addEventListener(TankShotingEvent.WAS_SHOT, onTankShot);
 			_targetsController.addEventListener(TargetsControllerEvent.NEW_TANK, onNewEnemyTank);
 
@@ -129,7 +134,7 @@ public class GameController extends EventDispatcher implements IScene{
 			_mapObjectsController.removeEventListener(DamageObjectEvent.DAMAGE_PLAYER_TANK, onPlayerDamage);
 			_mapObjectsController.removeEventListener(DamageObjectEvent.DAMAGE_ENEMY_TANK, onEnemyDamage);
 			_tankController.removeEventListener(TankShotingEvent.WAS_SHOT, onTankShot);
-			_tankController.addEventListener(TankShotingEvent.RELOAD_COMPLETE, onTankRelaodComplete);
+			_tankController.removeEventListener(TankShotingEvent.RELOAD_COMPLETE, onTankReloadComplete);
 			_targetsController.removeEventListener(TankShotingEvent.WAS_SHOT, onTankShot);
 			_targetsController.removeEventListener(TargetsControllerEvent.NEW_TANK, onNewEnemyTank);
 
@@ -154,7 +159,7 @@ public class GameController extends EventDispatcher implements IScene{
 		
 		private function onStageMouseDown(event:MouseEvent):void {
 			const point:Point = new Point(event.stageX, event.stageY);
-			if (!_tankController.isPointOnTank(point)) {
+			if (!_tankController.isPointOnTank(point) && _tankController.wannaShot) {
 				_tankController.setTarget(point);
 				_tankController.shot();
 				_mouseDown = true;
@@ -164,10 +169,15 @@ public class GameController extends EventDispatcher implements IScene{
 			_mouseDown = false;
 		}
 		private function onMouseMove(event:MouseEvent):void {
-			const point:Point = new Point(event.stageX, event.stageY);
-			if (_mouseDown) {
-				_tankController.setTarget(point, false);
+			_pointUnderMouse.x = event.stageX;
+			_pointUnderMouse.y = event.stageY;
+			if (_mouseDown && _tankController.wannaShot) {
+				_tankController.setTarget(_pointUnderMouse.clone());
+				_tankController.shot();
 			}
+		}
+
+		private function onEnterFrame(event:Event):void {
 		}
 		
 		private function onMineBam(event:MineBamEvent):void {
@@ -181,13 +191,14 @@ public class GameController extends EventDispatcher implements IScene{
 		private function onTankShot(event:TankShotingEvent):void {
 			_mapObjectsController.addBullet(event.bullet);
 		}
-		private function onTankRelaodComplete(event:TankShotingEvent):void {
-			if (_mouseDown) {
-				_tankController.setTarget();
-				_tankController.shot()
+
+		private function onTankReloadComplete(event:TankShotingEvent):void {
+			if (_tankController.wannaShot) {
+				_tankController.setTarget(_pointUnderMouse);
+				_tankController.shot();
 			}
 		}
-		
+
 		private function onNewMovePoint(event:DrawingControllerEvent):void {
 			_tankController.addPointToMovePath(_mouseDrawController.getLastMovePoint());
 		}
