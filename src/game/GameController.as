@@ -193,7 +193,7 @@ public class GameController extends EventDispatcher implements IScene{
 		}
 
 		private function onTankReloadComplete(event:TankShotingEvent):void {
-			if (_tankController.wannaShot) {
+			if (_mouseDown && _tankController.wannaShot) {
 				_tankController.setTarget(_pointUnderMouse);
 				_tankController.shot();
 			}
