@@ -22,7 +22,7 @@ import game.events.GunRotateCompleteEvent;
 		public function TankGunController(type:uint, tank:Tank) {
 			_tank = tank;
 			_type = type;
-			_gun = new TankGun(type);
+			_gun = tank.gun;
 			_gunLength = _gun.height;
 			_reloadController = new GunReloadController(reloadSpeed);
 			_reloadController.reloadBar.y = tank.originY + 30;
@@ -64,6 +64,7 @@ import game.events.GunRotateCompleteEvent;
 				gunRot = 180 - angle;
 			}
 			_rotating = true;
+			trace("try rotate, rotation : " + _gun.rotation + ", need rotation" + gunRot);
 			TweenMax.to(_gun, 0.4, {rotation : gunRot, onComplete: function():void {
 					_rotating = false;
 					dispatchEvent(new GunRotateCompleteEvent(GunRotateCompleteEvent.COMPLETE));

@@ -132,6 +132,7 @@ package game.tank {
 			if (!_bulletPoint) { return; }
 			if (rotateGun) {
 				if (_gunController.rotating) {
+					trace("im rotating [TankController.setTarget]");
 					_gunController.removeTween();
 					_gunController.removeEventListener(GunRotateCompleteEvent.COMPLETE, onGunRotateComplete);
 				}
