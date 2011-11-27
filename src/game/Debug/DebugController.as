@@ -1,17 +1,19 @@
 package game.Debug {
+	import com.greensock.events.TweenEvent;
+	import game.Debug.DebugObjects.Buttons;
 	import game.tank.TankController;
 	import flash.filters.GlowFilter;
 	import game.tank.Tank;
 	import flash.events.MouseEvent;
 	import game.GameController;
-	import game.mapObjects.Buttons;
 	import flash.display.Sprite;
 	import flash.events.EventDispatcher;
 
+	import com.greensock.*;
 
 
 	public class DebugController extends EventDispatcher {
-		
+ 		
 		private var _gameController:GameController;
 		private var _debugContainer:Sprite;
 		private var _buttons:Buttons;
@@ -24,11 +26,17 @@ package game.Debug {
 		private var _enemies:Vector.<Tank>;
 		private var _enemiesController:Vector.<TankController>;
 		
+		private var _tween:Boolean = false;
+		
 		public function DebugController(container:Sprite, gameController:GameController):void {
 			super();
 			_debugContainer = container;
 			_container = new Sprite();
-			_container.visible = false;
+			_container.graphics.lineStyle(2, 0x999999);
+			_container.graphics.beginFill(0xD4D4D4, .5);
+			_container.graphics.drawRoundRect(5, -110, 590, 80, 10);
+			_container.graphics.endFill();
+			//_container.visible = false;
 			_gameController = gameController;
 			createButtons();
 			
@@ -49,13 +57,24 @@ package game.Debug {
 		
 		private function onKeyDown(event:MouseEvent):void {
 			if (event.ctrlKey) {
-				_container.visible = !_container.visible;
+				if(!_tween) {
+					//_container.visible = !_container.visible;
+					TweenLite.to(_container, .5, {x: 0, y : 100 });
+					_tween = true;
+					return;
+				}
+				if(_tween) {
+					TweenLite.to(_container, 1, {x: 0, y : -100 });
+					//_container.visible = !_container.visible;
+					_tween = false;
+					return;
+				}
 			}
 		}
 		private function createButtons():void {
 			_buttons = new Buttons();
 			_buttons.x = 10;
-			_buttons.y = 10;
+			_buttons.y = -90;
 			_container.addChild(_buttons);
 		}
 		private function addButtons():void {

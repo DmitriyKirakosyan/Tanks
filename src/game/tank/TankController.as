@@ -181,7 +181,7 @@ package game.tank {
 			}
 		}
 
-		private function ejectBullet() {
+		private function ejectBullet():void {
 			const bullet:Bullet = _gunController.createBullet();
 			bullet.moveTo(_bulletPoint);
 			_container.addChild(bullet);
