@@ -1,4 +1,6 @@
 package game.tank {
+import flash.events.Event;
+
 import game.IControllerWithTime;
 import game.events.GunRotateCompleteEvent;
 	import flash.events.EventDispatcher;
@@ -18,6 +20,10 @@ import game.events.GunRotateCompleteEvent;
 		private var _tank:Tank;
 		private var _gun:TankGun;
 		private var _gunLength:Number;
+		private var _rotationCoeff:int;
+		private var _targetRotation:Number;
+
+		private const GUN_SPEED:Number = 4;
 		
 		public function TankGunController(tank:Tank) {
 			_tank = tank;
@@ -57,21 +63,49 @@ import game.events.GunRotateCompleteEvent;
 		}
 		
 		public function rotateGun(point:Point):void {
-			var angle:int = Math.asin((point.x - _tank.x)/(Math.sqrt((point.x - _tank.x)*(point.x - _tank.x) +
-							(point.y - _tank.y)*(point.y - _tank.y))))*180/Math.PI;
-			if (point.y < _tank.y) {
-				gunRot = angle;
-			}
-			else {
-				//TODO возможно здесь баг с поворотом
-				gunRot = 180 - angle;
-			}
+			var angle:Number = getAngleByPoint(point);
+			_rotationCoeff = getCoeffForAngle(angle);
+			_targetRotation = angle > 180 ? angle - 360 : angle;
+			startRotating();
+		}
+
+		private function startRotating():void {
 			_rotating = true;
-			TweenMax.to(_gun, 0.4, {rotation : gunRot, onComplete: function():void {
-					_rotating = false;
-					dispatchEvent(new GunRotateCompleteEvent(GunRotateCompleteEvent.COMPLETE));
-				}
-			});
+			_gun.addEventListener(Event.ENTER_FRAME, onGunEnterFrame);
+		}
+		private function stopRotating():void {
+			_rotating = false;
+			_gun.removeEventListener(Event.ENTER_FRAME, onGunEnterFrame);
+			dispatchEvent(new GunRotateCompleteEvent(GunRotateCompleteEvent.COMPLETE));
+		}
+
+		private function onGunEnterFrame(event:Event):void {
+			if (Math.abs(_targetRotation - _gun.rotation) <= GUN_SPEED) {
+				stopRotating();
+				return;
+			}
+			_gun.rotation += _rotationCoeff * GUN_SPEED;
+		}
+
+		private function getCoeffForAngle(angle:Number):int {
+			var selfRotation = _gun.rotation;
+			var newRotation = angle;
+
+			if (selfRotation < 0) { selfRotation = 360 + selfRotation; }
+			var selfMore:Boolean = selfRotation > newRotation;
+			if (selfMore) { newRotation += 180; } else { selfRotation += 180; }
+			return ((selfMore && newRotation > selfRotation) ||
+							(!selfMore && selfRotation > newRotation))? selfMore ? -1 : 1 : selfMore ? 1 : -1;
+		}
+
+		private function getAngleByPoint(point:Point):Number {
+			var result = Math.atan(-(point.y-_tank.y)/(point.x-_tank.x)) * 180 / Math.PI;
+			if (point.x >= _tank.x) {
+				result = 90 - result;
+			} else {
+				result = 270 - result;
+			}
+			return result;
 		}
 		
 		private function getBulletPoint():Point {
