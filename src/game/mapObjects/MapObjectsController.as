@@ -4,12 +4,11 @@ import com.greensock.easing.Bounce;
 
 import flash.display.Sprite;
 import flash.events.EventDispatcher;
-import flash.events.TimerEvent;
 import flash.geom.Point;
-import flash.utils.Timer;
 
 import game.IControllerWithTime;
 import game.events.DamageObjectEvent;
+import game.events.GameBonusEvent;
 import game.mapObjects.bonus.BonusManager;
 import game.mapObjects.bonus.GameBonus;
 import game.matrix.MapMatrix;
@@ -41,6 +40,7 @@ public class MapObjectsController extends EventDispatcher implements IController
 		_mapMatrix = matrix;
 		_container = container;
 		_bonusManager = new BonusManager();
+		_bonusManager.addEventListener(GameBonusEvent.BONUS_ADDED, onBonusAdded);
 	}
 
 	/*API*/
@@ -106,6 +106,13 @@ public class MapObjectsController extends EventDispatcher implements IController
 	}
 
 	/* Internal functions */
+
+	private function onBonusAdded(event:GameBonusEvent):void {
+		var point:Point = _mapMatrix.getRandomPoint();
+		event.bonus.x = point.x;
+		event.bonus.y = point.y;
+		_container.addChild(event.bonus);
+	}
 		
 	private function drawObjects():void {
 		if (!_mapMatrix || !_mapMatrix.matrix) { return; }
