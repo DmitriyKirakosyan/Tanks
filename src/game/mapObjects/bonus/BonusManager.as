@@ -9,6 +9,7 @@ import flash.events.TimerEvent;
 import flash.utils.Timer;
 
 import game.events.GameBonusEvent;
+import game.mapObjects.MapObject;
 
 public class BonusManager extends EventDispatcher{
 	private var _activeBonusList:Vector.<GameBonus>;
@@ -38,6 +39,17 @@ public class BonusManager extends EventDispatcher{
 		bonusTimer.start();
 	}
 
+	public function getBonusUnder(mapObject:MapObject):GameBonus {
+		var result:GameBonus;
+		for each (var gameBonus:GameBonus in _activeBonusList) {
+			if (mapObject.hitTestObject(gameBonus)) {
+				result = gameBonus;
+				break;
+			}
+		}
+		return result;
+	}
+
 	/* Internal functions */
 
 	private function onBonusTimer(event:TimerEvent):void{
@@ -52,17 +64,6 @@ public class BonusManager extends EventDispatcher{
 		addActiveBonus(gameBonus);
 		dispatchEvent(new GameBonusEvent(GameBonusEvent.BONUS_ADDED, gameBonus));
 	}
-
-/*
-	private function checkHitMedKit():void {
-		if (!medKit) {return;}
-		if (_playerTank.hitTestObject(medKit)){
-			_playerTank.updateLive();
-			removeMedKit();
-			medKit = null;
-		}
-	}
-	*/
 
 	private function removeActiveBonus(gameBonus:GameBonus):void{
 		var index:int = _activeBonusList.indexOf(gameBonus);

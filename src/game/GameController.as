@@ -3,6 +3,7 @@ import flash.events.Event;
 
 import game.Debug.DebugController;
 import game.events.DamageObjectEvent;
+import game.events.GameBonusEvent;
 import game.events.SceneEvent;
 import game.mapObjects.MapEditor;
 import game.tank.TankMovementListener;
@@ -133,6 +134,7 @@ public class GameController extends EventDispatcher implements IScene{
 			_mapObjectsController.removeEventListener(MineBamEvent.BAM, onMineBam);
 			_mapObjectsController.removeEventListener(DamageObjectEvent.DAMAGE_PLAYER_TANK, onPlayerDamage);
 			_mapObjectsController.removeEventListener(DamageObjectEvent.DAMAGE_ENEMY_TANK, onEnemyDamage);
+			_mapObjectsController.removeEventListener(GameBonusEvent.BONUS_APPLY_TO_PLAYER, onApplyBonusToPlayer);
 			_tankController.removeEventListener(TankShotingEvent.WAS_SHOT, onTankShot);
 			_tankController.removeEventListener(TankShotingEvent.RELOAD_COMPLETE, onTankReloadComplete);
 			_targetsController.removeEventListener(TankShotingEvent.WAS_SHOT, onTankShot);
@@ -152,6 +154,10 @@ public class GameController extends EventDispatcher implements IScene{
 			_tankController.bam();
 			_container.addEventListener(MouseEvent.CLICK, onClick);
 		}
+	  private function onApplyBonusToPlayer(event:GameBonusEvent):void {
+			_tankController.applyBonus(event.bonus.type);
+		}
+
 		private function onClick(event:MouseEvent):void {
 			_container.removeEventListener(MouseEvent.CLICK, onClick);
 			dispatchEvent(new SceneEvent(SceneEvent.WANT_REMOVE));
@@ -178,6 +184,7 @@ public class GameController extends EventDispatcher implements IScene{
 		}
 
 		private function onEnterFrame(event:Event):void {
+			if (Math.random() < .4) { _mapObjectsController.checkObjectsInteract(); }
 		}
 		
 		private function onMineBam(event:MineBamEvent):void {

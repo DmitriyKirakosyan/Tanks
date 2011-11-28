@@ -105,6 +105,11 @@ public class MapObjectsController extends EventDispatcher implements IController
 		_playerTank = tank;
 	}
 
+	/* сдесь будут отслеживаться основные столкновения */
+	public function checkObjectsInteract():void {
+		checkHitBonus();
+	}
+
 	/* Internal functions */
 
 	private function onBonusAdded(event:GameBonusEvent):void {
@@ -210,6 +215,17 @@ public class MapObjectsController extends EventDispatcher implements IController
 				showBamOnTank(new Point(_playerTank.originX, _playerTank.originY));
 				dispatchEvent(new DamageObjectEvent(DamageObjectEvent.DAMAGE_PLAYER_TANK, _playerTank));
 			}
+		}
+	}
+
+	private function checkHitBonus():void {
+		var gameBonus:GameBonus = _bonusManager.getBonusUnder(_playerTank);
+		if (gameBonus) {
+			if (_container.contains(gameBonus)) {
+				_container.removeChild(gameBonus);
+			} else { trace("warning!! game bonus dont contains on container [MapObjectsController.checkHitBonus]"); }
+			_bonusManager.removeBonus(gameBonus);
+			dispatchEvent(GameBonusEvent.createBonusApplyToPlayerEvent(gameBonus));
 		}
 	}
 

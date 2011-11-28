@@ -15,7 +15,8 @@ package game.tank {
 	import flash.geom.Point;
 	
 	import game.events.TankEvent;
-	import game.matrix.MapMatrix;
+import game.mapObjects.bonus.GameBonus;
+import game.matrix.MapMatrix;
 
 	public class TankController extends EventDispatcher implements IControllerWithTime{
 		public var tank:Tank;
@@ -143,6 +144,12 @@ package game.tank {
 				if (_bulletPoint && !_gunController.reloadController.reloading) {
 					ejectBullet();
 				}
+			}
+		}
+
+		public function applyBonus(bonusType:uint):void {
+			switch (bonusType) {
+				case GameBonus.MEDKIT : tank.updateLive();
 			}
 		}
 

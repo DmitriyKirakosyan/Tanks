@@ -7,6 +7,7 @@ public class MedKit extends GameBonus {
 		private var medKitSprite:Sprite;
 		
 		public function MedKit(){
+			super(GameBonus.MEDKIT);
 			medKitSprite = new Sprite();
 			draw();
 			this.addChild(medKitSprite);

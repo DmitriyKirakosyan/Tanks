@@ -13,17 +13,21 @@ import flash.events.Event;
 import game.mapObjects.MapObject;
 
 public class GameBonus extends MapObject {
+	private var _type:uint;
 
 	public static const MEDKIT:uint = 0;
-
-	public function GameBonus() {
-		super();
-		this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-	}
 
 	public static function createMedkit():GameBonus {
 		return new MedKit();
 	}
+
+	public function GameBonus(type:uint) {
+		super();
+		_type = type;
+		this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+	}
+
+	public function get type():uint { return _type; }
 
 	private function onAddedToStage(event:Event):void {
 		this.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
