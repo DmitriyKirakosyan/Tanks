@@ -61,7 +61,6 @@ import flash.utils.Timer;
 					_enemyControllers[i].bam();
 					removeEnemyTankListeners(_enemyControllers[i]);
 					_enemyControllers.splice(i, 1);
-					tank.removeChild(tank.liveTab);
 					break;
 				}
 			}

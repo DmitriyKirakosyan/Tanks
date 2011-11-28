@@ -209,8 +209,7 @@ public class MapObjectsController extends EventDispatcher implements IController
 			_playerTank.tankDamage();
 			_bonusManager.dropBonus(GameBonus.MEDKIT);
 			removeBullet(bullet);
-			if(_playerTank.liveTab.scaleX <= 0) {
-				_playerTank.liveTab.scaleX = 0;
+			if(_playerTank.isDead()) {
 				_playerTankKilled = true;
 				showBamOnTank(new Point(_playerTank.originX, _playerTank.originY));
 				dispatchEvent(new DamageObjectEvent(DamageObjectEvent.DAMAGE_PLAYER_TANK, _playerTank));

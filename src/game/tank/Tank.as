@@ -11,7 +11,7 @@ import game.tank.tank_destraction.TankDestroyMethodFactory;
 public class Tank extends MapObject {
 	public var _gun:TankGun;
 	public var tankBase:Sprite;
-	public var liveTab:LiveTab;
+	private var _liveTab:LiveTab;
 	public var reloadBar:Sprite;
 
 	private var _vo:TankVO;
@@ -30,13 +30,17 @@ public class Tank extends MapObject {
 		createTankBase();
 		addGun(new TankGun(vo.weaponType));
 
-		liveTab = new LiveTab();
-		this.addChild(liveTab);
+		_liveTab = new LiveTab();
+		this.addChild(_liveTab);
 		this.addChild(tankBase);
 	}
 
 	public function get gun():TankGun {
 		return _gun;
+	}
+
+	public function isDead():Boolean {
+		return _liveTab.scaleX == 0;
 	}
 
 	public function updateGun(weaponType:uint):void {
@@ -56,11 +60,12 @@ public class Tank extends MapObject {
 	}
 
 	public function tankDamage():void{
-		this.liveTab.scaleX -= .5;
+		_liveTab.scaleX -= .5;
+		if (_liveTab.scaleX < 0) { _liveTab.scaleX = 0; }
 	}
 
 	public function updateLive():void {
-		this.liveTab.scaleX = 1;
+		_liveTab.scaleX = 1;
 	}
 
 	public function get vo():TankVO { return _vo; }
@@ -81,6 +86,7 @@ public class Tank extends MapObject {
 		_destroyMethod = TankDestroyMethodFactory.createRandomMethod(this);
 		_destroyMethod.addEventListener(TankDestoryEvent.DESTORY_COMPLETE, onDestroyComplete);
 		_destroyMethod.destroy();
+		if (_liveTab && this.contains(_liveTab)) { this.removeChild(_liveTab); }
 	}
 
 
