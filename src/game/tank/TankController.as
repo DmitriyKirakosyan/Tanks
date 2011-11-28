@@ -22,14 +22,11 @@ import game.matrix.MapMatrix;
 		public var tank:Tank;
 		
 		private var _scaleTime:Number;
-		
+
 		private var _direction:TankDirection;
 		private var _container:Sprite;
 		private var _mapMatrix:MapMatrix;
 		private var _wannaShot:Boolean;
-		
-		private var _startX:Number = 300;
-		private var _startY:Number = 300;
 		
 		private var _movingTimeline:TimelineMax;
 		
@@ -63,6 +60,9 @@ import game.matrix.MapMatrix;
 			_gunController = new TankGunController(tank);
 			if (player) {
 				highlightPlayerTank();
+				var matrixPoint:Point = _mapMatrix.getMatrixPoint(new Point(300, 300));
+				tank.x = matrixPoint.x;
+				tank.y = matrixPoint.y;
 			}
 			tank.addReloadBar(_gunController.reloadController.reloadBar);
 			_container.addChild(tank);
@@ -150,6 +150,7 @@ import game.matrix.MapMatrix;
 		public function applyBonus(bonusType:uint):void {
 			switch (bonusType) {
 				case GameBonus.MEDKIT : tank.updateLive();
+				case GameBonus.TIME_DEFENSE : tank.addDefense(TankDefense.createTimeDefense());
 			}
 		}
 
@@ -199,8 +200,6 @@ import game.matrix.MapMatrix;
 		private function highlightPlayerTank():void {
 			var colorTank:ColorTransform = new ColorTransform;
 			colorTank.color = 0x0000ff;
-			tank.x = _mapMatrix.getMatrixPoint(new Point(_startX, _startY)).x;
-			tank.y = _mapMatrix.getMatrixPoint(new Point(_startX, _startY)).y;
 			tank.tankBase.transform.colorTransform = colorTank;
 		}
 	}

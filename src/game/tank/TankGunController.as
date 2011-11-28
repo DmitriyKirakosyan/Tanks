@@ -88,8 +88,8 @@ import game.events.GunRotateCompleteEvent;
 		}
 
 		private function getCoeffForAngle(angle:Number):int {
-			var selfRotation = _gun.rotation;
-			var newRotation = angle;
+			var selfRotation:Number = _gun.rotation;
+			var newRotation:Number = angle;
 
 			if (selfRotation < 0) { selfRotation = 360 + selfRotation; }
 			var selfMore:Boolean = selfRotation > newRotation;
@@ -99,7 +99,7 @@ import game.events.GunRotateCompleteEvent;
 		}
 
 		private function getAngleByPoint(point:Point):Number {
-			var result = Math.atan(-(point.y-_tank.y)/(point.x-_tank.x)) * 180 / Math.PI;
+			var result:Number = Math.atan(-(point.y-_tank.y)/(point.x-_tank.x)) * 180 / Math.PI;
 			if (point.x >= _tank.x) {
 				result = 90 - result;
 			} else {

@@ -10,6 +10,7 @@ import game.tank.tank_destraction.TankDestroyMethodFactory;
 
 public class Tank extends MapObject {
 	public var _gun:TankGun;
+	public var _defense:TankDefense;
 	public var tankBase:Sprite;
 	private var _liveTab:LiveTab;
 	public var reloadBar:Sprite;
@@ -41,6 +42,16 @@ public class Tank extends MapObject {
 
 	public function isDead():Boolean {
 		return _liveTab.scaleX == 0;
+	}
+
+	public function addDefense(defense:TankDefense):void {
+		if (defense) {
+			if (_defense) {
+				if (this.contains(_defense)) { this.removeChild(_defense); }
+			}
+			_defense = defense;
+			this.addChild(_defense);
+		}
 	}
 
 	public function updateGun(weaponType:uint):void {
