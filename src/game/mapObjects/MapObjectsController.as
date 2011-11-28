@@ -15,6 +15,7 @@ import game.matrix.MapMatrix;
 import game.matrix.MatrixItemIds;
 import game.tank.Bullet;
 import game.tank.Tank;
+import game.time.GameTimeZone;
 
 import tilemap.TileMap;
 
@@ -26,6 +27,7 @@ public class MapObjectsController extends EventDispatcher implements IController
 	private var _bricks:Vector.<Brick>;
 	private var _bullets:Vector.<Bullet>;
 	private var _enemyTanks:Vector.<Tank>;
+	private var _timeZoneList:Vector.<GameTimeZone>;
 	private var _playerTank:Tank;
 
 	private var _playerTankKilled:Boolean = false;
@@ -112,6 +114,13 @@ public class MapObjectsController extends EventDispatcher implements IController
 
 	/* Internal functions */
 
+	private function addTimeZone(timeZone:GameTimeZone):void {
+		if (!_timeZoneList) { _timeZoneList = new Vector.<GameTimeZone>(); }
+		if (timeZone && _timeZoneList.indexOf(timeZone) == -1) {
+			_timeZoneList.push(timeZone);
+		}
+	}
+
 	private function onBonusAdded(event:GameBonusEvent):void {
 		var point:Point = _mapMatrix.getRandomPoint();
 		event.bonus.x = point.x;
@@ -167,6 +176,7 @@ public class MapObjectsController extends EventDispatcher implements IController
 		checkHitStone(bullet);
 		checkHitBrick(bullet);
 		checkHitPlayerTank(bullet);
+		checkHitTimeZones(bullet);
 	}
 
 	private function checkHitEnemyTank(bullet:Bullet):void {
@@ -215,6 +225,10 @@ public class MapObjectsController extends EventDispatcher implements IController
 				dispatchEvent(new DamageObjectEvent(DamageObjectEvent.DAMAGE_PLAYER_TANK, _playerTank));
 			}
 		}
+	}
+
+	private function checkHitTimeZones(bullet:Bullet):void {
+
 	}
 
 	private function checkHitBonus():void {
