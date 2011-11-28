@@ -10,6 +10,8 @@ import flash.utils.Timer;
 
 import game.IControllerWithTime;
 import game.events.DamageObjectEvent;
+import game.mapObjects.bonus.BonusManager;
+import game.mapObjects.bonus.GameBonus;
 import game.matrix.MapMatrix;
 import game.matrix.MatrixItemIds;
 import game.tank.Bullet;
@@ -27,19 +29,18 @@ public class MapObjectsController extends EventDispatcher implements IController
 	private var _enemyTanks:Vector.<Tank>;
 	private var _playerTank:Tank;
 
-	private var medKit:MedKit;
-	private var timerMedKit:Timer;
-
 	private var _playerTankKilled:Boolean = false;
 
 	private var _scaleTime:Number;
 
+	private var _bonusManager:BonusManager;
 
 	public function MapObjectsController(matrix:MapMatrix, container:Sprite):void {
 		super();
 		_scaleTime = 1;
 		_mapMatrix = matrix;
 		_container = container;
+		_bonusManager = new BonusManager();
 	}
 
 	/*API*/
@@ -192,11 +193,9 @@ public class MapObjectsController extends EventDispatcher implements IController
 	private function checkHitPlayerTank(bullet:Bullet):void {
 		if (_playerTankKilled || !_playerTank) { return; }
 
-		checkHitMedKit();
-
 		if (_playerTank != bullet.selfTank && bullet.hitTestObject(_playerTank)) {
 			_playerTank.tankDamage();
-			startMedKitDropTimer();
+			_bonusManager.dropBonus(GameBonus.MEDKIT);
 			removeBullet(bullet);
 			if(_playerTank.liveTab.scaleX <= 0) {
 				_playerTank.liveTab.scaleX = 0;
@@ -226,38 +225,6 @@ public class MapObjectsController extends EventDispatcher implements IController
 		bullet.remove();
 		const index:int = _bullets.indexOf(bullet);
 		if (index >= 0) { _bullets.splice(index, 1); }
-	}
-
-	private function startMedKitDropTimer():void{
-		if (timerMedKit) {
-			timerMedKit.removeEventListener(TimerEvent.TIMER, onMedKitTimer);
-		}
-		timerMedKit = new Timer(Math.round(Math.random()*1000) + 1000);
-		timerMedKit.addEventListener(TimerEvent.TIMER, onMedKitTimer);
-		timerMedKit.start();
-	}
-	private function onMedKitTimer(event:TimerEvent):void{
-		addMedKit();
-		timerMedKit.removeEventListener(TimerEvent.TIMER, onMedKitTimer);
-		timerMedKit.stop();
-		timerMedKit = null;
-	}
-	private function addMedKit():void{
-		medKit = new MedKit(_mapMatrix.getRandomPoint());
-		_container.addChild(medKit);
-	}
-	private function checkHitMedKit():void {
-		if (!medKit) {return;}
-		if (_playerTank.hitTestObject(medKit)){
-			_playerTank.updateLive();
-			removeMedKit();
-			medKit = null;
-		}
-	}
-
-	private function removeMedKit():void{
-		if (_container.contains(medKit)) { _container.removeChild(medKit); }
-		medKit.removeMedKitInt();
 	}
 
 	private function removeBrick(brick:Brick):void {

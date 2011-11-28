@@ -14,8 +14,6 @@ public class Tank extends MapObject {
 	public var liveTab:LiveTab;
 	public var reloadBar:Sprite;
 
-	public var tankUseMouse:Boolean = false;
-
 	private var _vo:TankVO;
 
 	private var _destroyMethod:TankDestroyMethod;

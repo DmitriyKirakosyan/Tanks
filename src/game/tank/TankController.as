@@ -57,12 +57,6 @@ package game.tank {
 		public function get movingTimeline():TimelineMax { return _movingTimeline; }
 		public function get wannaShot():Boolean { return _wannaShot; }
 		
-		public function updateWeaponType(weaponType:uint):void {
-			tank.removeGun();
-			_gunController.updateWeaponType(weaponType);
-			tank.updateGun(weaponType);
-		}
-
 		public function init(tankVO:TankVO, player:Boolean = false):void {
 			tank = new Tank(tankVO, player);
 			_gunController = new TankGunController(tank);
@@ -83,8 +77,6 @@ package game.tank {
 			}
 		}
 
-		public function get tankTimeline():TimelineMax { return _movingTimeline; }
-		
 		public function scaleTime(value:Number):void {
 			_scaleTime = value;
 			if (_movingTimeline) {
