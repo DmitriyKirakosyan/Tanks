@@ -3,7 +3,7 @@
  * Date: 11/1/11
  * Time: 11:51 PM
  */
-package game.tank.tank_destraction {
+package game.tank.destraction {
 import game.tank.*;
 
 import com.greensock.TweenMax;

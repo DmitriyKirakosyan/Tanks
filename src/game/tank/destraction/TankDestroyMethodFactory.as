@@ -3,7 +3,7 @@
  * Date: 11/1/11
  * Time: 11:49 PM
  */
-package game.tank.tank_destraction {
+package game.tank.destraction {
 import game.tank.*;
 
 public class TankDestroyMethodFactory {

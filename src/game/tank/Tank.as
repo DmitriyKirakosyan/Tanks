@@ -4,9 +4,10 @@ import com.greensock.TweenMax;
 import flash.display.Sprite;
 
 import game.mapObjects.MapObject;
-import game.tank.tank_destraction.TankDestoryEvent;
-import game.tank.tank_destraction.TankDestroyMethod;
-import game.tank.tank_destraction.TankDestroyMethodFactory;
+import game.tank.destraction.TankDestoryEvent;
+import game.tank.destraction.TankDestroyMethod;
+import game.tank.destraction.TankDestroyMethodFactory;
+import game.tank.weapon.TankGun;
 
 public class Tank extends MapObject {
 	public var _gun:TankGun;

@@ -17,8 +17,10 @@ package game.tank {
 	import game.events.TankEvent;
 import game.mapObjects.bonus.GameBonus;
 import game.matrix.MapMatrix;
+import game.tank.weapon.Bullet;
+import game.tank.weapon.TankGunController;
 
-	public class TankController extends EventDispatcher implements IControllerWithTime{
+public class TankController extends EventDispatcher implements IControllerWithTime{
 		public var tank:Tank;
 		
 		private var _scaleTime:Number;

@@ -3,7 +3,7 @@
  * Date: 11/5/11
  * Time: 1:35 AM
  */
-package game.tank {
+package game.tank.weapon {
 import flash.display.Sprite;
 
 public class TankGun extends Sprite{

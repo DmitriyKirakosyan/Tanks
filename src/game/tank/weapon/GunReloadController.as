@@ -1,4 +1,4 @@
-package game.tank {
+package game.tank.weapon {
 	import com.bit101.components.ProgressBar;
 import com.greensock.TweenMax;
 

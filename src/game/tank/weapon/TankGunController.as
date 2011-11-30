@@ -1,4 +1,6 @@
-package game.tank {
+package game.tank.weapon {
+import game.tank.*;
+
 import flash.events.Event;
 
 import game.IControllerWithTime;
@@ -8,7 +10,11 @@ import game.events.GunRotateCompleteEvent;
 	
 	import flash.geom.Point;
 
-	public class TankGunController extends EventDispatcher implements IControllerWithTime {
+import game.tank.weapon.Bullet;
+import game.tank.weapon.GunReloadController;
+import game.tank.weapon.TankGun;
+
+public class TankGunController extends EventDispatcher implements IControllerWithTime {
 		public var gunRot:int;
 
 		private var _type:uint;

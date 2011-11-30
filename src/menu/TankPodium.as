@@ -16,7 +16,7 @@ import game.events.SceneEvent;
 import game.matrix.MapMatrix;
 
 import game.tank.Tank;
-import game.tank.TankGun;
+import game.tank.weapon.TankGun;
 import game.tank.TankVO;
 
 import state.UserState;

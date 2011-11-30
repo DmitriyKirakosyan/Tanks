@@ -1,5 +1,5 @@
 package game.events {
-	import game.tank.Bullet;
+	import game.tank.weapon.Bullet;
 	import flash.events.Event;
 
 	public class TankShotingEvent extends Event {

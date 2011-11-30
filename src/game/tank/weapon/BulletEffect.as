@@ -5,11 +5,13 @@
  * Time: 4:36 PM
  * To change this template use File | Settings | File Templates.
  */
-package game.tank {
+package game.tank.weapon {
 import com.greensock.TweenMax;
 import com.greensock.easing.Linear;
 
 import flash.display.Sprite;
+
+import game.tank.weapon.Bullet;
 
 public class BulletEffect {
 	private var _bullet:Bullet;

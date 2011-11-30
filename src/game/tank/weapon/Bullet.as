@@ -1,4 +1,6 @@
-package game.tank {
+package game.tank.weapon {
+import game.tank.*;
+
 import com.greensock.easing.Linear;
 
 import flash.geom.Point;

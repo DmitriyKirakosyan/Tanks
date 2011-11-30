@@ -13,7 +13,7 @@ import game.mapObjects.bonus.BonusManager;
 import game.mapObjects.bonus.GameBonus;
 import game.matrix.MapMatrix;
 import game.matrix.MatrixItemIds;
-import game.tank.Bullet;
+import game.tank.weapon.Bullet;
 import game.tank.Tank;
 import game.time.GameTimeZone;
 
