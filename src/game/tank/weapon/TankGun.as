@@ -38,12 +38,7 @@ public class TankGun extends Sprite{
 	}
 
 	private function createMinigun():void {
-		this.graphics.lineStyle(2, 0x00000a);
-		this.graphics.lineTo(-3, -10);
-		this.graphics.moveTo(0, 0);
-		this.graphics.lineTo(0, -10);
-		this.graphics.moveTo(0, 0);
-		this.graphics.lineTo(3, -10);
+		this.addChild(new MachineGunView());
 	}
 	private function createFiregun():void {
 		this.graphics.beginFill(0xa11717);
