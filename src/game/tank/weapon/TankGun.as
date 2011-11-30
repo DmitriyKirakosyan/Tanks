@@ -41,9 +41,7 @@ public class TankGun extends Sprite{
 		this.addChild(new MachineGunView());
 	}
 	private function createFiregun():void {
-		this.graphics.beginFill(0xa11717);
-		this.graphics.drawRect(-5, -20, 10, 20);
-		this.graphics.endFill();
+		this.addChild(new RocketGunView());
 	}
 
 }
