@@ -94,7 +94,7 @@ import flash.utils.Timer;
 		private function createTarget():void {
 			//_random = Math.random();
 			//trace(_random);
-			var enemyTank:TankController = new TankController(_container, _mapMatrix);
+			var enemyTank:TankController = new TankBotController(_container, _mapMatrix);
 			enemyTank.init(new TankVO());
 			var rndX:int = Math.random() * MapMatrix.MATRIX_WIDTH;
 			var rndY:int = Math.random() * MapMatrix.MATRIX_HEIGHT;

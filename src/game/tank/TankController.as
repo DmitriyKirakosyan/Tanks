@@ -34,9 +34,6 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 		
 		private var _gunController:TankGunController;
 
-		private var _autoAttackTimer:Timer;
-		private var _targetTank:Tank; //for autoattack mode only
-		
 		private var _bulletPoint:Point; // waiting for gun rotate
 		
 		public static const LEFT_ROT:int = -90;
@@ -74,7 +71,6 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 			TweenMax.killTweensOf(tank);
 			tank.killTweens();
 			_movingTimeline.kill();
-			if (_autoAttackTimer && _autoAttackTimer.running) { _autoAttackTimer.stop(); }
 			if (_container.contains(tank)) {
 				_container.removeChild(tank);
 			}
@@ -92,18 +88,9 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 			return tank.hitTestPoint(point.x, point.y);
 		}
 		
-		public function setAutoAttack(targetTank:Tank):void {
-			_targetTank = targetTank;
-			_autoAttackTimer = new Timer(Math.random() * 5000 + 1000);  //TODO Auto attack
-			_autoAttackTimer.addEventListener(TimerEvent.TIMER, onAutoAttackTimer);
-			_autoAttackTimer.start();
-		}
-		
-		public function get autoAttackTimer():Timer { return _autoAttackTimer; }
-		
+
 		public function bam():void {
 			TweenMax.killTweensOf(tank);
-			if (_autoAttackTimer) { _autoAttackTimer.stop(); }
 			tank.bam();
 		}
 		
@@ -156,13 +143,9 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 			}
 		}
 
+		public function setAutoAttack(tank:Tank):void {}
+
 		/* Internal functions */
-		
-		private function onAutoAttackTimer(event:TimerEvent):void {
-			if (_targetTank) {
-				setTarget(new Point(_targetTank.originX, _targetTank.originY));
-			}
-		}
 		
 		private function onMovingComplete():void {
 			dispatchEvent(new TankEvent(TankEvent.MOVING_COMPLETE, this));

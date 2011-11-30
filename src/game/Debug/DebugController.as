@@ -173,7 +173,7 @@ package game.Debug {
 				if (tank == tankController.tank) {
 					tankController.movingTimeline.vars["onComplete"] = null;
 					tankController.movingTimeline.killTweensOf(tank);
-					tankController.autoAttackTimer.stop();
+	//				tankController.autoAttackTimer.stop();
 					break;
 				}
 			}
@@ -183,7 +183,7 @@ package game.Debug {
 				if (tank == tankController.tank) {
 						_gameController.targetsController.moveEnemy = tankController;
 						_gameController.container.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
-						tankController.autoAttackTimer.start();
+//						tankController.autoAttackTimer.start();
 					break;
 				}
 			}
