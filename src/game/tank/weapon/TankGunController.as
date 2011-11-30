@@ -41,7 +41,7 @@ public class TankGunController extends EventDispatcher implements IControllerWit
 			_gunLength = _gun.height;
 			_reloadController = new GunReloadController(reloadSpeed);
 			_reloadController.reloadBar.y = tank.originY + 30;
-			_reloadController.reloadBar.x = tank.originX - tank.width/2;
+			_reloadController.reloadBar.x = tank.originX - tank.width/2; 
 		}
 
 		public function scaleTime(value:Number):void {
