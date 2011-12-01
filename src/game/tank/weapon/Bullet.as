@@ -33,7 +33,7 @@ public class Bullet extends Sprite {
 		_type = type;
 		_selfTank = selfTank;
 		_bulletEffect = createBulletEffect();
-		drawBulletPointOn(this, 0xf0002f);
+		drawBulletPointOn(this);
 	}
 
 	public function setPosition(point:Point):void {
@@ -84,9 +84,11 @@ public class Bullet extends Sprite {
 		if (_tween) { _tween.timeScale = value; }
 	}
 
-	public function drawBulletPointOn(sprite:Sprite, color:uint = 0x0fafcd):void {
+	public function drawBulletPointOn(sprite:Sprite):void {
+		var color:uint = _type == TankGun.MINIGUN ? 0xB22222 : 0xf0002f;
+		var radius:uint = _type == TankGun.MINIGUN ? 1 : _type == TankGun.TAIL_ROCKET ? 3 : 2;
 		sprite.graphics.beginFill(color);
-		sprite.graphics.drawCircle(0,0,2);
+		sprite.graphics.drawCircle(0,0,radius);
 		sprite.graphics.endFill();
 	}
 

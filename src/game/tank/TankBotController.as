@@ -28,6 +28,7 @@ public class TankBotController extends TankController{
 	}
 
 	private function onTankComeToCell(event:TankEvent):void {
+		if (!_targetTank) { return; }
 		if (_targetTank.x == tank.x || _targetTank.y == tank.y) {
 			setTarget(new Point(_targetTank.x,  _targetTank.y));
 			shot();

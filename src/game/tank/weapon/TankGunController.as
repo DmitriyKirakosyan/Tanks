@@ -15,8 +15,6 @@ import game.tank.weapon.GunReloadController;
 import game.tank.weapon.TankGun;
 
 public class TankGunController extends EventDispatcher implements IControllerWithTime {
-		public var gunRot:int;
-
 		private var _type:uint;
 
 		private var _reloadController:GunReloadController;
@@ -39,7 +37,7 @@ public class TankGunController extends EventDispatcher implements IControllerWit
 			_type = tank.vo.weaponType;
 			_gun = tank.gun;
 			_gunLength = _gun.height;
-			_reloadController = new GunReloadController(reloadSpeed);
+			_reloadController = new GunReloadController(getReloadSpeed());
 			_reloadController.reloadBar.y = tank.originY + 30;
 			_reloadController.reloadBar.x = tank.originX - tank.width/2; 
 		}
@@ -141,8 +139,8 @@ public class TankGunController extends EventDispatcher implements IControllerWit
 			return result;
 		}
 
-		private function get reloadSpeed():Number {
-			return _type == TankGun.MINIGUN ? 10 : _type == TankGun.TAIL_ROCKET ? 2 : 4;
+		private function getReloadSpeed():Number {
+			return _type == TankGun.MINIGUN ? 9 : _type == TankGun.TAIL_ROCKET ? .5 : 2;
 		}
 	}
 }
