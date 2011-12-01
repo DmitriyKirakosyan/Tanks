@@ -4,9 +4,11 @@
  * Time: 11:51 PM
  */
 package game.tank.destraction {
-import game.tank.*;
+import game.events.TankDestractionEvent;
 
 import com.greensock.TweenMax;
+
+import game.tank.Tank;
 
 public class TankDestroyFlash extends TankDestroyMethod{
 
@@ -19,7 +21,7 @@ public class TankDestroyFlash extends TankDestroyMethod{
 	}
 
 	private function onDestoryComplete():void {
-		dispatchEvent(new TankDestoryEvent(TankDestoryEvent.DESTORY_COMPLETE));
+		dispatchEvent(new TankDestractionEvent(TankDestractionEvent.TANK_DESTRAYED));
 	}
 }
 }

@@ -6,10 +6,12 @@
  * To change this template use File | Settings | File Templates.
  */
 package game.tank.destraction {
-import game.tank.*;
+import game.events.TankDestractionEvent;
 
 import com.greensock.TimelineMax;
 import com.greensock.TweenMax;
+
+import game.tank.Tank;
 
 public class TankDestoryRotation extends TankDestroyMethod{
 
@@ -37,7 +39,7 @@ public class TankDestoryRotation extends TankDestroyMethod{
     }
 
     private function onBamComplete():void {
-        dispatchEvent(new TankDestoryEvent(TankDestoryEvent.DESTORY_COMPLETE));
+        dispatchEvent(new TankDestractionEvent(TankDestractionEvent.TANK_DESTRAYED));
     }
 
 }

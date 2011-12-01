@@ -4,7 +4,9 @@ package game.tank {
 	import game.events.GunRotateCompleteEvent;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
-	import game.events.TankShotingEvent;
+
+import game.events.TankDestractionEvent;
+import game.events.TankShotingEvent;
 	import game.IControllerWithTime;
 	import com.greensock.TimelineMax;
 	import com.greensock.TweenMax;
@@ -92,6 +94,7 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 		public function bam():void {
 			TweenMax.killTweensOf(tank);
 			tank.bam();
+			tank.addEventListener(TankDestractionEvent.TANK_DESTRAYED, onTankDestroyed);
 		}
 		
 		public function readyForMoving():void {
@@ -146,6 +149,14 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 		}
 
 		/* Internal functions */
+
+		private function onTankDestroyed(event:TankDestractionEvent):void {
+			if (!_container.contains(tank)) {
+				trace("tank not on container, fix it [TankController.onTankDestoryed]");
+				return;
+			}
+			_container.removeChild(tank);
+		}
 		
 		private function onMovingComplete():void {
 			dispatchEvent(new TankEvent(TankEvent.MOVING_COMPLETE, this));

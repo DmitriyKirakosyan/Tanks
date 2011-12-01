@@ -3,8 +3,9 @@ import com.greensock.TweenMax;
 
 import flash.display.Sprite;
 
+import game.events.TankDestractionEvent;
+
 import game.mapObjects.MapObject;
-import game.tank.destraction.TankDestoryEvent;
 import game.tank.destraction.TankDestroyMethod;
 import game.tank.destraction.TankDestroyMethodFactory;
 import game.tank.weapon.TankGun;
@@ -96,7 +97,7 @@ public class Tank extends MapObject {
 
 	public function bam():void {
 		_destroyMethod = TankDestroyMethodFactory.createRandomMethod(this);
-		_destroyMethod.addEventListener(TankDestoryEvent.DESTORY_COMPLETE, onDestroyComplete);
+		_destroyMethod.addEventListener(TankDestractionEvent.TANK_DESTRAYED, onDestroyComplete);
 		_destroyMethod.destroy();
 		if (_liveTab && this.contains(_liveTab)) { this.removeChild(_liveTab); }
 	}
@@ -128,8 +129,9 @@ public class Tank extends MapObject {
 		}
 	}
 
-	private function onDestroyComplete(event:TankDestoryEvent):void {
-		_destroyMethod.removeEventListener(TankDestoryEvent.DESTORY_COMPLETE, onDestroyComplete);
+	private function onDestroyComplete(event:TankDestractionEvent):void {
+		_destroyMethod.removeEventListener(TankDestractionEvent.TANK_DESTRAYED, onDestroyComplete);
+		dispatchEvent(new TankDestractionEvent(TankDestractionEvent.TANK_DESTRAYED));
 		trace("[Tank.onDestroyComplete] me destroed");
 	}
 
