@@ -9,32 +9,30 @@ import flash.events.TimerEvent;
 import flash.geom.Point;
 import flash.utils.Timer;
 
+import game.events.TankEvent;
+
 import game.matrix.MapMatrix;
 
 public class TankBotController extends TankController{
-	private var _autoAttackTimer:Timer;
-	private var _targetTank:Tank; //for autoattack mode only
+	private var _targetTank:Tank;
 
 	public function TankBotController(container:Sprite, mapMatrix:MapMatrix) {
 		super(container, mapMatrix);
 	}
 
-	public function get autoAttackTimer():Timer { return _autoAttackTimer; }
-
-	override public function setAutoAttack(targetTank:Tank):void {
+	public function setTargetTank(targetTank:Tank):void {
 		_targetTank = targetTank;
-		_autoAttackTimer = new Timer(Math.random() * 5000 + 1000);  //TODO Auto attack
-		_autoAttackTimer.addEventListener(TimerEvent.TIMER, onAutoAttackTimer);
-		_autoAttackTimer.start();
+		if (!this.hasEventListener(TankEvent.COME_TO_CELL)) {
+			this.addEventListener(TankEvent.COME_TO_CELL, onTankComeToCell);
+		}
 	}
 
-	override public function remove():void {
-		super.remove();
-		if (_autoAttackTimer && _autoAttackTimer.running) { _autoAttackTimer.stop(); }
-	}
+	private function onTankComeToCell(event:TankEvent):void {
+		if (_targetTank.x == tank.x || _targetTank.y == tank.y) {
+			setTarget(new Point(_targetTank.x,  _targetTank.y));
+			shot();
+		}
 
-	override public function bam():void {
-		if (_autoAttackTimer) { _autoAttackTimer.stop(); }
 	}
 
 	private function onAutoAttackTimer(event:TimerEvent):void {

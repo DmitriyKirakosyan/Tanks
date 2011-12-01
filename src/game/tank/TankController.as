@@ -143,8 +143,6 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 			}
 		}
 
-		public function setAutoAttack(tank:Tank):void {}
-
 		/* Internal functions */
 		
 		private function onMovingComplete():void {
