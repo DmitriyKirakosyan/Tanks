@@ -20,7 +20,7 @@ public class TankBotController extends TankController{
 		super(container, mapMatrix);
 	}
 
-	public function setTargetTank(targetTank:Tank):void {
+	override public function setTargetTank(targetTank:Tank):void {
 		_targetTank = targetTank;
 		if (!this.hasEventListener(TankEvent.COME_TO_CELL)) {
 			this.addEventListener(TankEvent.COME_TO_CELL, onTankComeToCell);

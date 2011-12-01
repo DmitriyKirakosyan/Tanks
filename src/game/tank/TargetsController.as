@@ -120,7 +120,7 @@ import flash.utils.Timer;
 			*/
 			enemyTank.tank.x = rndX;
 			enemyTank.tank.y = rndY;
-			enemyTank.setAutoAttack(_playerTank);
+			enemyTank.setTargetTank(_playerTank);
 			_enemyControllers.push(enemyTank);
 			moveEnemyTank(enemyTank);
 			enemyTank.addEventListener(TankEvent.MOVING_COMPLETE, onEnemyMovingComplete);
