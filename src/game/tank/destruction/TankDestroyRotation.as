@@ -5,19 +5,19 @@
  * Time: 5:11 PM
  * To change this template use File | Settings | File Templates.
  */
-package game.tank.destraction {
-import game.events.TankDestractionEvent;
+package game.tank.destruction {
+import game.events.TankDestructionEvent;
 
 import com.greensock.TimelineMax;
 import com.greensock.TweenMax;
 
 import game.tank.Tank;
 
-public class TankDestoryRotation extends TankDestroyMethod{
+public class TankDestroyRotation extends TankDestroyMethod{
 
     private var _bamTimeline:TimelineMax;
 
-    public function TankDestoryRotation(tank:Tank) {
+    public function TankDestroyRotation(tank:Tank) {
         super(tank);
     }
 
@@ -39,7 +39,7 @@ public class TankDestoryRotation extends TankDestroyMethod{
     }
 
     private function onBamComplete():void {
-        dispatchEvent(new TankDestractionEvent(TankDestractionEvent.TANK_DESTRAYED));
+        dispatchEvent(new TankDestructionEvent(TankDestructionEvent.TANK_DESTRAYED));
     }
 
 }

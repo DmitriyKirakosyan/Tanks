@@ -3,7 +3,7 @@
  * Date: 1/11/11
  * Time: 5:05 PM
  */
-package game.tank.destraction {
+package game.tank.destruction {
 import game.tank.*;
 
 import flash.events.EventDispatcher;

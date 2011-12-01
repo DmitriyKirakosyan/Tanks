@@ -6,10 +6,10 @@
 package game.events {
 import flash.events.Event;
 
-public class TankDestractionEvent extends Event{
+public class TankDestructionEvent extends Event{
 	public static const TANK_DESTRAYED:String = "tankDestroyed";
 
-	public function TankDestractionEvent(type:String) {
+	public function TankDestructionEvent(type:String) {
 		super(type);
 	}
 }
