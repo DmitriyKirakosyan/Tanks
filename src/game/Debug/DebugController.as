@@ -51,17 +51,6 @@ package game.Debug {
 			removeButtons();	
 		}
 		
-		public function drawMatrix():void {
-			_container.graphics.lineStyle(1, 0x00BBFF, .1);
-			for (var i:int = 0; i <= MapMatrix.MATRIX_WIDTH; ++i) {
-				_container.graphics.moveTo(i * GameController.CELL, 0);
-				_container.graphics.lineTo(i * GameController.CELL, MapMatrix.MATRIX_HEIGHT * GameController.CELL);
-			}
-			for (var j:int = 0; j <= MapMatrix.MATRIX_HEIGHT; ++j) {
-				_container.graphics.moveTo(0, j * GameController.CELL);
-				_container.graphics.lineTo(MapMatrix.MATRIX_WIDTH * GameController.CELL, j * GameController.CELL);
-			}
-		}
 		
 		//TODO убрать баги с движением врага, доделать столкновение с пулей. после передвижений, 
 		//остальные танки стреляют в точку где танк был опущен

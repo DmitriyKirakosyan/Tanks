@@ -44,7 +44,7 @@ public class MapObjectsController extends EventDispatcher implements IController
 		_bonusManager = new BonusManager();
 		_bonusManager.addEventListener(GameBonusEvent.BONUS_ADDED, onBonusAdded);
 	}
-
+	
 	/*API*/
 
 	public function init():void {
