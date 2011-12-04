@@ -11,7 +11,7 @@ import flash.utils.Timer;
 import game.events.GameBonusEvent;
 import game.mapObjects.MapObject;
 
-public class BonusManager extends EventDispatcher{
+public class BonusManager extends EventDispatcher {
 	private var _activeBonusList:Vector.<GameBonus>;
 
 	private var nextBonusType:uint;
@@ -49,6 +49,12 @@ public class BonusManager extends EventDispatcher{
 		}
 		return result;
 	}
+
+	public function clear():void {
+		while (_activeBonusList && _activeBonusList.length > 0) { removeActiveBonus(_activeBonusList[0]); }
+	}
+
+	public function get activeBonuseList():Vector.<GameBonus> { return _activeBonusList; }
 
 	/* Internal functions */
 

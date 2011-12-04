@@ -11,6 +11,7 @@ import game.events.DamageObjectEvent;
 import game.events.GameBonusEvent;
 import game.mapObjects.bonus.BonusManager;
 import game.mapObjects.bonus.GameBonus;
+import game.mapObjects.bonus.GameBonus;
 import game.matrix.MapMatrix;
 import game.matrix.MatrixItemIds;
 import game.tank.weapon.Bullet;
@@ -66,6 +67,8 @@ public class MapObjectsController extends EventDispatcher implements IController
 		_tileMap.remove();
 		removeBricks();
 		removeStones();
+		removeBullets();
+		removeBonuses();
 		_playerTankKilled = false;
 		_scaleTime = 1;
 	}
@@ -155,6 +158,22 @@ public class MapObjectsController extends EventDispatcher implements IController
 		for each (var stone:Stone in _stones) {
 			 removeElementFromMap(stone);
 			_stones= new Vector.<Stone>();
+		}
+	}
+
+	private function removeBullets():void {
+		for each (var bullet:Bullet in _bullets) {
+			bullet.remove();
+			if (_container.contains(bullet)) { _container.removeChild(bullet);
+			} else { trace("bullet not on container [MapObjectsController.removeBullets]"); }
+		}
+	}
+
+	private function removeBonuses():void {
+		for each (var gameBonus:GameBonus in _bonusManager.activeBonuseList) {
+			if (_container.contains(gameBonus)) { _container.removeChild(gameBonus);
+			} else { trace("WARN! bonus not on container [MapObjectsController.removeBonuses]"); }
+			_bonusManager.clear();
 		}
 	}
 
