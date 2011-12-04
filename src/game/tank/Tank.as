@@ -42,6 +42,8 @@ public class Tank extends MapObject {
 		return _gun;
 	}
 
+	public function hasDefence():Boolean { return _defense != null; }
+
 	public function isDead():Boolean {
 		return _liveTab.scaleX == 0;
 	}
@@ -53,6 +55,11 @@ public class Tank extends MapObject {
 			}
 			_defense = defense;
 			this.addChild(_defense);
+			var thisTank:Tank = this;
+			TweenMax.to(_defense, 2, { alpha : 0, onComplete: function():void {
+				if (thisTank.contains(_defense)) { thisTank.removeChild(_defense); }
+				_defense = null;
+			}});
 		}
 	}
 

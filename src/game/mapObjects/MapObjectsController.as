@@ -3,6 +3,7 @@ import com.greensock.TweenMax;
 import com.greensock.easing.Bounce;
 
 import flash.display.Sprite;
+import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.geom.Point;
 
@@ -50,15 +51,6 @@ public class MapObjectsController extends EventDispatcher implements IController
 	
 	/*API*/
 
-	public function init():void {
-		_mapMatrix.createMatrix();
-		_tileMap = new TileMap(MapMatrix.MATRIX_WIDTH, MapMatrix.MATRIX_HEIGHT);
-		_container.addChildAt(_tileMap, 0);
-		drawObjects();
-		_targetsController.init();
-		_targetsController.addEventListener(TankShotingEvent.WAS_SHOT, onEnemyTankShot);
-	}
-
 	public function get targetsController():TargetsController { return _targetsController; }
 
 	public function dropBonus(bonusType:uint):void { _bonusManager.dropBonus(bonusType); }
@@ -68,7 +60,18 @@ public class MapObjectsController extends EventDispatcher implements IController
 		removeStones();
 	}
 
+	public function init():void {
+		_mapMatrix.createMatrix();
+		_tileMap = new TileMap(MapMatrix.MATRIX_WIDTH, MapMatrix.MATRIX_HEIGHT);
+		_container.addChildAt(_tileMap, 0);
+		drawObjects();
+		_targetsController.init();
+		_targetsController.addEventListener(TankShotingEvent.WAS_SHOT, onEnemyTankShot);
+		_container.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+	}
+
 	public function remove():void {
+		_container.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 		_container.removeChild(_tileMap);
 		_tileMap.remove();
 		removeBricks();
@@ -119,15 +122,19 @@ public class MapObjectsController extends EventDispatcher implements IController
 		_targetsController.addPlayerTank(tank);
 	}
 
-	/* сдесь будут отслеживаться основные столкновения */
-	public function checkObjectsInteract():void {
-		checkHitBonus();
-	}
-
 	/* Internal functions */
+
+	private function onEnterFrame(event:Event):void {
+		checkObjectsInteract();
+	}
 
 	private function onEnemyTankShot(event:TankShotingEvent):void {
 		addBullet(event.bullet);
+	}
+
+	/* сдесь будут отслеживаться основные столкновения */
+	public function checkObjectsInteract():void {
+		checkHitBonus();
 	}
 
 	private function addTimeZone(timeZone:GameTimeZone):void {
@@ -183,8 +190,8 @@ public class MapObjectsController extends EventDispatcher implements IController
 		for each (var gameBonus:GameBonus in _bonusManager.activeBonuseList) {
 			if (_container.contains(gameBonus)) { _container.removeChild(gameBonus);
 			} else { trace("WARN! bonus not on container [MapObjectsController.removeBonuses]"); }
-			_bonusManager.clear();
 		}
+		_bonusManager.clear();
 	}
 
 	private function addBrick(mPoint:Point):void {
@@ -247,8 +254,10 @@ public class MapObjectsController extends EventDispatcher implements IController
 
 		if (_playerTank != bullet.selfTank && bullet.hitTestObject(_playerTank)) {
 			removeBullet(bullet);
-			dispatchEvent(new DamageObjectEvent(DamageObjectEvent.DAMAGE_PLAYER_TANK, _playerTank));
-			showBamOnTank(new Point(_playerTank.originX, _playerTank.originY));
+			if (!_playerTank.hasDefence()) {
+				dispatchEvent(new DamageObjectEvent(DamageObjectEvent.DAMAGE_PLAYER_TANK, _playerTank));
+				showBamOnTank(new Point(_playerTank.originX, _playerTank.originY));
+			}
 		}
 	}
 

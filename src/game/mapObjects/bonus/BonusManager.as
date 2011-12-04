@@ -52,6 +52,7 @@ public class BonusManager extends EventDispatcher {
 
 	public function clear():void {
 		while (_activeBonusList && _activeBonusList.length > 0) { removeActiveBonus(_activeBonusList[0]); }
+		if (bonusTimer) { bonusTimer.stop(); }
 	}
 
 	public function get activeBonuseList():Vector.<GameBonus> { return _activeBonusList; }
@@ -75,12 +76,12 @@ public class BonusManager extends EventDispatcher {
 		var index:int = _activeBonusList.indexOf(gameBonus);
 		if (index != -1) {
 			_activeBonusList.splice(index, 1);
-		}
+		} else { trace("WARN!! bonus is not in list [BonusManager.removeActiveBonus]"); }
 	}
 
 	private function addActiveBonus(gameBonus:GameBonus):void {
 		if (!_activeBonusList) { _activeBonusList = new Vector.<GameBonus>(); }
-		if (_activeBonusList.indexOf(gameBonus) != -1) {
+		if (_activeBonusList.indexOf(gameBonus) == -1) {
 			_activeBonusList.push(gameBonus);
 		}
 	}

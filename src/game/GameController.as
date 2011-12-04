@@ -105,6 +105,7 @@ public class GameController extends EventDispatcher implements IScene{
 			_mouseDrawController.addEventListener(DrawingControllerEvent.DRAWING_COMPLETE, onDrawingComplete);
 			_mapObjectsController.addEventListener(MineBamEvent.BAM, onMineBam);
 			_mapObjectsController.addEventListener(DamageObjectEvent.DAMAGE_PLAYER_TANK, onPlayerDamage);
+			_mapObjectsController.addEventListener(GameBonusEvent.BONUS_APPLY_TO_PLAYER, onApplyBonusToPlayer);
 			_tankController.addEventListener(TankShotingEvent.WAS_SHOT, onTankShot);
 			_tankController.addEventListener(TankShotingEvent.RELOAD_COMPLETE, onTankReloadComplete);
 
