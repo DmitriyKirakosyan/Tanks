@@ -53,6 +53,8 @@ public class MapObjectsController extends EventDispatcher implements IController
 		drawObjects();
 	}
 
+	public function dropBonus(bonusType:uint):void { _bonusManager.dropBonus(bonusType); }
+
 	public function removeMapObjects():void {
 		removeBricks();
 		removeStones();
@@ -176,7 +178,6 @@ public class MapObjectsController extends EventDispatcher implements IController
 		checkHitStone(bullet);
 		checkHitBrick(bullet);
 		checkHitPlayerTank(bullet);
-		checkHitTimeZones(bullet);
 	}
 
 	private function checkHitEnemyTank(bullet:Bullet):void {
@@ -216,19 +217,10 @@ public class MapObjectsController extends EventDispatcher implements IController
 		if (_playerTankKilled || !_playerTank) { return; }
 
 		if (_playerTank != bullet.selfTank && bullet.hitTestObject(_playerTank)) {
-			_playerTank.tankDamage();
-			_bonusManager.dropBonus(GameBonus.MEDKIT);
 			removeBullet(bullet);
-			if(_playerTank.isDead()) {
-				_playerTankKilled = true;
-				showBamOnTank(new Point(_playerTank.originX, _playerTank.originY));
-				dispatchEvent(new DamageObjectEvent(DamageObjectEvent.DAMAGE_PLAYER_TANK, _playerTank));
-			}
+			dispatchEvent(new DamageObjectEvent(DamageObjectEvent.DAMAGE_PLAYER_TANK, _playerTank));
+			showBamOnTank(new Point(_playerTank.originX, _playerTank.originY));
 		}
-	}
-
-	private function checkHitTimeZones(bullet:Bullet):void {
-
 	}
 
 	private function checkHitBonus():void {

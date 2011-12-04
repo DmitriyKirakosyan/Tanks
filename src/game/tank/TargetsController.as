@@ -6,6 +6,7 @@ import game.IControllerWithTime;
 import game.events.TankShotingEvent;
 import game.events.TankEvent;
 import game.tank.TankController;
+import game.tank.TankController;
 import game.matrix.MapMatrix;
 import pathfinder.Pathfinder;
 import game.events.TargetsControllerEvent;
@@ -66,6 +67,13 @@ import flash.utils.Timer;
 			}
 		}
 
+		public function cleanTargetTank():void {
+			for each (var tankController:TankController in _enemyControllers) {
+				tankController.removeTargetTank();
+				_playerTank = null;
+			}
+		}
+
 		public function init():void {
 			for (var i:int = 0; i < Math.random() * 5; i++) { createTarget(); }
 			startTimer();
@@ -74,6 +82,7 @@ import flash.utils.Timer;
 		public function remove():void {
 			_timer.stop();
 			for each (var enemy:TankController in _enemyControllers) {
+				removeEnemyTankListeners(enemy);
 				enemy.remove();
 			}
 			_enemyControllers = new Vector.<TankController>();
@@ -98,29 +107,9 @@ import flash.utils.Timer;
 			enemyTank.init(new TankVO());
 			var rndX:int = Math.random() * MapMatrix.MATRIX_WIDTH;
 			var rndY:int = Math.random() * MapMatrix.MATRIX_HEIGHT;
-			/*
-			var rndX:int;
-			var rndY:int;
-			if (_random <= .25) {
-				rndX = Math.random() * MapMatrix.MATRIX_WIDTH;
-				rndY = -1;
-			}
-			if (_random > .25 && _random <= .5) {
-				rndX = Math.random() * MapMatrix.MATRIX_WIDTH;
-				rndY = 15;
-			}
-			if (_random > .5 && _random <= .75) {
-				rndX = -1;
-				rndY = Math.random() * MapMatrix.MATRIX_HEIGHT;
-			}
-			if (_random > .75) {
-				rndX = 15;
-				rndY = Math.random() * MapMatrix.MATRIX_HEIGHT;
-			}
-			*/
 			enemyTank.tank.x = rndX;
 			enemyTank.tank.y = rndY;
-			enemyTank.setTargetTank(_playerTank);
+			if (_playerTank) { enemyTank.setTargetTank(_playerTank); }
 			_enemyControllers.push(enemyTank);
 			moveEnemyTank(enemyTank);
 			enemyTank.addEventListener(TankEvent.MOVING_COMPLETE, onEnemyMovingComplete);

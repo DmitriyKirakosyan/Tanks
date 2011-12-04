@@ -6,6 +6,7 @@ import game.events.DamageObjectEvent;
 import game.events.GameBonusEvent;
 import game.events.SceneEvent;
 import game.mapObjects.MapEditor;
+import game.mapObjects.bonus.GameBonus;
 import game.tank.TankMovementListener;
 import pathfinder.Pathfinder;
 import game.tank.Tank;
@@ -151,8 +152,14 @@ public class GameController extends EventDispatcher implements IScene{
 			_targetsController.killEnemyTank(event.object as Tank);
 		}
 		private function onPlayerDamage(event:DamageObjectEvent):void {
-			_tankController.bam();
-			_container.addEventListener(MouseEvent.CLICK, onClick);
+			_tankController.tank.tankDamage();
+			if(_tankController.tank.isDead()) {
+				_tankController.bam();
+				_targetsController.cleanTargetTank();
+				_container.addEventListener(MouseEvent.CLICK, onClick);
+			} else {
+				_mapObjectsController.dropBonus(GameBonus.MEDKIT);
+			}
 		}
 	  private function onApplyBonusToPlayer(event:GameBonusEvent):void {
 			_tankController.applyBonus(event.bonus.type);

@@ -140,6 +140,7 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 		}
 
 		public function setTargetTank(tank:Tank):void {}
+		public function removeTargetTank():void {}
 
 		public function applyBonus(bonusType:uint):void {
 			switch (bonusType) {
