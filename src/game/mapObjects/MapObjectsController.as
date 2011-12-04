@@ -9,11 +9,12 @@ import flash.geom.Point;
 import game.IControllerWithTime;
 import game.events.DamageObjectEvent;
 import game.events.GameBonusEvent;
+import game.events.TankShotingEvent;
 import game.mapObjects.bonus.BonusManager;
-import game.mapObjects.bonus.GameBonus;
 import game.mapObjects.bonus.GameBonus;
 import game.matrix.MapMatrix;
 import game.matrix.MatrixItemIds;
+import game.tank.TargetsController;
 import game.tank.weapon.Bullet;
 import game.tank.Tank;
 import game.time.GameTimeZone;
@@ -27,9 +28,9 @@ public class MapObjectsController extends EventDispatcher implements IController
 	private var _stones:Vector.<Stone>;
 	private var _bricks:Vector.<Brick>;
 	private var _bullets:Vector.<Bullet>;
-	private var _enemyTanks:Vector.<Tank>;
 	private var _timeZoneList:Vector.<GameTimeZone>;
 	private var _playerTank:Tank;
+	private var _targetsController:TargetsController;
 
 	private var _playerTankKilled:Boolean = false;
 
@@ -44,6 +45,7 @@ public class MapObjectsController extends EventDispatcher implements IController
 		_container = container;
 		_bonusManager = new BonusManager();
 		_bonusManager.addEventListener(GameBonusEvent.BONUS_ADDED, onBonusAdded);
+		_targetsController = new TargetsController(_container, _mapMatrix);
 	}
 	
 	/*API*/
@@ -53,7 +55,11 @@ public class MapObjectsController extends EventDispatcher implements IController
 		_tileMap = new TileMap(MapMatrix.MATRIX_WIDTH, MapMatrix.MATRIX_HEIGHT);
 		_container.addChildAt(_tileMap, 0);
 		drawObjects();
+		_targetsController.init();
+		_targetsController.addEventListener(TankShotingEvent.WAS_SHOT, onEnemyTankShot);
 	}
+
+	public function get targetsController():TargetsController { return _targetsController; }
 
 	public function dropBonus(bonusType:uint):void { _bonusManager.dropBonus(bonusType); }
 
@@ -71,6 +77,8 @@ public class MapObjectsController extends EventDispatcher implements IController
 		removeBonuses();
 		_playerTankKilled = false;
 		_scaleTime = 1;
+		_targetsController.remove();
+		_targetsController.removeEventListener(TankShotingEvent.WAS_SHOT, onEnemyTankShot);
 	}
 
 	public function scaleTime(value:Number):void {
@@ -80,6 +88,7 @@ public class MapObjectsController extends EventDispatcher implements IController
 				bullet.scaleTime(value);
 			}
 		}
+		_targetsController.scaleTime(value);
 	}
 
 	public function putBrick(brick:Brick):void {
@@ -104,13 +113,10 @@ public class MapObjectsController extends EventDispatcher implements IController
 		bullet.setContainer(_container);
 	}
 
-	public function addEnemyTank(tank:Tank):void {
-		if (!_enemyTanks) { _enemyTanks = new Vector.<Tank>(); }
-		_enemyTanks.push(tank);
-	}
-
 	public function addPlayerTank(tank:Tank):void {
+		if (_playerTank) { trace("WARN!! player tank already exists [MapObjectsController.addPlayerTank]"); }
 		_playerTank = tank;
+		_targetsController.addPlayerTank(tank);
 	}
 
 	/* сдесь будут отслеживаться основные столкновения */
@@ -119,6 +125,10 @@ public class MapObjectsController extends EventDispatcher implements IController
 	}
 
 	/* Internal functions */
+
+	private function onEnemyTankShot(event:TankShotingEvent):void {
+		addBullet(event.bullet);
+	}
 
 	private function addTimeZone(timeZone:GameTimeZone):void {
 		if (!_timeZoneList) { _timeZoneList = new Vector.<GameTimeZone>(); }
@@ -201,13 +211,12 @@ public class MapObjectsController extends EventDispatcher implements IController
 	}
 
 	private function checkHitEnemyTank(bullet:Bullet):void {
-		for each (var enemyTank:Tank in _enemyTanks) {
+		for each (var enemyTank:Tank in _targetsController.getEnemyTanks()) {
 			if (enemyTank != bullet.selfTank &&
 				bullet.hitTestObject(enemyTank)) {
 				removeBullet(bullet);
+				showBamOnTank(new Point(enemyTank.originX, enemyTank.originY));  //TODO all ok?
 				removeEnemyTank(enemyTank);
-				showBamOnTank(new Point(enemyTank.originX, enemyTank.originY));
-				dispatchEvent(new DamageObjectEvent(DamageObjectEvent.DAMAGE_ENEMY_TANK, enemyTank));
 				break;
 			}
 		}
@@ -288,8 +297,7 @@ public class MapObjectsController extends EventDispatcher implements IController
 
 	/* enemy tanks functions */
 	private function removeEnemyTank(tank:Tank):void {
-		const index:int = _enemyTanks.indexOf(tank);
-		if (index >= 0) { _enemyTanks.splice(index, 1); }
+		_targetsController.killEnemyTank(tank);
 	}
 		
 }

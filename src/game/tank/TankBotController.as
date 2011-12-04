@@ -36,6 +36,8 @@ public class TankBotController extends TankController{
 		}
 	}
 
+	override public function hasTargetTank():Boolean { return _targetTank != null; }
+
 	private function onTankComeToCell(event:TankEvent):void {
 		if (!_targetTank) { return; }
 		if (Math.abs(_targetTank.x - tank.x) < GameController.CELL ||

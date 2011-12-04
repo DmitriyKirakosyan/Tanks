@@ -35,6 +35,9 @@ import flash.utils.Timer;
 
 		public function addPlayerTank(tank:Tank):void {
 			_playerTank = tank;
+			for each (var tankController:TankController in _enemyControllers) {
+				if (!tankController.hasTargetTank()) { tankController.setTargetTank(tank); }
+			}
 		}
 		
 		public function scaleTime(value:Number):void {
@@ -100,12 +103,11 @@ import flash.utils.Timer;
 			var rndY:int = Math.random() * MapMatrix.MATRIX_HEIGHT;
 			enemyTank.tank.x = rndX;
 			enemyTank.tank.y = rndY;
-			if (_playerTank) { enemyTank.setTargetTank(_playerTank); }
+			if (_playerTank && !enemyTank.hasTargetTank()) { enemyTank.setTargetTank(_playerTank); }
 			_enemyControllers.push(enemyTank);
 			moveEnemyTank(enemyTank);
 			enemyTank.addEventListener(TankEvent.MOVING_COMPLETE, onEnemyMovingComplete);
 			enemyTank.addEventListener(TankShotingEvent.WAS_SHOT, onEnemyShotEvent);
-			dispatchEvent(new TargetsControllerEvent(TargetsControllerEvent.NEW_TANK, enemyTank.tank));
 		}
 		private function removeEnemyTankListeners(enemyTankController:TankController):void {
 			enemyTankController.removeEventListener(TankShotingEvent.WAS_SHOT, onEnemyShotEvent);
