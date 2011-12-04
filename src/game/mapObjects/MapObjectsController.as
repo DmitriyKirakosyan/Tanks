@@ -48,6 +48,7 @@ public class MapObjectsController extends EventDispatcher implements IController
 	/*API*/
 
 	public function init():void {
+		_mapMatrix.createMatrix();
 		_tileMap = new TileMap(MapMatrix.MATRIX_WIDTH, MapMatrix.MATRIX_HEIGHT);
 		_container.addChildAt(_tileMap, 0);
 		drawObjects();

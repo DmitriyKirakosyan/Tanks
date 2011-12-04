@@ -51,10 +51,10 @@ public class GameController extends EventDispatcher implements IScene{
 		}
 
 		public function open():void {
+			_mapObjectsController.init(); // first of all we need to create map and map objects
 		 	_tankController.init(UserState.instance.tankVO, true);
 			_targetsController.init();
 			_targetsController.addPlayerTank(_tankController.tank);
-			_mapObjectsController.init();
 			initMapObjectsController();
 			addListeners();
 			_debugController.open();
@@ -83,7 +83,7 @@ public class GameController extends EventDispatcher implements IScene{
 		private function initControllers():void {
 			_mapMatrix = new MapMatrix(_container);
 			_mapMatrix.drawMatrix();
-			Pathfinder.matrix = _mapMatrix.matrix;
+			Pathfinder.setMatrix(_mapMatrix.matrix);
 			_mouseDrawController = new MouseDrawController(_container, _mapMatrix);
 			trace("[GameController.initControllers] tank base : ", UserState.instance.tankVO.tankBase);
 			_tankController = new TankController(_container, _mapMatrix);

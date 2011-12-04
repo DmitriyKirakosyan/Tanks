@@ -1,12 +1,7 @@
 package game.tank {
-import game.events.TankShotingEvent;
-import game.events.TankEvent;
-import game.IControllerWithTime;
 import game.IControllerWithTime;
 import game.events.TankShotingEvent;
 import game.events.TankEvent;
-import game.tank.TankController;
-import game.tank.TankController;
 import game.matrix.MapMatrix;
 import pathfinder.Pathfinder;
 import game.events.TargetsControllerEvent;
@@ -98,11 +93,7 @@ import flash.utils.Timer;
 		
 		/* Internal functions */
 		
-		
-		//TODO укоротить ф-цию, разобраться с появлением танков
 		private function createTarget():void {
-			//_random = Math.random();
-			//trace(_random);
 			var enemyTank:TankController = new TankBotController(_container, _mapMatrix);
 			enemyTank.init(new TankVO());
 			var rndX:int = Math.random() * MapMatrix.MATRIX_WIDTH;
@@ -130,14 +121,12 @@ import flash.utils.Timer;
 		}
 		
 		
-		//TODO укоротить ф-цию, разобраться как для каждого танка свою такую ф-цию определить
 		private function moveEnemyTank(enemyTankController:TankController):void {
 
 			const toPoint:Point = new Point(int(Math.random()*MapMatrix.MATRIX_WIDTH),
 																		int(Math.random()*MapMatrix.MATRIX_HEIGHT));
-			const path:Vector.<Point> = 
-				Pathfinder.getPath(new Point(enemyTankController.tank.x, enemyTankController.tank.y),
-													toPoint);
+			const path:Vector.<Point> = Pathfinder.getPath(new Point(enemyTankController.tank.x, enemyTankController.tank.y),
+																										toPoint);
 			addPathToEnemyTankController(path, enemyTankController);
 		}	
 	

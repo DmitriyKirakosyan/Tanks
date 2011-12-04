@@ -1,19 +1,22 @@
 package game.matrix {
-	import flash.geom.Rectangle;
+import flash.geom.Matrix;
+import flash.geom.Rectangle;
 	import flash.geom.Point;
 	import game.GameController;
 	import flash.display.Sprite;
 
 public class MapMatrix {
 		private var _matrix:Vector.<Vector.<uint>>;
+
+		/* for debug (drawing web) */
 		private var _container:Sprite;
 		
 		public static const MATRIX_WIDTH:int = 15;
 		public static const MATRIX_HEIGHT:int = 15;
 		
 		public function MapMatrix(container:Sprite) {
-			createMatrix();
 			_container = container;
+			createEmptyMatrix();
 		}
 		
 		public function get matrix():Vector.<Vector.<uint>> {
@@ -67,21 +70,26 @@ public class MapMatrix {
 
 		public function remove():void {
 		}
-		
-		private function createMatrix():void {
+
+		public function createEmptyMatrix():void {
 			_matrix = new Vector.<Vector.<uint>>();
 			for (var i:int = 0; i < MATRIX_WIDTH; ++i) {
 				_matrix.push(new Vector.<uint>());
-			}
-			
-			for (var k:int = 0; k < _matrix.length; ++k) {
 				for (var j:int = 0; j < MATRIX_HEIGHT; ++j) {
-					if (k == int(MATRIX_WIDTH/2) && j == int(MATRIX_HEIGHT/2)) {
-						_matrix[k].push(MatrixItemIds.EMPTY);
+					_matrix[i].push(MatrixItemIds.EMPTY);
+				}
+			}
+		}
+		
+		public function createMatrix():void {
+
+			for (var i:int = 0; i < _matrix.length; ++i) {
+				for (var j:int = 0; j < MATRIX_HEIGHT; ++j) {
+					if (i == int(MATRIX_WIDTH/2) && j == int(MATRIX_HEIGHT/2)) {
+						_matrix[i][j] = MatrixItemIds.EMPTY;
 					} else {
-						Math.random() > .2 ? _matrix[k].push(MatrixItemIds.EMPTY) :
-																	Math.random() < .1 ? _matrix[k].push(MatrixItemIds.STONE)
-																										: _matrix[k].push(MatrixItemIds.BRICKS);
+						_matrix[i][j] = Math.random() > .2 ?  MatrixItemIds.EMPTY :
+																	Math.random() < .1 ? MatrixItemIds.STONE : MatrixItemIds.BRICKS;
 					}
 				}
 			}

@@ -13,7 +13,8 @@ public class Pathfinder{
 	private static var pathMatrix:Vector.<Vector.<Point>>;
 	private static var bypassFunctionsQueue:Vector.<Function>;
 
-	public static function set matrix(value:Vector.<Vector.<uint>>):void{
+	public static function setMatrix(value:Vector.<Vector.<uint>>):void{
+		if (value.length == 0) { throw new Error("uncorrect matrix, 0 rows"); }
 		if (value && value.length > 0 && value[0].length > 0){
 			_matrix = value;
 			w = value.length;
