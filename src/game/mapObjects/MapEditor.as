@@ -40,7 +40,7 @@ public class MapEditor {
 	}
 
 	public function saveMap():void {
-		var fileReference:FileReference;
+		var fileReference:FileReference = new FileReference();
 		fileReference.save(JSON.encode(_mapMatrix.matrix), "map");
 	}
 

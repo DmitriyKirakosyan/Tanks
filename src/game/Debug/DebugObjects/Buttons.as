@@ -8,6 +8,8 @@ package game.Debug.DebugObjects {
 		private var _removeMapObjButton:DelObjBtn;
 		private var _addBrickBtn:AddBrickBtn;
 		private var _addStoneBtn:AddStoneBtn;
+		private var _saveMapBtn:SaveMap;
+		private var _trashBtn:TrashBtn;
 		
 		
 		public function Buttons():void {
@@ -21,6 +23,8 @@ package game.Debug.DebugObjects {
 		public function get removeMapObjButton():DelObjBtn { return _removeMapObjButton; }
 		public function get addBrickBtn():AddBrickBtn { return _addBrickBtn; }
 		public function get addStoneBtm():AddStoneBtn { return _addStoneBtn; }
+		public function get saveMapBtn():SaveMap { return _saveMapBtn; }
+		public function get trashBtn():TrashBtn { return _trashBtn; }
 		
 		/* Internal functions */
 		
@@ -54,6 +58,18 @@ package game.Debug.DebugObjects {
 			_addStoneBtn.x = 300;
 			_addStoneBtn.y = 20;
 			super.addChild(_addStoneBtn);
+			
+			_saveMapBtn = new SaveMap();
+			_saveMapBtn.scaleX = _saveMapBtn.scaleY = .3;
+			_saveMapBtn.x = 370;
+			_saveMapBtn.y = 20;
+			super.addChild(_saveMapBtn);
+			
+			_trashBtn = new TrashBtn();
+			_trashBtn.scaleX = _trashBtn.scaleY = .3;
+			_trashBtn.x = 500;
+			_trashBtn.y = 20;
+			super.addChild(_trashBtn);
 		}
 	}
 }

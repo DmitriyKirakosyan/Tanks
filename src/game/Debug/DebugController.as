@@ -19,6 +19,7 @@ package game.Debug {
 		private var _debugContainer:Sprite;
 		private var _buttons:Buttons;
 		private var _container:Sprite;
+		private var _matrix:Sprite;
 		
 		private var _stopAddTank:Boolean = false;
 		private var _tankDrag:Boolean = false;
@@ -45,10 +46,12 @@ package game.Debug {
 		}
 			
 		public function open():void {
+			drawMatrix();
 			addButtons();
 		}
 		public function close():void {
-			removeButtons();	
+			removeButtons();
+			_debugContainer.removeChild(_matrix);
 		}
 		
 		
@@ -63,16 +66,34 @@ package game.Debug {
 					//_container.visible = !_container.visible;
 					TweenLite.to(_container, .5, {x: 0, y : 100 });
 					_tween = true;
+					_matrix.visible = true;
 					return;
 				}
 				if(_tween) {
 					TweenLite.to(_container, 1, {x: 0, y : -100 });
 					//_container.visible = !_container.visible;
 					_tween = false;
+					_matrix.visible = false;
 					return;
 				}
 			}
 		}
+		
+		public function drawMatrix():void {
+			_matrix = new Sprite();
+			_matrix.visible = false;
+			_matrix.graphics.lineStyle(1, 0x00FF00, .4);
+			for (var i:int = 0; i <= MapMatrix.MATRIX_WIDTH; ++i) {
+				_matrix.graphics.moveTo(i * GameController.CELL, 0);
+				_matrix.graphics.lineTo(i * GameController.CELL, MapMatrix.MATRIX_HEIGHT * GameController.CELL);
+			}
+			for (var j:int = 0; j <= MapMatrix.MATRIX_HEIGHT; ++j) {
+				_matrix.graphics.moveTo(0, j * GameController.CELL);
+				_matrix.graphics.lineTo(MapMatrix.MATRIX_WIDTH * GameController.CELL, j * GameController.CELL);
+			}
+			_debugContainer.addChild(_matrix);
+		}
+		
 		private function createButtons():void {
 			_buttons = new Buttons();
 			_buttons.x = 10;
@@ -86,6 +107,7 @@ package game.Debug {
 			_buttons.removeMapObjButton.addEventListener(MouseEvent.CLICK, removeMapObjects);
 			_buttons.addBrickBtn.addEventListener(MouseEvent.CLICK, addBrick);
 			_buttons.addStoneBtm.addEventListener(MouseEvent.CLICK, addStone);
+			_buttons.saveMapBtn.addEventListener(MouseEvent.CLICK, saveMap);
 			_playerTank = _gameController.targetsController.playerTank;
 			_enemies = _gameController.targetsController.enemies;
 			_enemiesController = _gameController.targetsController.enemyControllers;
@@ -100,7 +122,7 @@ package game.Debug {
 				_buttons.addStoneBtm.removeEventListener(MouseEvent.CLICK, addStone);
 			}
 		}
-		/*Delete Map Objects*/
+		/*Map Editor*/
 		private function removeMapObjects(event:MouseEvent):void {
 			_gameController.mapObjectsController.removeMapObjects();
 		}
@@ -113,7 +135,9 @@ package game.Debug {
 			event.stopPropagation();
 			_gameController.mapEditor.takeStone();
 		}
-
+		private function saveMap(event:MouseEvent):void {
+			_gameController.mapEditor.saveMap();
+		}
 		//TODO сделать кнопку для saveMap() и пофиг на выдает ошибку "null"
 
 
