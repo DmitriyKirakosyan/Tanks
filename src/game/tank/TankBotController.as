@@ -50,24 +50,29 @@ public class TankBotController extends TankController{
 			setTarget(new Point(_targetTank.originX,  _targetTank.originY));
 			shot();
 		}
-		if (_strength == 1 && ((Math.abs(_targetTank.originX - tank.originX) < GameController.CELL*3 ||
-				Math.abs(_targetTank.originY - tank.originY) < GameController.CELL*3))) {
-			if (Math.abs(_targetTank.originY - tank.originY)) {
-				if (_targetTank.originX < tank.originX && _targetTank.rotation == TankController.RIGHT_ROT) {
-					setTarget(new Point(_targetTank.originX,  _targetTank.originY));
+		if (_strength == 0) { return; }
+		var xDistance:Number = Math.abs(_targetTank.originX - tank.originX);
+		var yDistance:Number = Math.abs(_targetTank.originY - tank.originY);
+		if (xDistance < GameController.CELL*3) {
+				if (_targetTank.originX < tank.originX && _targetTank.baseRotation == TankController.RIGHT_ROT) {
+					trace("shooooot right");
+					setTarget(new Point(_targetTank.originX + xDistance,  _targetTank.originY));
 					shot();
-				} else if (_targetTank.originX > tank.originX && _targetTank.rotation == TankController.LEFT_ROT) {
-					setTarget(new Point(_targetTank.originX,  _targetTank.originY));
-					shot();
-				}
-			} else if (Math.abs(_targetTank.originX - tank.originX)) {
-				if (_targetTank.originY < tank.originY && _targetTank.rotation == TankController.UP_ROT) {
-					setTarget(new Point(_targetTank.originX,  _targetTank.originY));
-					shot();
-				} else if (_targetTank.originY > tank.originY && (_targetTank.rotation == TankController.DOWN_ROT_MINUS || _targetTank.rotation == TankController.DOWN_ROT_PLUS)) {
-					setTarget(new Point(_targetTank.originX,  _targetTank.originY));
+				} else if (_targetTank.originX > tank.originX && _targetTank.baseRotation == TankController.LEFT_ROT) {
+					trace("shooooot left");
+					setTarget(new Point(_targetTank.originX - xDistance,  _targetTank.originY));
 					shot();
 				}
+		}
+		if (yDistance < GameController.CELL*3) {
+			if (_targetTank.originY < tank.originY && (_targetTank.baseRotation == TankController.DOWN_ROT_MINUS || _targetTank.baseRotation == TankController.DOWN_ROT_PLUS)) {
+					trace("shooooot up");
+					setTarget(new Point(_targetTank.originX,  _targetTank.originY + yDistance));
+					shot();
+			} else if (_targetTank.originY > tank.originY && _targetTank.baseRotation == TankController.UP_ROT) {
+					trace("shooooot down");
+					setTarget(new Point(_targetTank.originX,  _targetTank.originY - yDistance));
+					shot();
 			}
 		}
 

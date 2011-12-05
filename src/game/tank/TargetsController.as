@@ -73,7 +73,7 @@ import flash.utils.Timer;
 		}
 
 		public function init():void {
-			for (var i:int = 0; i < Math.random() * 5; i++) { createTarget(); }
+			for (var i:int = 0; i < Math.random() * 3; i++) { createTarget(); }
 			startTimer();
 		}
 
@@ -97,7 +97,9 @@ import flash.utils.Timer;
 		/* Internal functions */
 		
 		private function createTarget():void {
-			var enemyTank:TankController = new TankBotController(_container, _mapMatrix);
+			var enemyTank:TankController = new TankBotController(_container, _mapMatrix, 1);
+			var tankVO:TankVO = new TankVO();
+			tankVO.weaponType = 1;
 			enemyTank.init(new TankVO());
 			var rndX:int = Math.random() * MapMatrix.MATRIX_WIDTH;
 			var rndY:int = Math.random() * MapMatrix.MATRIX_HEIGHT;

@@ -42,6 +42,8 @@ public class Tank extends MapObject {
 		return _gun;
 	}
 
+	public function get baseRotation():Number { return tankBase.rotation; }
+
 	public function hasDefence():Boolean { return _defense != null; }
 
 	public function isDead():Boolean {
