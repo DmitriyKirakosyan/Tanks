@@ -17,9 +17,14 @@ import game.matrix.MapMatrix;
 
 public class TankBotController extends TankController{
 	private var _targetTank:Tank;
+	private var _strength:uint;
 
-	public function TankBotController(container:Sprite, mapMatrix:MapMatrix) {
+	private const BASE_BOT:uint = 0;
+	private const ADVANCE_BOT:uint = 1;
+
+	public function TankBotController(container:Sprite, mapMatrix:MapMatrix, strength:uint = 0) {
 		super(container, mapMatrix);
+		_strength = strength;
 	}
 
 	override public function setTargetTank(targetTank:Tank):void {
@@ -40,10 +45,30 @@ public class TankBotController extends TankController{
 
 	private function onTankComeToCell(event:TankEvent):void {
 		if (!_targetTank) { return; }
-		if (Math.abs(_targetTank.x - tank.x) < GameController.CELL ||
-				Math.abs(_targetTank.y - tank.y) < GameController.CELL) {
+		if (Math.abs(_targetTank.originX - tank.originX) < GameController.CELL ||
+				Math.abs(_targetTank.originY - tank.originY) < GameController.CELL) {
 			setTarget(new Point(_targetTank.originX,  _targetTank.originY));
 			shot();
+		}
+		if (_strength == 1 && ((Math.abs(_targetTank.originX - tank.originX) < GameController.CELL*3 ||
+				Math.abs(_targetTank.originY - tank.originY) < GameController.CELL*3))) {
+			if (Math.abs(_targetTank.originY - tank.originY)) {
+				if (_targetTank.originX < tank.originX && _targetTank.rotation == TankController.RIGHT_ROT) {
+					setTarget(new Point(_targetTank.originX,  _targetTank.originY));
+					shot();
+				} else if (_targetTank.originX > tank.originX && _targetTank.rotation == TankController.LEFT_ROT) {
+					setTarget(new Point(_targetTank.originX,  _targetTank.originY));
+					shot();
+				}
+			} else if (Math.abs(_targetTank.originX - tank.originX)) {
+				if (_targetTank.originY < tank.originY && _targetTank.rotation == TankController.UP_ROT) {
+					setTarget(new Point(_targetTank.originX,  _targetTank.originY));
+					shot();
+				} else if (_targetTank.originY > tank.originY && (_targetTank.rotation == TankController.DOWN_ROT_MINUS || _targetTank.rotation == TankController.DOWN_ROT_PLUS)) {
+					setTarget(new Point(_targetTank.originX,  _targetTank.originY));
+					shot();
+				}
+			}
 		}
 
 	}
