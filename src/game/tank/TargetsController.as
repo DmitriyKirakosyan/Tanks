@@ -3,6 +3,8 @@ import game.IControllerWithTime;
 import game.events.TankShotingEvent;
 import game.events.TankEvent;
 import game.matrix.MapMatrix;
+import game.tank.TankBotController;
+
 import pathfinder.Pathfinder;
 import game.events.TargetsControllerEvent;
 
@@ -127,8 +129,11 @@ import flash.utils.Timer;
 		
 		private function moveEnemyTank(enemyTankController:TankController):void {
 
-			const toPoint:Point = new Point(int(Math.random()*MapMatrix.MATRIX_WIDTH),
-																		int(Math.random()*MapMatrix.MATRIX_HEIGHT));
+			var toPoint:Point = (TankBotController(enemyTankController)).getTargetMovePoint();
+			if (!toPoint) {
+				toPoint = new Point(int(Math.random()*MapMatrix.MATRIX_WIDTH),
+														int(Math.random()*MapMatrix.MATRIX_HEIGHT));
+			}
 			const path:Vector.<Point> = Pathfinder.getPath(new Point(enemyTankController.tank.x, enemyTankController.tank.y),
 																										toPoint);
 			addPathToEnemyTankController(path, enemyTankController);

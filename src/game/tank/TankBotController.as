@@ -41,10 +41,18 @@ public class TankBotController extends TankController{
 		}
 	}
 
+	public function getTargetMovePoint():Point {
+		if (!_targetTank) { return null; }
+		if (_strength > 0 && Math.abs(_targetTank.x - tank.x) < GameController.CELL * 5 &&
+						Math.abs(_targetTank.y - tank.y) < GameController.CELL * 5) {
+			return new Point(_targetTank.x,  _targetTank.y);
+		}
+	}
+
 	override public function hasTargetTank():Boolean { return _targetTank != null; }
 
 	private function onTankComeToCell(event:TankEvent):void {
-		if (!_targetTank) { return; }
+		if (!_targetTank || !this.wannaShot) { return; }
 		if (Math.abs(_targetTank.originX - tank.originX) < GameController.CELL ||
 				Math.abs(_targetTank.originY - tank.originY) < GameController.CELL) {
 			setTarget(new Point(_targetTank.originX,  _targetTank.originY));
