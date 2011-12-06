@@ -170,6 +170,7 @@ public class MapObjectsController extends EventDispatcher implements IController
 		if (!_stones) { _stones = new Vector.<Stone>(); }
 		_stones.push(stone);
 		_container.addChild(stone);
+		_mapMatrix.setCell(mPoint.x, mPoint.y, MatrixItemIds.STONE);
 	}
 	private function removeStones():void {
 		for each (var stone:Stone in _stones) {
@@ -200,6 +201,7 @@ public class MapObjectsController extends EventDispatcher implements IController
 		if (!_bricks) { _bricks = new Vector.<Brick>(); }
 		_bricks.push(brick);
 		_container.addChild(brick);
+		_mapMatrix.setCell(mPoint.x, mPoint.y, MatrixItemIds.BRICKS);
 	}
 	private function removeBricks():void {
 		for each (var brick:Brick in _bricks) {

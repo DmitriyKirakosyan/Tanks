@@ -61,7 +61,13 @@ public class MapMatrix {
 		}
 		
 		public function clearCell(x:int, y:int):void {
+			if (!pointInMatrix(x, y)) { return; }
 			_matrix[x][y] = MatrixItemIds.EMPTY;
+		}
+
+		public function setCell(x:int, y:int, cellId:int):void {
+			if (!pointInMatrix(x,  y)) { return; }
+			_matrix[x][y] = cellId;
 		}
 
 		public function isFreeCell(mPoint:Point):Boolean {
@@ -93,6 +99,10 @@ public class MapMatrix {
 					}
 				}
 			}
+		}
+
+		private function pointInMatrix(x:int, y:int):Boolean {
+			return x >= 0 && x < MATRIX_WIDTH && y >= 0 && y < MATRIX_HEIGHT;
 		}
 	}
 }
