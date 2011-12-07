@@ -63,22 +63,18 @@ public class TankBotController extends TankController{
 		var yDistance:Number = Math.abs(_targetTank.originY - tank.originY);
 		if (xDistance < GameController.CELL*3) {
 				if (_targetTank.originX < tank.originX && _targetTank.baseRotation == TankController.RIGHT_ROT) {
-					trace("shooooot right");
 					setTarget(new Point(_targetTank.originX + xDistance,  _targetTank.originY));
 					shot();
 				} else if (_targetTank.originX > tank.originX && _targetTank.baseRotation == TankController.LEFT_ROT) {
-					trace("shooooot left");
 					setTarget(new Point(_targetTank.originX - xDistance,  _targetTank.originY));
 					shot();
 				}
 		}
 		if (yDistance < GameController.CELL*3) {
 			if (_targetTank.originY < tank.originY && (_targetTank.baseRotation == TankController.DOWN_ROT_MINUS || _targetTank.baseRotation == TankController.DOWN_ROT_PLUS)) {
-					trace("shooooot up");
 					setTarget(new Point(_targetTank.originX,  _targetTank.originY + yDistance));
 					shot();
 			} else if (_targetTank.originY > tank.originY && _targetTank.baseRotation == TankController.UP_ROT) {
-					trace("shooooot down");
 					setTarget(new Point(_targetTank.originX,  _targetTank.originY - yDistance));
 					shot();
 			}

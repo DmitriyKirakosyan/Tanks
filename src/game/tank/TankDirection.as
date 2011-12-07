@@ -30,17 +30,17 @@ package game.tank {
 		
 		public function rotateIfNeed(tank:Tank, nPoint:Point):Boolean {
 			const pPoint:Point = new Point(tank.x, tank.y);
-			if (pPoint.x == nPoint.x) {
+			if (Math.abs(pPoint.x - nPoint.x) < .5) {
 				if (pPoint.y > nPoint.y) {
-					if (_value != UP_DIR) { rotateTank(tank, UP_DIR); }
+					if (_value != UP_DIR) { rotateTank(tank, UP_DIR); trace("rotate up"); }
 				} else {
-					if (_value != DOWN_DIR) { rotateTank(tank, DOWN_DIR); }
+					if (_value != DOWN_DIR) { rotateTank(tank, DOWN_DIR); trace("rotate down"); }
 				}
 			} else {
 				if (pPoint.x > nPoint.x) {
-					if (_value != LEFT_DIR) { rotateTank(tank, LEFT_DIR); }
+					if (_value != LEFT_DIR) { rotateTank(tank, LEFT_DIR); trace("rotate left"); }
 				} else {
-					if (_value != RIGHT_DIR) {rotateTank(tank, RIGHT_DIR); }
+					if (_value != RIGHT_DIR) {rotateTank(tank, RIGHT_DIR); trace("rotate right"); }
 				}
 			}
 			return false;
