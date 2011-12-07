@@ -6,6 +6,7 @@
 package game.tank {
 import flash.display.Sprite;
 import flash.events.TimerEvent;
+import flash.filters.GlowFilter;
 import flash.geom.Point;
 import flash.utils.Timer;
 
@@ -27,6 +28,13 @@ public class TankBotController extends TankController{
 		_strength = strength;
 	}
 
+	override public function init(tankVO:TankVO, player:Boolean = false):void {
+		super.init(tankVO,  player);
+		if (_strength > 0) {
+			tank.filters = _strength == 1 ? [new GlowFilter()] : [new GlowFilter(0)];
+		}
+	}
+
 	override public function setTargetTank(targetTank:Tank):void {
 		_targetTank = targetTank;
 		if (!this.hasEventListener(TankEvent.COME_TO_CELL)) {
@@ -43,7 +51,7 @@ public class TankBotController extends TankController{
 
 	public function getTargetMovePoint():Point {
 		if (!_targetTank) { return null; }
-		if (_strength > 0 && Math.abs(_targetTank.x - tank.x) < GameController.CELL * 5 &&
+		if (_strength > 1 && Math.abs(_targetTank.x - tank.x) < GameController.CELL * 5 &&
 						Math.abs(_targetTank.y - tank.y) < GameController.CELL * 5) {
 			return new Point(_targetTank.x,  _targetTank.y);
 		}

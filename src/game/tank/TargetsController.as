@@ -99,7 +99,8 @@ import flash.utils.Timer;
 		/* Internal functions */
 		
 		private function createTarget():void {
-			var enemyTank:TankController = new TankBotController(_container, _mapMatrix, 1);
+			var strength:int = int(Math.random() * 3);
+			var enemyTank:TankController = new TankBotController(_container, _mapMatrix, strength);
 			var tankVO:TankVO = new TankVO();
 			tankVO.weaponType = 1;
 			enemyTank.init(new TankVO());
@@ -133,6 +134,9 @@ import flash.utils.Timer;
 			if (!toPoint) {
 				toPoint = new Point(int(Math.random()*MapMatrix.MATRIX_WIDTH),
 														int(Math.random()*MapMatrix.MATRIX_HEIGHT));
+			} else {
+				toPoint.x = int(toPoint.x);
+				toPoint.y = int(toPoint.y);
 			}
 			const path:Vector.<Point> = Pathfinder.getPath(new Point(enemyTankController.tank.x, enemyTankController.tank.y),
 																										toPoint);

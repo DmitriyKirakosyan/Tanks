@@ -65,7 +65,7 @@ public class MapObjectsController extends EventDispatcher implements IController
 		_tileMap = new TileMap(MapMatrix.MATRIX_WIDTH, MapMatrix.MATRIX_HEIGHT);
 		_container.addChildAt(_tileMap, 0);
 		drawObjects();
-		//_targetsController.init();
+		_targetsController.init();
 		_targetsController.addEventListener(TankShotingEvent.WAS_SHOT, onEnemyTankShot);
 		_container.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 	}
