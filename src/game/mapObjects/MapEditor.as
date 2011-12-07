@@ -8,6 +8,7 @@ import com.adobe.serialization.json.JSON;
 
 import flash.display.Sprite;
 import flash.events.MouseEvent;
+import flash.filters.GlowFilter;
 import flash.geom.Point;
 import flash.net.FileReference;
 
@@ -20,6 +21,8 @@ public class MapEditor {
 
 	private var _draggingContainer:Sprite;
 	private var _mapMatrix:MapMatrix;
+
+	private var _cantPutFilter:GlowFilter = new GlowFilter();
 
 	private var _draggingObject:MapObject;
 
@@ -62,6 +65,16 @@ public class MapEditor {
 			}
 			_draggingObject.originX = event.stageX;
 			_draggingObject.originY = event.stageY;
+			checkAccessForPut();
+		}
+	}
+
+	private function checkAccessForPut():void {
+		var point:Point = new Point(int(_draggingObject.x + .5), int(_draggingObject.y + .5));
+		if (!_mapMatrix.isFreeCell(point)) {
+			if (_draggingObject.filters.length == 0) { trace("filter"); _draggingObject.filters = [_cantPutFilter]; }
+		} else if (_draggingObject.filters.length > 0) {
+			_draggingObject.filters = [];
 		}
 	}
 

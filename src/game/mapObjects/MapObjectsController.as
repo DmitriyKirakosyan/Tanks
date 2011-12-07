@@ -95,10 +95,16 @@ public class MapObjectsController extends EventDispatcher implements IController
 	}
 
 	public function putBrick(brick:Brick):void {
-		addBrick(new Point(int(brick.x),  int(brick.y)));
+		var point:Point = new Point(int(brick.x + .5),  int(brick.y + .5));
+		if (_mapMatrix.isFreeCell(point)) {
+			addBrick(point);
+		}
 	}
 	public function putStone(stone:Stone):void {
-		addStone(new Point(int(stone.x),  int(stone.y)));
+		var point:Point = new Point(int(stone.x + .5),  int(stone.y + .5));
+		if (_mapMatrix.isFreeCell(point)) {
+			addStone(point);
+		}
 	}
 
 	public function addBullet(bullet:Bullet):void {
