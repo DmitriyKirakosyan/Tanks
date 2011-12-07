@@ -64,7 +64,7 @@ public class MapObjectsController extends EventDispatcher implements IController
 		_mapMatrix.createMatrix();
 		_tileMap = new TileMap(MapMatrix.MATRIX_WIDTH, MapMatrix.MATRIX_HEIGHT);
 		_container.addChildAt(_tileMap, 0);
-		//drawObjects();
+		drawObjects();
 		//_targetsController.init();
 		_targetsController.addEventListener(TankShotingEvent.WAS_SHOT, onEnemyTankShot);
 		_container.addEventListener(Event.ENTER_FRAME, onEnterFrame);
@@ -95,16 +95,10 @@ public class MapObjectsController extends EventDispatcher implements IController
 	}
 
 	public function putBrick(brick:Brick):void {
-		brick.correctMapPosition();
-		if (!_bricks) { _bricks = new Vector.<Brick>(); }
-		_bricks.push(brick);
-		_container.addChild(brick);
+		addBrick(new Point(int(brick.x),  int(brick.y)));
 	}
 	public function putStone(stone:Stone):void {
-		stone.correctMapPosition();
-		if (!_stones) { _stones = new Vector.<Stone>(); }
-		_stones.push(stone);
-		_container.addChild(stone);
+		addStone(new Point(int(stone.x),  int(stone.y)));
 	}
 
 	public function addBullet(bullet:Bullet):void {

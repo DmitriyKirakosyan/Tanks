@@ -66,10 +66,14 @@ public class MapEditor {
 	}
 
 	private function onClick(event:MouseEvent):void {
-		_container.removeEventListener(MouseEvent.CLICK, onClick);
-		_container.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
-		_container.removeChild(_draggingContainer);
-		sendObjectToObjectsController();
+		if (_draggingObject.originY > 100) {
+			sendObjectToObjectsController();
+		} else {
+			_container.removeEventListener(MouseEvent.CLICK, onClick);
+			_container.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+			_container.removeChild(_draggingContainer);
+			_draggingContainer.removeChild(_draggingObject);
+		}
 	}
 
 	private function sendObjectToObjectsController():void {

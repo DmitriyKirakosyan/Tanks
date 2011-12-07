@@ -47,6 +47,7 @@ public class TankBotController extends TankController{
 						Math.abs(_targetTank.y - tank.y) < GameController.CELL * 5) {
 			return new Point(_targetTank.x,  _targetTank.y);
 		}
+		return null;
 	}
 
 	override public function hasTargetTank():Boolean { return _targetTank != null; }
