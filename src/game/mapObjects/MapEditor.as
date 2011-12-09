@@ -70,8 +70,7 @@ public class MapEditor {
 	}
 
 	private function checkAccessForPut():void {
-		var point:Point = new Point(int(_draggingObject.x + .5), int(_draggingObject.y + .5));
-		if (!_mapMatrix.isFreeCell(point)) {
+		if (!_mapMatrix.isFreeCell(int(_draggingObject.x + .5), int(_draggingObject.y + .5))) {
 			if (_draggingObject.filters.length == 0) { trace("filter"); _draggingObject.filters = [_cantPutFilter]; }
 		} else if (_draggingObject.filters.length > 0) {
 			_draggingObject.filters = [];

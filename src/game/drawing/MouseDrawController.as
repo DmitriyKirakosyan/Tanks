@@ -113,7 +113,8 @@ public class MouseDrawController extends EventDispatcher{
 	}
 
 	private function onEnterFrame(event:Event):void {
-		if (_drawing && _mapMatrix.isFreeCell(_mapMatrix.getMatrixPoint(_currentPoint))) {
+		var mPoint:Point = _mapMatrix.getMatrixPoint(_currentPoint);
+		if (_drawing && _mapMatrix.isFreeCell(mPoint.x, mPoint.y)) {
 			drawShapePathToCurrentPoint();
 			if (newPoint(_currentPoint)) {
 				addPointToPath(_currentPoint);
@@ -126,7 +127,6 @@ public class MouseDrawController extends EventDispatcher{
 	}
 
 	//refact this shit
-
 	private function drawShapePathToCurrentPoint():void {
 		if (!_drawing) { return; }
 		var lastPoint:Point = (_pathShapes && _pathShapes.length > 0) ?

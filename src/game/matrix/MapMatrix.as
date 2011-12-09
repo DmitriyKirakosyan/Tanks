@@ -23,6 +23,9 @@ public class MapMatrix {
 	public function get matrix():Vector.<Vector.<uint>> {
 		return _matrix;
 	}
+	public function get tankMatrix():Vector.<Vector.<uint>> {
+		return _tankMatrix;
+	}
 
 	public function getMatrixPoint(point:Point):Point{
 		return new Point(int((point.x ) / GameController.CELL),
@@ -65,14 +68,26 @@ public class MapMatrix {
 		if (!pointInMatrix(x, y)) { return; }
 		_matrix[x][y] = MatrixItemIds.EMPTY;
 	}
-
 	public function setCell(x:int, y:int, cellId:int):void {
 		if (!pointInMatrix(x,  y)) { return; }
 		_matrix[x][y] = cellId;
 	}
+	public function isFreeCell(x:int,  y:int):Boolean {
+		if (!pointInMatrix(x,  y)) { return false; }
+		return _matrix[x][y] == MatrixItemIds.EMPTY;
+	}
 
-	public function isFreeCell(mPoint:Point):Boolean {
-		return _matrix[mPoint.x][mPoint.y] == MatrixItemIds.EMPTY;
+	public function clearTankCell(x:int,  y:int):void {
+		if (!pointInMatrix(x,  y)) { return; }
+		_tankMatrix[x][y] = MatrixItemIds.EMPTY;
+	}
+	public function setTankCell(x:int, y:int, cellId:int):void {
+		if (!pointInMatrix(x,  y)) { return; }
+		_tankMatrix[x][y] = cellId;
+	}
+	public function isFreeTankCell(x:int, y:int):Boolean {
+		if (!pointInMatrix(x,  y)) { return false; }
+		return _tankMatrix[x][y] == MatrixItemIds.EMPTY;
 	}
 
 	public function remove():void {
