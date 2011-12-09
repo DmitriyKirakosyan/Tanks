@@ -32,15 +32,15 @@ package game.tank {
 			const pPoint:Point = new Point(tank.x, tank.y);
 			if (Math.abs(pPoint.x - nPoint.x) < .5) {
 				if (pPoint.y > nPoint.y) {
-					if (_value != UP_DIR) { rotateTank(tank, UP_DIR); trace("rotate up"); }
+					if (_value != UP_DIR) { rotateTank(tank, UP_DIR); }
 				} else {
-					if (_value != DOWN_DIR) { rotateTank(tank, DOWN_DIR); trace("rotate down"); }
+					if (_value != DOWN_DIR) { rotateTank(tank, DOWN_DIR); }
 				}
 			} else {
 				if (pPoint.x > nPoint.x) {
-					if (_value != LEFT_DIR) { rotateTank(tank, LEFT_DIR); trace("rotate left"); }
+					if (_value != LEFT_DIR) { rotateTank(tank, LEFT_DIR); }
 				} else {
-					if (_value != RIGHT_DIR) {rotateTank(tank, RIGHT_DIR); trace("rotate right"); }
+					if (_value != RIGHT_DIR) {rotateTank(tank, RIGHT_DIR); }
 				}
 			}
 			return false;
