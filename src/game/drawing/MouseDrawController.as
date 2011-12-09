@@ -135,6 +135,8 @@ public class MouseDrawController extends EventDispatcher{
 		if (!lastPoint) {
 			newPathShape = PathShape.createCircleShape();
 			addNewPathShape(newPathShape);
+			newPathShape.x = _currentPoint.x;
+			newPathShape.y = _currentPoint.y;
 		} else {
 			var nowPoint:Point = new Point(_currentPoint.x, _currentPoint.y);
 			var lineLength:Number = Point.distance(lastPoint, nowPoint);
