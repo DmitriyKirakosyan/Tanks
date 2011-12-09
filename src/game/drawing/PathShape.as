@@ -28,7 +28,7 @@ public class PathShape extends Sprite{
 		this.graphics.beginFill(0xffffff);
 		if (_type == RECTANGLE) {
 			this.graphics.drawRect(-3, -3, 6, 6);
-		} else { this.graphics.drawCircle(0, 0, 2); }
+		} else { this.graphics.drawCircle(0, 0, 3); }
 		this.graphics.endFill();
 	}
 }
