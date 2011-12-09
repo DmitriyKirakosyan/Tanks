@@ -1,4 +1,5 @@
 package game.drawing {
+	import game.tank.weapon.TankGunController;
 	import flash.display.Shape;
 import flash.events.Event;
 
@@ -146,6 +147,7 @@ public class MouseDrawController extends EventDispatcher{
 			addNewPathShape(newPathShape);
 			newPathShape.x = _currentPoint.x;
 			newPathShape.y = _currentPoint.y;
+			newPathShape.rotation = TankGunController.ANGLE;
 		} else {
 			var nowPoint:Point = new Point(_currentPoint.x, _currentPoint.y);
 			var lineLength:Number = Point.distance(lastPoint, nowPoint);
@@ -155,6 +157,7 @@ public class MouseDrawController extends EventDispatcher{
 				tempPoint = Point.interpolate(nowPoint, lastPoint, i / lineLength);
 				newPathShape.x = tempPoint.x;
 				newPathShape.y = tempPoint.y;
+				newPathShape.rotation = TankGunController.ANGLE;
 				addNewPathShape(newPathShape);
 			}
 		}

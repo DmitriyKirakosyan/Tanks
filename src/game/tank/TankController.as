@@ -70,6 +70,7 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 			tank.addReloadBar(_gunController.reloadController.reloadBar);
 			_container.addChild(tank);
 		}
+		
 
 		public function remove():void {
 			TweenMax.killTweensOf(tank);

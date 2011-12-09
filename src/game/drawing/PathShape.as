@@ -25,11 +25,14 @@ public class PathShape extends Sprite{
 	}
 
 	private function draw():void {
-		this.graphics.beginFill(0xffffff);
+		/*this.graphics.beginFill(0xffffff);
 		if (_type == RECTANGLE) {
 			this.graphics.drawRect(-3, -3, 6, 6);
 		} else { this.graphics.drawCircle(0, 0, 3); }
-		this.graphics.endFill();
+		this.graphics.endFill();*/
+		var arrow:Sprite = new Arrow4();
+		arrow.scaleX = arrow.scaleY = 2;
+		this.addChild(arrow);
 	}
 }
 }
