@@ -150,7 +150,7 @@ import flash.utils.Timer;
 			}
 		}
 		
-		private function createTargetforTimer (event:TimerEvent):void {
+		private function createTargetForTimer (event:TimerEvent):void {
 			if (_enemyControllers.length < 5 && Math.random() < .5) {
 				createTarget();
 			}
@@ -158,7 +158,7 @@ import flash.utils.Timer;
 		
 		private function initTimer():void {
 			_timer = new Timer(5000);
-			_timer.addEventListener(TimerEvent.TIMER, createTargetforTimer);
+			_timer.addEventListener(TimerEvent.TIMER, createTargetForTimer);
 		}
 		
 		private function startTimer():void {
