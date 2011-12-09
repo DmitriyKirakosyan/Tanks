@@ -13,7 +13,10 @@ import game.events.DrawingControllerEvent;
 
 public class MouseDrawController extends EventDispatcher{
 	private var _mapMatrix:MapMatrix;
-	private var _path:Vector.<Point>;
+	private var _matrixPath:Vector.<Point>;
+	private var _originPath:Vector.<Point>;
+
+	private var _pathShapes:Vector.<Sprite>;
 
 	private var _currentMousePoint:Point;
 
@@ -43,23 +46,23 @@ public class MouseDrawController extends EventDispatcher{
 	}
 
 	public function get tankPath():Vector.<Point> {
-		return _path;
+		return _matrixPath;
 	}
 
 	public function get currentMousePoint():Point { return _currentMousePoint; }
 
 	public function getLastMovePoint():Point {
-		if (_path && _path.length > 0) {
-			return _path[_path.length-1];
+		if (_matrixPath && _matrixPath.length > 0) {
+			return _matrixPath[_matrixPath.length-1];
 		}
 		return null;
 	}
 
 	public function startDrawTankPath():void {
 		removePath();
-		_path = new Vector.<Point>();
+		_matrixPath = new Vector.<Point>();
 		createNewPathPart();
-		_path.push(_mapMatrix.getMatrixPoint(new Point(_currentMousePoint.x, _currentMousePoint.y)));
+		_matrixPath.push(_mapMatrix.getMatrixPoint(new Point(_currentMousePoint.x, _currentMousePoint.y)));
 		//_drawingContainer.graphics.moveTo(_currentMousePoint.x, _currentMousePoint.y);
 		_drawing = true;
 		_container.addEventListener(Event.ENTER_FRAME, onEnterFrame);
@@ -122,31 +125,39 @@ public class MouseDrawController extends EventDispatcher{
 		}
 	}
 
+	//refact this shit
+
 	private function drawShapePathToCurrentPoint():void {
 		if (!_drawing) { return; }
-		/*
-		var lastPoint:Point = (_selectedHunter.pathParts && _selectedHunter.pathParts.length > 0) ?
-										new Point(_selectedHunter.pathParts[_selectedHunter.pathParts.length-1].x,
-															_selectedHunter.pathParts[_selectedHunter.pathParts.length-1].y) :
-										null;
-		var newPathPart:Sprite;
+		var lastPoint:Point = (_pathShapes && _pathShapes.length > 0) ?
+													new Point(_pathShapes[_pathShapes.length-1].x, _pathShapes[_pathShapes.length-1].y) : null;
+		var newPathShape:Sprite;
 		if (!lastPoint) {
-			newPathPart = createPathPart();
-			addNewPathPart(newPathPart);
+			newPathShape = PathShape.createCircleShape();
+			addNewPathShape(newPathShape);
 		} else {
-			var nowPoint:Point = new Point(_currentX, _currentY);
+			var nowPoint:Point = new Point(_currentPoint.x, _currentPoint.y);
 			var lineLength:Number = Point.distance(lastPoint, nowPoint);
-			for (var i:int = 4 + _partsDistance; i < lineLength; i+= 4 + _partsDistance) {
-				newPathPart = createPathPart( Point.interpolate(nowPoint, lastPoint, i / lineLength) );
-				addNewPathPart(newPathPart);
+			var tempPoint:Point;
+			for (var i:int = 4; i < lineLength; i+= 4) {
+				newPathShape = PathShape.createCircleShape();
+				tempPoint = Point.interpolate(nowPoint, lastPoint, i / lineLength);
+				newPathShape.x = tempPoint.x;
+				newPathShape.y = tempPoint.y;
+				addNewPathShape(newPathShape);
 			}
 		}
-		*/
+	}
+
+	private function addNewPathShape(pathShape:Sprite):void {
+		_drawingContainer.addChild(pathShape);
+		if (!_pathShapes) { _pathShapes = new Vector.<Sprite>(); }
+		_pathShapes.push(pathShape);
 	}
 
 	private function onMouseUp(event:MouseEvent):void {
 		stopDrawing();
-		if (_path) {
+		if (_matrixPath) {
 			dispatchEvent(new DrawingControllerEvent(DrawingControllerEvent.DRAWING_COMPLETE));
 		}
 	}
@@ -158,13 +169,13 @@ public class MouseDrawController extends EventDispatcher{
 
 	private function newPoint(point:Point):Boolean {
 		const matrixPoint:Point = _mapMatrix.getMatrixPoint(point);
-		if (!_path || _path.length == 0) { return true; }
-		return (matrixPoint.x != _path[_path.length-1].x ||
-						matrixPoint.y != _path[_path.length-1].y);
+		if (!_matrixPath || _matrixPath.length == 0) { return true; }
+		return (matrixPoint.x != _matrixPath[_matrixPath.length-1].x ||
+						matrixPoint.y != _matrixPath[_matrixPath.length-1].y);
 	}
 
 	private function addPointToPath(point:Point):void {
-			_path.push(_mapMatrix.getMatrixPoint(point));
+			_matrixPath.push(_mapMatrix.getMatrixPoint(point));
 	}
 
 	private function drawPoint(point:Point):void {
@@ -174,7 +185,7 @@ public class MouseDrawController extends EventDispatcher{
 	}
 
 	private function removePath():void {
-		if (_path) {
+		if (_matrixPath) {
 			if (_pathParts && _pathParts.length > 0) {
 				for each (var part:Shape in _pathParts) {
 					TweenMax.killTweensOf(part);
@@ -182,7 +193,7 @@ public class MouseDrawController extends EventDispatcher{
 				}
 				_pathParts = null;
 			}
-			_path = null;
+			_matrixPath = null;
 		}
 	}
 
@@ -194,12 +205,12 @@ public class MouseDrawController extends EventDispatcher{
 
 	/*
 	private function newPathAndShow():void {
-		if (!_path || _path.length == 0) { return; }
+		if (!_matrixPath || _matrixPath.length == 0) { return; }
 		_drawingContainer.graphics.clear();
 		_drawingContainer.graphics.lineStyle(2, 0x00ff00);
-		_drawingContainer.graphics.moveTo(_path[0].x * cellWidth + cellWidth/2,
-																			_path[0].y * cellWidth + cellWidth/2);
-		for each (var point:Point in _path) {
+		_drawingContainer.graphics.moveTo(_matrixPath[0].x * cellWidth + cellWidth/2,
+																			_matrixPath[0].y * cellWidth + cellWidth/2);
+		for each (var point:Point in _matrixPath) {
 			_drawingContainer.graphics.lineTo(point.x * cellWidth + cellWidth/2,
 																				point.y * cellWidth + cellWidth/2);
 		}
