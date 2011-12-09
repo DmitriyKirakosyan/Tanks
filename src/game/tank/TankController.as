@@ -33,6 +33,7 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 		private var _wannaShot:Boolean;
 		
 		private var _movingTimeline:TimelineMax;
+		private var _nextPoint:Point;
 		
 		private var _gunController:TankGunController;
 
@@ -64,6 +65,7 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 				var matrixPoint:Point = _mapMatrix.getMatrixPoint(new Point(300, 300));
 				tank.x = matrixPoint.x;
 				tank.y = matrixPoint.y;
+				_mapMatrix.setTankCell(tank.x,  tank.y,  1);
 			}
 			tank.addReloadBar(_gunController.reloadController.reloadBar);
 			_container.addChild(tank);
@@ -95,6 +97,7 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 			TweenMax.killTweensOf(tank);
 			tank.bam();
 			tank.addEventListener(TankDestructionEvent.TANK_DESTRAYED, onTankDestroyed);
+			_mapMatrix.clearTankCell(_nextPoint.x, _nextPoint.y);
 		}
 		
 		public function readyForMoving():void {
@@ -161,11 +164,23 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 		}
 		
 		private function onMovingComplete():void {
+			if (!tank.isPlayer) {
+				trace("moving complete [TankController.onMovingComplete]");
+			}
 			dispatchEvent(new TankEvent(TankEvent.MOVING_COMPLETE, this));
 		}
 		
 		private function onStartMoveToPathNode(point:Point):void {
+			if (!_mapMatrix.isFreeTankCell(point.x,  point.y)) {
+				trace("stop, tank!! [TankController.onStartMoveToPathNode]");
+				_movingTimeline.kill();
+				onMovingComplete();
+				return;
+			}
+			_nextPoint = point;
 			_direction.rotateIfNeed(tank, point);
+			_mapMatrix.clearTankCell(int(tank.x), int(tank.y));
+			_mapMatrix.setTankCell(point.x,  point.y, 1);
 			dispatchEvent(new TankEvent(TankEvent.COME_TO_CELL));
 		}
 		
