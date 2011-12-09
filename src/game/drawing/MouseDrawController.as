@@ -49,7 +49,7 @@ public class MouseDrawController extends EventDispatcher{
 		return _matrixPath;
 	}
 
-	public function get currentMousePoint():Point { return _currentMousePoint; }
+	public function get currentMousePoint():Point { return _currentPoint; }
 
 	public function getLastMovePoint():Point {
 		if (_matrixPath && _matrixPath.length > 0) {
@@ -62,7 +62,7 @@ public class MouseDrawController extends EventDispatcher{
 		removePath();
 		_matrixPath = new Vector.<Point>();
 		createNewPathPart();
-		_matrixPath.push(_mapMatrix.getMatrixPoint(new Point(_currentMousePoint.x, _currentMousePoint.y)));
+		_matrixPath.push(_mapMatrix.getMatrixPoint(new Point(_currentPoint.x, _currentPoint.y)));
 		//_drawingContainer.graphics.moveTo(_currentMousePoint.x, _currentMousePoint.y);
 		_drawing = true;
 		_container.addEventListener(Event.ENTER_FRAME, onEnterFrame);
@@ -89,8 +89,8 @@ public class MouseDrawController extends EventDispatcher{
 	private function createNewPathPart():void {
 		if (!_pathParts) { _pathParts = new Vector.<Shape>(); }
 		_currentPathPart = new Shape();
-		drawPartRectangle(_currentMousePoint);
-		_currentPathPart.graphics.moveTo(_currentMousePoint.x, _currentMousePoint.y);
+		drawPartRectangle(_currentPoint);
+		_currentPathPart.graphics.moveTo(_currentPoint.x, _currentPoint.y);
 		_currentPathPart.graphics.lineStyle(2, 0x00ff00);
 		_pathParts.push(_currentPathPart);
 
