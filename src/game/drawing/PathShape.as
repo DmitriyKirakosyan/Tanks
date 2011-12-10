@@ -30,7 +30,7 @@ public class PathShape extends Sprite{
 			this.graphics.drawRect(-3, -3, 6, 6);
 		} else { this.graphics.drawCircle(0, 0, 3); }
 		this.graphics.endFill();*/
-		var arrow:Sprite = new Arrow4();
+		var arrow:Sprite = new Arrow5();
 		arrow.scaleX = arrow.scaleY = 2;
 		this.addChild(arrow);
 	}

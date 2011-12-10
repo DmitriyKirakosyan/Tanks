@@ -33,6 +33,7 @@ public class MouseDrawController extends EventDispatcher{
 //		private var _rectangles:Vector.<Shape>;
 
 	private var _drawing:Boolean;
+	private var _arrowAngle:Number;
 
 	public function MouseDrawController(container:Sprite, mapMatrix:MapMatrix) {
 		_mapMatrix = mapMatrix;
@@ -135,8 +136,16 @@ public class MouseDrawController extends EventDispatcher{
 			stopDrawing();
 		}
 	}
-
+	
+	private function getAngle(arrow:Sprite):Number {
+			var dx:Number = arrow.x - _container.mouseX;
+			var dy:Number = arrow.y - _container.mouseY;
+			var angle:Number = Math.atan2(dy, dx)*180/Math.PI;
+			return angle;
+	}
 	//refact this shit
+	//TODO баг с исчезанием стрелок под конец пути, проявляется во время стрельбы. 
+	//Стрелки прикольно выглядят когда убираешь закраску квадаров движения
 	private function drawShapePathToCurrentPoint():void {
 		if (!_drawing) { return; }
 		var lastPoint:Point = (_pathShapes && _pathShapes.length > 0) ?
@@ -147,7 +156,8 @@ public class MouseDrawController extends EventDispatcher{
 			addNewPathShape(newPathShape);
 			newPathShape.x = _currentPoint.x;
 			newPathShape.y = _currentPoint.y;
-			newPathShape.rotation = TankGunController.ANGLE;
+			_arrowAngle = getAngle(newPathShape);
+			newPathShape.rotation = 90 + _arrowAngle;
 		} else {
 			var nowPoint:Point = new Point(_currentPoint.x, _currentPoint.y);
 			var lineLength:Number = Point.distance(lastPoint, nowPoint);
@@ -157,7 +167,8 @@ public class MouseDrawController extends EventDispatcher{
 				tempPoint = Point.interpolate(nowPoint, lastPoint, i / lineLength);
 				newPathShape.x = tempPoint.x;
 				newPathShape.y = tempPoint.y;
-				newPathShape.rotation = TankGunController.ANGLE;
+				_arrowAngle = getAngle(newPathShape);
+				newPathShape.rotation = 90 + _arrowAngle;
 				addNewPathShape(newPathShape);
 			}
 		}
