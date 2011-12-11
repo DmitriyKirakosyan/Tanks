@@ -1,5 +1,8 @@
 package game.drawing {
-	import game.tank.weapon.TankGunController;
+import flash.filters.BlurFilter;
+import flash.filters.GlowFilter;
+
+import game.tank.weapon.TankGunController;
 	import flash.display.Shape;
 import flash.events.Event;
 
@@ -112,8 +115,9 @@ public class MouseDrawController extends EventDispatcher{
 		const mapPoint:Point = _mapMatrix.getMatrixPoint(point);
 		const rectPoint:Point = new Point(mapPoint.x * cellWidth, mapPoint.y * cellWidth);
 		_currentPathPart.graphics.beginFill(0x1fffff, .3);
-		_currentPathPart.graphics.drawRoundRect(rectPoint.x, rectPoint.y, cellWidth, cellWidth, 1, 1);
+		_currentPathPart.graphics.drawRoundRect(rectPoint.x + 5, rectPoint.y + 5, cellWidth - 10, cellWidth - 10, 1, 1);
 		_currentPathPart.graphics.endFill();
+		_currentPathPart.filters = [new BlurFilter(15, 15, 6), new GlowFilter(0xffffff)];
 	}
 
 	private function onMouseMove(event:MouseEvent):void {
