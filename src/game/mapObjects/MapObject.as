@@ -28,7 +28,7 @@ import game.*;
 		}
 
 		private function drawRectangle():void {
-			this.graphics.lineStyle(1, 0xffffff);
+			//this.graphics.lineStyle(1, 0xffffff);
 			this.graphics.drawRect(-GameController.CELL/2, -GameController.CELL/2, GameController.CELL, GameController.CELL);
 		}
 	}
