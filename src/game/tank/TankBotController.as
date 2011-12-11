@@ -20,12 +20,15 @@ public class TankBotController extends TankController{
 	private var _targetTank:Tank;
 	private var _strength:uint;
 
+	private var _waitTimer:Timer;
+
 	private const BASE_BOT:uint = 0;
 	private const ADVANCE_BOT:uint = 1;
 
 	public function TankBotController(container:Sprite, mapMatrix:MapMatrix, strength:uint = 0) {
 		super(container, mapMatrix);
 		_strength = strength;
+		_waitTimer = new Timer(3000);
 	}
 
 	override public function init(tankVO:TankVO, player:Boolean = false):void {
@@ -46,6 +49,22 @@ public class TankBotController extends TankController{
 		if (_targetTank) {
 			_targetTank = null;
 			this.removeEventListener(TankEvent.COME_TO_CELL, onTankComeToCell);
+		}
+	}
+
+	override public function setMovingPath(path:Vector.<Point>):void {
+		if (_targetTank) {
+			var xDistance:Number = Math.abs(tank.originX - _targetTank.originX);
+			var yDistance:Number = Math.abs(tank.originY - _targetTank.originY);
+			if (xDistance <= GameController.CELL*2 && yDistance <= GameController.CELL*2 && Math.abs(yDistance - xDistance) > GameController.CELL/2) {
+				trace("stop pleas");
+				onMovingComplete();
+				return;
+			}
+		}
+		readyForMoving();
+		for each (var point:Point in path) {
+			addPointToMovePath(point);
 		}
 	}
 
@@ -88,7 +107,18 @@ public class TankBotController extends TankController{
 					shot();
 			}
 		}
+	}
 
+	override protected function onMovingComplete():void {
+		_waitTimer.addEventListener(TimerEvent.TIMER, onWaitTimer);
+		_waitTimer.start();
+	}
+
+	private function onWaitTimer(event:TimerEvent):void {
+		_waitTimer.removeEventListener(TimerEvent.TIMER, onWaitTimer);
+		_waitTimer.stop();
+//		tank.correctMapPosition();
+		super.onMovingComplete();
 	}
 
 	private function onAutoAttackTimer(event:TimerEvent):void {

@@ -23,8 +23,8 @@ import game.*;
 		public function set originY(value:Number):void { super.y = value; }
 
 		public function correctMapPosition():void {
-			x = int (x);
-			y = int (y);
+			x = int (x + .5);
+			y = int (y + .5);
 		}
 
 		private function drawRectangle():void {

@@ -1,7 +1,9 @@
 package game.tank {
 	import flash.events.Event;
 	import flash.geom.ColorTransform;
-	import game.events.GunRotateCompleteEvent;
+
+import game.GameController;
+import game.events.GunRotateCompleteEvent;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 
@@ -105,7 +107,11 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 			tank.updateSpeedup();
 			_movingTimeline.kill();
 			_movingTimeline = new TimelineMax({onComplete : onMovingComplete});
+			_movingTimeline.stop();
 			_movingTimeline.timeScale = _scaleTime;
+		}
+
+		public function setMovingPath(path:Vector.<Point>):void {
 		}
 		
 		public function addPointToMovePath(point:Point):void {
@@ -164,25 +170,28 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 			_container.removeChild(tank);
 		}
 		
-		private function onMovingComplete():void {
-			if (!tank.isPlayer) {
-				trace("moving complete [TankController.onMovingComplete]");
-			}
+		protected function onMovingComplete():void {
 			dispatchEvent(new TankEvent(TankEvent.MOVING_COMPLETE, this));
 		}
 		
 		private function onStartMoveToPathNode(point:Point):void {
 			if (!_mapMatrix.isFreeTankCell(point.x,  point.y)) {
-				trace("stop, tank!! [TankController.onStartMoveToPathNode]");
+				_movingTimeline.vars["onComplete"] = null;
 				_movingTimeline.kill();
+				tank.correctMapPosition();
 				onMovingComplete();
 				return;
 			}
-			_nextPoint = point;
 			_direction.rotateIfNeed(tank, point);
-			_mapMatrix.clearTankCell(int(tank.x), int(tank.y));
+
+			//fuck this please anybody
+			if (_nextPoint) {
+				_mapMatrix.clearTankCell(_nextPoint.x, _nextPoint.y);
+			}
+			_mapMatrix.clearTankCell(int(tank.x + .5), int(tank.y + .5));
 			_mapMatrix.setTankCell(point.x,  point.y, 1);
 			dispatchEvent(new TankEvent(TankEvent.COME_TO_CELL));
+			_nextPoint = point;
 		}
 		
 		private function onGunRotateComplete(event:GunRotateCompleteEvent):void {

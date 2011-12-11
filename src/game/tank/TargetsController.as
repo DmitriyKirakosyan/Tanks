@@ -144,10 +144,7 @@ import flash.utils.Timer;
 		}	
 	
 		private function addPathToEnemyTankController(path:Vector.<Point>, enemyTankController:TankController):void {
-			enemyTankController.readyForMoving();
-			for each (var point:Point in path) {
-				enemyTankController.addPointToMovePath(point);
-			}
+			enemyTankController.setMovingPath(path);
 		}
 		
 		private function createTargetForTimer (event:TimerEvent):void {
