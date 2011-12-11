@@ -112,6 +112,16 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 		}
 
 		public function setMovingPath(path:Vector.<Point>):void {
+			if (!path || path.length == 0) { return; }
+			if (!_mapMatrix.isFreeTankCell(path[0].x,  path[0].y)) {
+				trace("stop pleas [TankController.setMovingPath]");
+				onMovingComplete();
+				return;
+			}
+			readyForMoving();
+			for each (var point:Point in path) {
+				addPointToMovePath(point);
+			}
 		}
 		
 		public function addPointToMovePath(point:Point):void {

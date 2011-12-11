@@ -52,22 +52,6 @@ public class TankBotController extends TankController{
 		}
 	}
 
-	override public function setMovingPath(path:Vector.<Point>):void {
-		if (_targetTank) {
-			var xDistance:Number = Math.abs(tank.originX - _targetTank.originX);
-			var yDistance:Number = Math.abs(tank.originY - _targetTank.originY);
-			if (xDistance <= GameController.CELL*2 && yDistance <= GameController.CELL*2 && Math.abs(yDistance - xDistance) > GameController.CELL/2) {
-				trace("stop pleas");
-				onMovingComplete();
-				return;
-			}
-		}
-		readyForMoving();
-		for each (var point:Point in path) {
-			addPointToMovePath(point);
-		}
-	}
-
 	public function getTargetMovePoint():Point {
 		if (!_targetTank) { return null; }
 		if (_strength > 1 && Math.abs(_targetTank.x - tank.x) < GameController.CELL * 5 &&

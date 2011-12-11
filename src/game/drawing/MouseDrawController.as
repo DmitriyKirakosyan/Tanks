@@ -153,6 +153,8 @@ public class MouseDrawController extends EventDispatcher{
 	//refact this shit
 	//TODO баг с исчезанием стрелок под конец пути, проявляется во время стрельбы. 
 	//Стрелки прикольно выглядят когда убираешь закраску квадаров движения
+	//Знаю, полный отстой, но не знаю как лучше, если без квадратиков то езда танка
+	//по этим стрелка выглядит слегка не корректной
 	private function drawShapePathToCurrentPoint():void {
 		if (!_drawing) { return; }
 		var lastPoint:Point = (_pathShapes && _pathShapes.length > 0) ?
