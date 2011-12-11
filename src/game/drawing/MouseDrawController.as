@@ -1,9 +1,12 @@
 package game.drawing {
+
+import com.greensock.easing.Elastic;
+
 import flash.filters.BlurFilter;
 import flash.filters.GlowFilter;
 
 import game.tank.weapon.TankGunController;
-	import flash.display.Shape;
+import flash.display.Shape;
 import flash.events.Event;
 
 import game.events.DrawingControllerEvent;
@@ -114,10 +117,10 @@ public class MouseDrawController extends EventDispatcher{
 	private function drawPartRectangle(point:Point):void {
 		const mapPoint:Point = _mapMatrix.getMatrixPoint(point);
 		const rectPoint:Point = new Point(mapPoint.x * cellWidth, mapPoint.y * cellWidth);
-		_currentPathPart.graphics.beginFill(0x1fffff, .3);
-		_currentPathPart.graphics.drawRoundRect(rectPoint.x + 5, rectPoint.y + 5, cellWidth - 10, cellWidth - 10, 1, 1);
+		_currentPathPart.graphics.beginFill(0x1fffff, .1);
+		_currentPathPart.graphics.drawRoundRect(rectPoint.x, rectPoint.y, cellWidth, cellWidth, 1, 1);
 		_currentPathPart.graphics.endFill();
-		_currentPathPart.filters = [new BlurFilter(15, 15, 6), new GlowFilter(0xffffff)];
+		//_currentPathPart.filters = [new BlurFilter(15, 15, 6), new GlowFilter(0xffffff)];
 	}
 
 	private function onMouseMove(event:MouseEvent):void {
@@ -173,6 +176,8 @@ public class MouseDrawController extends EventDispatcher{
 				newPathShape.y = tempPoint.y;
 				_arrowAngle = getAngle(newPathShape);
 				newPathShape.rotation = 90 + _arrowAngle;
+				newPathShape.filters = [new GlowFilter(0x91e600, 1, 40, 40, 20)];
+				TweenMax.to(newPathShape, .8, {glowFilter:{color:0x91e600, alpha:.5, blurX:4, strength : 4, blurY:4, ease : Elastic.easeOut}});
 				addNewPathShape(newPathShape);
 			}
 		}
