@@ -1,4 +1,5 @@
 package game.tank.weapon {
+import game.IControllerWithTime;
 import game.tank.*;
 
 import com.greensock.easing.Linear;
@@ -7,7 +8,7 @@ import flash.geom.Point;
 import com.greensock.TweenMax;
 import flash.display.Sprite;
 
-public class Bullet extends Sprite {
+public class Bullet extends Sprite implements IControllerWithTime {
 	private var _tween:TweenMax;
 	private var _speed:Number;
 	private var _selfTank:Tank;
@@ -80,8 +81,17 @@ public class Bullet extends Sprite {
 		}
 	}
 
+	/* time functions */
+
 	public function scaleTime(value:Number):void {
 		if (_tween) { _tween.timeScale = value; }
+	}
+
+	public function pause():void {
+		if (_tween) { _tween.pause(); }
+	}
+	public function resume():void {
+		if (_tween) { _tween.resume(); }
 	}
 
 	public function drawBulletPointOn(sprite:Sprite):void {

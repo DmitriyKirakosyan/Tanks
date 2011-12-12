@@ -30,17 +30,17 @@ public class TankGun extends Sprite{
 				this.addChild(new GunView());
 				break;
 			case MINIGUN :
-				createMinigun();
+				createMiniGun();
 				break;
-			default : //FIREGUN
-				createFiregun();
+			default : //TAIL_ROCKET
+				createTailRocket();
 		}
 	}
 
-	private function createMinigun():void {
+	private function createMiniGun():void {
 		this.addChild(new MachineGunView());
 	}
-	private function createFiregun():void {
+	private function createTailRocket():void {
 		this.addChild(new RocketGunView());
 	}
 

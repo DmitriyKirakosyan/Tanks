@@ -12,13 +12,25 @@ package game {
 		}
 		
 		/* API */
-		
+
 		public function add_controller(controllerWithTime:IControllerWithTime):void {
 			if (!controllerWithTime) { return; }
 			if (!_controllers) { _controllers = new Vector.<IControllerWithTime>(); }
 			_controllers.push(controllerWithTime);
 		}
 		
+		/* for debug */
+		public function pauseWorld():void {
+			for each (var controller:IControllerWithTime in _controllers) {
+				controller.pause();
+			}
+		}
+		public function resumeWorld():void {
+			for each (var controller:IControllerWithTime in _controllers) {
+				controller.resume();
+			}
+		}
+
 		/** slow down time */
 		public function slowDown():void {
 			scaleTime(.14);

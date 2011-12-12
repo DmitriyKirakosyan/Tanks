@@ -84,6 +84,8 @@ public class MapObjectsController extends EventDispatcher implements IController
 		_targetsController.removeEventListener(TankShotingEvent.WAS_SHOT, onEnemyTankShot);
 	}
 
+	/* time functions */
+
 	public function scaleTime(value:Number):void {
 		_scaleTime = value;
 		if (_bullets) {
@@ -92,6 +94,23 @@ public class MapObjectsController extends EventDispatcher implements IController
 			}
 		}
 		_targetsController.scaleTime(value);
+	}
+
+	public function pause():void {
+		if (_bullets) {
+			for each (var bullet:Bullet in _bullets) {
+				bullet.pause();
+			}
+		}
+		_targetsController.pause();
+	}
+	public function resume():void {
+		if (_bullets) {
+			for each (var bullet:Bullet in _bullets) {
+				bullet.resume();
+			}
+		}
+		_targetsController.resume();
 	}
 
 	public function putBrick(brick:Brick):void {

@@ -41,10 +41,23 @@ import flash.utils.Timer;
 				if (!tankController.hasTargetTank()) { tankController.setTargetTank(tank); }
 			}
 		}
-		
+
+		/* time functions */
+
 		public function scaleTime(value:Number):void {
 			for each (var tankController:TankController in _enemyControllers) {
 				tankController.scaleTime(value);
+			}
+		}
+
+		public function pause():void {
+			for each (var tankController:TankController in _enemyControllers) {
+				tankController.pause();
+			}
+		}
+		public function resume():void {
+			for each (var tankController:TankController in _enemyControllers) {
+				tankController.resume();
 			}
 		}
 		
