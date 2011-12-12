@@ -11,6 +11,10 @@ package game.Debug.DebugObjects {
 		private var _saveMapBtn:SaveMap;
 		private var _trashBtn:TrashBtn;
 		
+		private var _pauseGameBtn:PauseGame;
+		private var _changeGunBtn:ChangeGun;
+		private var _newGameBtn:NewGame;
+		
 		
 		public function Buttons():void {
 			super();
@@ -25,6 +29,9 @@ package game.Debug.DebugObjects {
 		public function get addStoneBtm():AddStoneBtn { return _addStoneBtn; }
 		public function get saveMapBtn():SaveMap { return _saveMapBtn; }
 		public function get trashBtn():TrashBtn { return _trashBtn; }
+		public function get pauseGameBtn():PauseGame { return _pauseGameBtn; }
+		public function get changeGunBtn():ChangeGun { return _changeGunBtn; }
+		public function get newGameBtn():NewGame { return _newGameBtn; }
 		
 		/* Internal functions */
 		
@@ -67,9 +74,28 @@ package game.Debug.DebugObjects {
 			
 			_trashBtn = new TrashBtn();
 			_trashBtn.scaleX = _trashBtn.scaleY = .3;
-			_trashBtn.x = 500;
+			_trashBtn.x = 550;
 			_trashBtn.y = 20;
 			super.addChild(_trashBtn);
+			
+			_pauseGameBtn = new PauseGame();
+			_pauseGameBtn.scaleX = _pauseGameBtn.scaleY = 1;
+			_pauseGameBtn.x = 500;
+			_pauseGameBtn.y = 20;
+			_pauseGameBtn.gotoAndStop(1);
+			super.addChild(_pauseGameBtn);
+			
+			_changeGunBtn = new ChangeGun();
+			_changeGunBtn.scaleX = _changeGunBtn.scaleY = 1;
+			_changeGunBtn.x = 460;
+			_changeGunBtn.y = 20;
+			super.addChild(_changeGunBtn);
+			
+			_newGameBtn = new NewGame();
+			_newGameBtn.scaleX = _newGameBtn.scaleY = 1;
+			_newGameBtn.x = 420;
+			_newGameBtn.y = 20;
+			super.addChild(_newGameBtn);
 		}
 	}
 }

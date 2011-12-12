@@ -116,7 +116,7 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 	public function setMovingPath(path:Vector.<Point>):void {
 		if (!path || path.length == 0) { return; }
 		if (!_mapMatrix.isFreeTankCell(path[0].x,  path[0].y)) {
-			trace("stop pleas [TankController.setMovingPath]");
+			trace("stop please [TankController.setMovingPath]");
 			onMovingComplete();
 			return;
 		}
@@ -182,7 +182,7 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 		dispatchEvent(new TankEvent(TankEvent.MOVING_COMPLETE, this));
 	}
 
-	private function onStartMoveToPathNode(point:Point):void {
+	private function onStartMoveToPathNode(point:Point):void { 
 		if (!_mapMatrix.isFreeTankCell(point.x,  point.y)) {
 			_movingTimeline.vars["onComplete"] = null;
 			_movingTimeline.kill();

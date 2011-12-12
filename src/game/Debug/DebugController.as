@@ -24,6 +24,8 @@ import game.tank.TankController;
 		
 		private var _stopAddTank:Boolean = false;
 		private var _tankDrag:Boolean = false;
+		private var _tikTak:Boolean = false;
+		private var _gunType:uint = 0;
 		
 		private var _playerTank:Tank;
 		private var _enemies:Vector.<Tank>;
@@ -109,6 +111,9 @@ import game.tank.TankController;
 			_buttons.addBrickBtn.addEventListener(MouseEvent.CLICK, addBrick);
 			_buttons.addStoneBtm.addEventListener(MouseEvent.CLICK, addStone);
 			_buttons.saveMapBtn.addEventListener(MouseEvent.CLICK, saveMap);
+			_buttons.pauseGameBtn.addEventListener(MouseEvent.CLICK, pauseGame);
+			_buttons.changeGunBtn.addEventListener(MouseEvent.CLICK, changeGun);
+			_buttons.newGameBtn.addEventListener(MouseEvent.CLICK, newGame);
 			_playerTank = _gameController.targetsController.playerTank;
 			_enemies = _gameController.targetsController.enemies;
 			_enemyControllers = _gameController.targetsController.enemyControllers;
@@ -121,6 +126,10 @@ import game.tank.TankController;
 				_buttons.removeMapObjButton.removeEventListener(MouseEvent.CLICK, removeMapObjects);
 				_buttons.addBrickBtn.removeEventListener(MouseEvent.CLICK, addBrick);
 				_buttons.addStoneBtm.removeEventListener(MouseEvent.CLICK, addStone);
+				_buttons.saveMapBtn.removeEventListener(MouseEvent.CLICK, saveMap);
+				_buttons.pauseGameBtn.removeEventListener(MouseEvent.CLICK, pauseGame);
+				_buttons.changeGunBtn.removeEventListener(MouseEvent.CLICK, changeGun);
+				_buttons.newGameBtn.removeEventListener(MouseEvent.CLICK, newGame);
 			}
 		}
 		/*Map Editor*/
@@ -214,6 +223,30 @@ import game.tank.TankController;
 					break;
 				}
 			}
+		}
+		private function pauseGame(event:MouseEvent):void {
+			if (!_tikTak) { _gameController.timeController.pauseWorld(); _buttons.pauseGameBtn.gotoAndStop(2); _tikTak = true; return; }
+			if (_tikTak) { _gameController.timeController.resumeWorld(); _buttons.pauseGameBtn.gotoAndStop(1); _tikTak = false; return; }
+		}
+		private function changeGun(event:MouseEvent):void {
+			switch (_gunType) {
+				case 0 :
+					_gameController.playerTankController.tank.updateGun(0);
+					_gunType = 1;
+					break;
+				case 1 :
+					_gameController.playerTankController.tank.updateGun(1);
+					_gunType = 2;
+					break;
+				case 2 :
+					_gameController.playerTankController.tank.updateGun(2);
+					_gunType = 0;
+					break;
+				default : return;
+			}
+		}
+		private function newGame(event:MouseEvent):void {
+			_gameController.startNewGame();
 		}
 	}
 }
