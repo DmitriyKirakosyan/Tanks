@@ -233,6 +233,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 		const point:Point = new Point(_tank.x,  _tank.y);
 		vo.tankBase = _tank.vo.tankBase == 0 ? 1 : 0;
 		vo.weaponType = _weapon.type;
+		vo.ability = 1;
 		_tank = new Tank(vo);
 		const distance:Number = Math.abs(_defaultTankPoint.x -point.x);
 		_tank.x = point.x < _defaultTankPoint.x ? point.x + 2*distance :point.x - 2 * distance;

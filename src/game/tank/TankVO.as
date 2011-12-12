@@ -10,6 +10,7 @@ public class TankVO {
 	public var tankBase:uint;
 	public var destroyMethod:uint;
 	public var weaponType:uint;
+	public var ability:uint;
 
 	public static const DEFAULT_BASE:uint = 0;
 	public static const BRICK_BASE:uint = 1;
@@ -19,6 +20,7 @@ public class TankVO {
 		res.tankBase = this.tankBase;
 		res.destroyMethod = this.destroyMethod;
 		res.weaponType = this.weaponType;
+		res.ability = this.ability;
 		return res;
 	}
 }

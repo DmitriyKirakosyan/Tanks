@@ -6,6 +6,7 @@ import flash.display.Sprite;
 import game.events.TankDestructionEvent;
 
 import game.mapObjects.MapObject;
+import game.tank.ability.TankAbility;
 import game.tank.destruction.TankDestroyMethod;
 import game.tank.destruction.TankDestroyMethodFactory;
 import game.tank.weapon.TankGun;
@@ -41,6 +42,8 @@ public class Tank extends MapObject {
 	public function get gun():TankGun {
 		return _gun;
 	}
+
+	public function get ability():uint { return _vo.ability; }
 
 	public function get baseRotation():Number { return tankBase.rotation; }
 
@@ -145,6 +148,5 @@ public class Tank extends MapObject {
 		trace("[Tank.onDestroyComplete] me destroed");
 	}
 
-		
-	}
+}
 }

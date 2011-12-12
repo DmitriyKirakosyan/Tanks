@@ -9,6 +9,8 @@ import game.mapObjects.MapEditor;
 import game.mapObjects.bonus.GameBonus;
 import game.tank.PlayerTankController;
 import game.tank.TankMovementListener;
+import game.tank.ability.TankAbility;
+
 import pathfinder.Pathfinder;
 import game.events.TankShotingEvent;
 import game.events.MineBamEvent;
@@ -211,7 +213,9 @@ public class GameController extends EventDispatcher implements IScene{
 		if (_tankController.isPointOnTank(_mouseDrawController.currentMousePoint)) {
 			_tankController.readyForMoving();
 			_mouseDrawController.startDrawTankPath();
-			_timeController.slowDown();
+			if (_tankController.tank.ability == TankAbility.TIME_SCALE) {
+				_timeController.slowDown();
+			}
 		}
 	}
 
