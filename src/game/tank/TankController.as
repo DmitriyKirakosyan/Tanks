@@ -161,10 +161,6 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 		}
 	}
 
-	public function setTargetTank(tank:Tank):void {}
-	public function removeTargetTank():void {}
-	public function hasTargetTank():Boolean { return false; }
-
 	public function applyBonus(bonusType:uint):void {
 		switch (bonusType) {
 			case GameBonus.MEDKIT : tank.updateLive();

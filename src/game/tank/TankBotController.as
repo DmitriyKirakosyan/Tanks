@@ -31,21 +31,21 @@ public class TankBotController extends TankController{
 		_waitTimer = new Timer(3000);
 	}
 
-	override public function init(tankVO:TankVO, player:Boolean = false):void {
-		super.init(tankVO,  player);
+	override public function init(tankVO:TankVO):void {
+		super.init(tankVO);
 		if (_strength > 0) {
 			tank.filters = _strength == 1 ? [new GlowFilter()] : [new GlowFilter(0)];
 		}
 	}
 
-	override public function setTargetTank(targetTank:Tank):void {
+	public function setTargetTank(targetTank:Tank):void {
 		_targetTank = targetTank;
 		if (!this.hasEventListener(TankEvent.COME_TO_CELL)) {
 			this.addEventListener(TankEvent.COME_TO_CELL, onTankComeToCell);
 		}
 	}
 
-	override public function removeTargetTank():void {
+	public function removeTargetTank():void {
 		if (_targetTank) {
 			_targetTank = null;
 			this.removeEventListener(TankEvent.COME_TO_CELL, onTankComeToCell);
@@ -61,7 +61,7 @@ public class TankBotController extends TankController{
 		return null;
 	}
 
-	override public function hasTargetTank():Boolean { return _targetTank != null; }
+	public function hasTargetTank():Boolean { return _targetTank != null; }
 
 	private function onTankComeToCell(event:TankEvent):void {
 		if (!_targetTank || !this.wannaShot) { return; }

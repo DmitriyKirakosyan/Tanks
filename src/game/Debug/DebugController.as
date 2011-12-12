@@ -2,7 +2,8 @@ package game.Debug {
 	import game.matrix.MapMatrix;
 	import com.greensock.events.TweenEvent;
 	import game.Debug.DebugObjects.Buttons;
-	import game.tank.TankController;
+import game.tank.TankBotController;
+import game.tank.TankController;
 	import flash.filters.GlowFilter;
 	import game.tank.Tank;
 	import flash.events.MouseEvent;
@@ -26,7 +27,7 @@ package game.Debug {
 		
 		private var _playerTank:Tank;
 		private var _enemies:Vector.<Tank>;
-		private var _enemiesController:Vector.<TankController>;
+		private var _enemyControllers:Vector.<TankBotController>;
 		
 		private var _tween:Boolean = false;
 		
@@ -110,7 +111,7 @@ package game.Debug {
 			_buttons.saveMapBtn.addEventListener(MouseEvent.CLICK, saveMap);
 			_playerTank = _gameController.targetsController.playerTank;
 			_enemies = _gameController.targetsController.enemies;
-			_enemiesController = _gameController.targetsController.enemyControllers;
+			_enemyControllers = _gameController.targetsController.enemyControllers;
 		}
 		private function removeButtons():void {
 			if (_debugContainer.contains(_container)) {
@@ -195,7 +196,7 @@ package game.Debug {
 		}
 		
 		private function stopTank(tank:Tank):void {
-			for each (var tankController:TankController in _enemiesController) {
+			for each (var tankController:TankController in _enemyControllers) {
 				if (tank == tankController.tank) {
 					tankController.movingTimeline.vars["onComplete"] = null;
 					tankController.movingTimeline.killTweensOf(tank);
@@ -205,7 +206,7 @@ package game.Debug {
 			}
 		}
 		private function playTank(tank:Tank):void{
-			for each (var tankController:TankController in _enemiesController) {
+			for each (var tankController:TankController in _enemyControllers) {
 				if (tank == tankController.tank) {
 						_gameController.targetsController.moveEnemy = tankController;
 						_gameController.container.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);

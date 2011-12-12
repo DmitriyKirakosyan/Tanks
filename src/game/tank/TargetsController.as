@@ -16,28 +16,22 @@ import flash.utils.Timer;
 	
 	public class TargetsController extends EventDispatcher implements IControllerWithTime{
 		private var _timer:Timer;
-		private var _enemyControllers:Vector.<TankController>;
+		private var _enemyControllers:Vector.<TankBotController>;
 		private var _container:Sprite;
 		private var _mapMatrix:MapMatrix;
-		
-		
 		private var _playerTank:Tank;
-		
-		private var _random:Number;
-		private var _firstMove:Boolean = true;
-		
 		
 		public function TargetsController(container:Sprite, mapMatrix:MapMatrix) {
 			_container = container;
 			_mapMatrix = mapMatrix;
-			_enemyControllers = new Vector.<TankController>();
+			_enemyControllers = new Vector.<TankBotController>();
 			initTimer();
 		}
 		
 
 		public function addPlayerTank(tank:Tank):void {
 			_playerTank = tank;
-			for each (var tankController:TankController in _enemyControllers) {
+			for each (var tankController:TankBotController in _enemyControllers) {
 				if (!tankController.hasTargetTank()) { tankController.setTargetTank(tank); }
 			}
 		}
@@ -81,7 +75,7 @@ import flash.utils.Timer;
 		}
 
 		public function cleanTargetTank():void {
-			for each (var tankController:TankController in _enemyControllers) {
+			for each (var tankController:TankBotController in _enemyControllers) {
 				tankController.removeTargetTank();
 				_playerTank = null;
 			}
@@ -98,13 +92,13 @@ import flash.utils.Timer;
 				removeEnemyTankListeners(enemy);
 				enemy.remove();
 			}
-			_enemyControllers = new Vector.<TankController>();
+			_enemyControllers = new Vector.<TankBotController>();
 		}
 		
 		/* For Debug */
 		
 		public function get enemies():Vector.<Tank> { return getEnemyTanks(); }
-		public function get enemyControllers():Vector.<TankController> { return _enemyControllers; }
+		public function get enemyControllers():Vector.<TankBotController> { return _enemyControllers; }
 		public function get timerAddTank():Timer { return _timer; }
 		public function get playerTank():Tank { return _playerTank; }
 		public function set moveEnemy(value:TankController):void { moveEnemyTank(value); }
@@ -113,7 +107,7 @@ import flash.utils.Timer;
 		
 		private function createTarget():void {
 			var strength:int = int(Math.random() * 3);
-			var enemyTank:TankController = new TankBotController(_container, _mapMatrix, strength);
+			var enemyTank:TankBotController = new TankBotController(_container, _mapMatrix, strength);
 			var tankVO:TankVO = new TankVO();
 			tankVO.weaponType = 1;
 			enemyTank.init(new TankVO());

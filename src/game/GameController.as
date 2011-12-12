@@ -7,6 +7,7 @@ import game.events.GameBonusEvent;
 import game.events.SceneEvent;
 import game.mapObjects.MapEditor;
 import game.mapObjects.bonus.GameBonus;
+import game.tank.PlayerTankController;
 import game.tank.TankMovementListener;
 import pathfinder.Pathfinder;
 import game.events.TankShotingEvent;
@@ -27,7 +28,7 @@ import flash.display.Sprite;
 public class GameController extends EventDispatcher implements IScene{
 	private var _container:Sprite;
 	private var _mapEditor:MapEditor;
-	private var _tankController:TankController;
+	private var _tankController:PlayerTankController;
 	private var _tankMovementListener:TankMovementListener;
 	private var _mapMatrix:MapMatrix;
 	private var _mapObjectsController:MapObjectsController;
@@ -49,7 +50,7 @@ public class GameController extends EventDispatcher implements IScene{
 
 	public function open():void {
 		_mapObjectsController.init(); // first of all we need to create map and map objects
-		_tankController.init(UserState.instance.tankVO, true);
+		_tankController.init(UserState.instance.tankVO);
 		initMapObjectsController();
 		addListeners();
 		_debugController.open();
@@ -87,7 +88,7 @@ public class GameController extends EventDispatcher implements IScene{
 		Pathfinder.setMatrix(_mapMatrix.matrix);
 		_mouseDrawController = new MouseDrawController(_container, _mapMatrix);
 		trace("[GameController.initControllers] tank base : ", UserState.instance.tankVO.tankBase);
-		_tankController = new TankController(_container, _mapMatrix);
+		_tankController = new PlayerTankController(_container, _mapMatrix);
 		_mapObjectsController = new MapObjectsController(_mapMatrix, _container);
 		_tankMovementListener = new TankMovementListener(_tankController, _mapObjectsController, _mouseDrawController);
 		_timeController = new TimeController(_container);
