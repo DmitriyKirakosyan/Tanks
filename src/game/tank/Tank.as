@@ -26,8 +26,8 @@ public class Tank extends MapObject {
 	private var _speedup:Number = 0;
 	private var maxSpeedup:Number = .5;
 
-	public function Tank(vo:TankVO, player:Boolean = false) {
-		_isPlayer = player;
+	public function Tank(vo:TankVO) {
+		_isPlayer = false;
 		_vo = vo;
 
 		createTankBase();
@@ -92,6 +92,7 @@ public class Tank extends MapObject {
 
 	public function get vo():TankVO { return _vo; }
 	public function get isPlayer():Boolean {return _isPlayer;}
+	public function set isPlayer(value:Boolean):void { _isPlayer = value; }
 	public function set speedup(value:Number):void {
 		value; //TODO refact it
 		if (_speedup < maxSpeedup) { _speedup+= .05; }

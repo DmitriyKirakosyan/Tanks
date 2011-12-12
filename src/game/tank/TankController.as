@@ -28,7 +28,7 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 
 	private var _direction:TankDirection;
 	private var _container:Sprite;
-	private var _mapMatrix:MapMatrix;
+	protected var _mapMatrix:MapMatrix;
 	private var _wannaShot:Boolean;
 
 	private var _movingTimeline:TimelineMax;
@@ -55,18 +55,11 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 
 	public function get movingTimeline():TimelineMax { return _movingTimeline; }
 	public function get wannaShot():Boolean { return _wannaShot; }
+	public function get gunController():TankGunController { return _gunController; }
 
-	public function init(tankVO:TankVO, player:Boolean = false):void {
-		tank = new Tank(tankVO, player);
+	public function init(tankVO:TankVO):void {
+		tank = new Tank(tankVO);
 		_gunController = new TankGunController(tank);
-		if (player) {
-			highlightPlayerTank();
-			var matrixPoint:Point = _mapMatrix.getMatrixPoint(new Point(300, 300));
-			tank.x = matrixPoint.x;
-			tank.y = matrixPoint.y;
-			_mapMatrix.setTankCell(tank.x,  tank.y,  1);
-		}
-		tank.addReloadBar(_gunController.reloadController.reloadBar);
 		_container.addChild(tank);
 	}
 
@@ -104,7 +97,6 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 	public function isPointOnTank(point:Point):Boolean {
 		return tank.hitTestPoint(point.x, point.y);
 	}
-
 
 	public function bam():void {
 		TweenMax.killTweensOf(tank);
@@ -238,12 +230,6 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 		_gunController.reloadController.removeEventListener(Event.COMPLETE, onReloadComplete);
 		_wannaShot = true;
 		dispatchEvent(new TankShotingEvent(TankShotingEvent.RELOAD_COMPLETE, null));
-	}
-
-	private function highlightPlayerTank():void {
-		var colorTank:ColorTransform = new ColorTransform;
-		colorTank.color = 0x0000ff;
-		tank.tankBase.transform.colorTransform = colorTank;
 	}
 
 }
