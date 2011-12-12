@@ -134,11 +134,7 @@ public class MouseDrawController extends EventDispatcher{
 		var mPoint:Point = _mapMatrix.getMatrixPoint(_currentPoint);
 		if (_drawing && _mapMatrix.isFreeCell(mPoint.x, mPoint.y)) {
 			drawShapePathToCurrentPoint();
-			if (newPoint(_currentPoint)) {
-				addPointToPath(_currentPoint);
-				createNewPathPart();
-				dispatchEvent(new DrawingControllerEvent(DrawingControllerEvent.NEW_MOVE_POINT));
-			}
+			drawPathPartsToCurrentPoint();
 		} else {
 			stopDrawing();
 		}
@@ -150,11 +146,33 @@ public class MouseDrawController extends EventDispatcher{
 			var angle:Number = Math.atan2(dy, dx)*180/Math.PI;
 			return angle;
 	}
+
+	private function drawPathPartsToCurrentPoint():void {
+		var lastPoint:Point = getLastMovePoint();
+		var tempPoint:Point;
+		if (lastPoint) {
+			for (var i:int = 0; i < Point.distance(lastPoint, _currentPoint); i+= 10) {
+				tempPoint = Point.interpolate(lastPoint, _currentPoint, i);
+				addNewPathPartIfNeed(tempPoint);
+			}
+		} else {
+			addNewPathPartIfNeed(_currentPoint);
+		}
+	}
+
+	private function addNewPathPartIfNeed(point:Point):void {
+		if (newPoint(point)) {
+			addPointToPath(point);
+			createNewPathPart();
+			dispatchEvent(new DrawingControllerEvent(DrawingControllerEvent.NEW_MOVE_POINT));
+		}
+	}
+
 	//refact this shit
 	//TODO баг с исчезанием стрелок под конец пути, проявляется во время стрельбы. 
 	//Стрелки прикольно выглядят когда убираешь закраску квадаров движения
 	//Знаю, полный отстой, но не знаю как лучше, если без квадратиков то езда танка
-	//по этим стрелка выглядит слегка не корректной
+	//по этим стрелкам выглядит слегка не корректной
 	private function drawShapePathToCurrentPoint():void {
 		if (!_drawing) { return; }
 		var lastPoint:Point = (_pathShapes && _pathShapes.length > 0) ?
