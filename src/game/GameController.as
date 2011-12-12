@@ -73,6 +73,12 @@ public class GameController extends EventDispatcher implements IScene{
 		public function get mapEditor():MapEditor { return _mapEditor; }
 		public function get targetsController():TargetsController { return _mapObjectsController.targetsController; }
 		public function get container():Sprite { return _container; }
+		public function get playerTankController():TankController { return _tankController; }
+
+		public function startNewGame():void {
+			remove();
+			open();
+		}
 		
 		/* Inits */
 		
