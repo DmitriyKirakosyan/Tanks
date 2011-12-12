@@ -5,6 +5,8 @@ import com.greensock.easing.Elastic;
 import flash.filters.BlurFilter;
 import flash.filters.GlowFilter;
 
+import game.drawing.PathShape;
+
 import game.tank.weapon.TankGunController;
 import flash.display.Shape;
 import flash.events.Event;
@@ -106,9 +108,16 @@ public class MouseDrawController extends EventDispatcher{
 	private function createNewPathPart():void {
 		if (!_pathParts) { _pathParts = new Vector.<Shape>(); }
 		_currentPathPart = new Shape();
-		drawPartRectangle(_currentPoint);
-		_currentPathPart.graphics.moveTo(_currentPoint.x, _currentPoint.y);
-		_currentPathPart.graphics.lineStyle(2, 0x00ff00);
+
+		var pathArrow:PathShape = PathShape.createArrow();
+		pathArrow.x = _currentPoint.x;
+		pathArrow.y = _currentPoint.y;
+		addNewPathShape(pathArrow);
+		pathArrow.filters = [new GlowFilter(0x91e600, 1, 40, 40, 20)];
+		TweenMax.to(pathArrow, .8, {glowFilter:{color:0x91e600, alpha:.5, blurX:4, strength : 4, blurY:4, ease : Elastic.easeOut}});
+		//drawPartRectangle(_currentPoint);
+		//_currentPathPart.graphics.moveTo(_currentPoint.x, _currentPoint.y);
+		//_currentPathPart.graphics.lineStyle(2, 0x00ff00);
 		_pathParts.push(_currentPathPart);
 
 		_drawingContainer.addChild(_currentPathPart);
@@ -133,7 +142,7 @@ public class MouseDrawController extends EventDispatcher{
 	private function onEnterFrame(event:Event):void {
 		var mPoint:Point = _mapMatrix.getMatrixPoint(_currentPoint);
 		if (_drawing && _mapMatrix.isFreeCell(mPoint.x, mPoint.y)) {
-			drawShapePathToCurrentPoint();
+			//drawShapePathToCurrentPoint();
 			drawPathPartsToCurrentPoint();
 		} else {
 			stopDrawing();

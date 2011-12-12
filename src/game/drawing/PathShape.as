@@ -9,8 +9,13 @@ import flash.display.Sprite;
 public class PathShape extends Sprite{
 	public static const CIRCLE:uint = 0;
 	public static const RECTANGLE:uint = 1;
+	public static const ARROW:uint = 2;
 
 	private var _type:uint;
+
+	public static function createArrow():PathShape {
+		return new PathShape(ARROW);
+	}
 
 	public static function createCircleShape():PathShape {
 		return new PathShape(CIRCLE);
