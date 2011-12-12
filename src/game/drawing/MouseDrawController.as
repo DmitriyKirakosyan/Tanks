@@ -157,15 +157,18 @@ public class MouseDrawController extends EventDispatcher{
 	}
 
 	private function drawPathPartsToCurrentPoint():void {
-		var lastPoint:Point = getLastMovePoint();
+		var lastPoint:Point = _mapMatrix.getStagePoint(getLastMovePoint());
 		var tempPoint:Point;
+		var distance:Number = Point.distance(lastPoint, _currentPoint);
 		if (lastPoint) {
-			for (var i:int = 0; i < Point.distance(lastPoint, _currentPoint); i+= 10) {
-				tempPoint = Point.interpolate(lastPoint, _currentPoint, i);
+			for (var i:int = 0; i < distance; i+= 10) {
+				tempPoint = Point.interpolate(lastPoint, _currentPoint, i/distance);
+				//tempPoint.x = int(tempPoint.x + .5);
+				//tempPoint.y = int(tempPoint.y + .5);
 				addNewPathPartIfNeed(tempPoint);
 			}
 		} else {
-			addNewPathPartIfNeed(_currentPoint);
+			addNewPathPartIfNeed(tempPoint);
 		}
 	}
 
