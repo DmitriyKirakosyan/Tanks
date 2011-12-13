@@ -71,7 +71,7 @@ public class MouseDrawController extends EventDispatcher{
 	public function startDrawTankPath():void {
 		removePath();
 		_pathOfMatrixPoints = new Vector.<Point>();
-		createNewPathPart();
+		createNewPathPart(_currentPoint);
 		_pathOfMatrixPoints.push(_mapMatrix.getMatrixPoint(new Point(_currentPoint.x, _currentPoint.y)));
 		//_drawingContainer.graphics.moveTo(_currentMousePoint.x, _currentMousePoint.y);
 		_drawing = true;
@@ -105,17 +105,18 @@ public class MouseDrawController extends EventDispatcher{
 
 	/* Internal functions */
 
-	private function createNewPathPart():void {
+	private function createNewPathPart(point:Point):void {
 		if (!_pathParts) { _pathParts = new Vector.<Shape>(); }
 		_currentPathPart = new Shape();
 
 		var pathArrow:PathShape = PathShape.createArrow();
-		pathArrow.x = _currentPoint.x;
-		pathArrow.y = _currentPoint.y;
+		var correctingPoint:Point = _mapMatrix.getStagePoint(_mapMatrix.getMatrixPoint(point));
+		pathArrow.x = correctingPoint.x;
+		pathArrow.y = correctingPoint.y;
 		addNewPathShape(pathArrow);
 		pathArrow.filters = [new GlowFilter(0x91e600, 1, 40, 40, 20)];
 		TweenMax.to(pathArrow, .8, {glowFilter:{color:0x91e600, alpha:.5, blurX:4, strength : 4, blurY:4, ease : Elastic.easeOut}});
-		//drawPartRectangle(_currentPoint);
+		drawPartRectangle(point);
 		//_currentPathPart.graphics.moveTo(_currentPoint.x, _currentPoint.y);
 		//_currentPathPart.graphics.lineStyle(2, 0x00ff00);
 		_pathParts.push(_currentPathPart);
@@ -175,7 +176,7 @@ public class MouseDrawController extends EventDispatcher{
 	private function addNewPathPartIfNeed(point:Point):void {
 		if (newPoint(point)) {
 			addPointToPath(point);
-			createNewPathPart();
+			createNewPathPart(point);
 			dispatchEvent(new DrawingControllerEvent(DrawingControllerEvent.NEW_MOVE_POINT));
 		}
 	}

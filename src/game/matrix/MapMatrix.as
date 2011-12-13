@@ -28,8 +28,7 @@ public class MapMatrix {
 	}
 
 	public function getMatrixPoint(point:Point):Point{
-		return new Point(int((point.x ) / GameController.CELL),
-											int((point.y) / GameController.CELL));
+		return new Point(int(point.x / GameController.CELL), int(point.y / GameController.CELL));
 	}
 
 	public function getStagePoint(point:Point):Point {
