@@ -255,6 +255,8 @@ public class MapObjectsController extends EventDispatcher implements IController
 		for each (var stone:Stone in _stones) {
 			if (bullet.hitTestObject(stone)) {
 				removeBullet(bullet);
+				stone.damage(bullet.damageStrength);
+				if (stone.destroyed) { removeStone(stone); }
 				break;
 			}
 		}
@@ -264,8 +266,8 @@ public class MapObjectsController extends EventDispatcher implements IController
 		for each (var brick:Brick in _bricks) {
 			if (bullet.hitTestObject(brick)) {
 				removeBullet(bullet);
-				if (brick.damaged) { removeBrick(brick);
-				} else { brick.damage(bullet.damageStrength); }
+				brick.damage(bullet.damageStrength);
+				if (brick.destroyed) { removeBrick(brick); }
 				break;
 			}
 		}
@@ -318,6 +320,12 @@ public class MapObjectsController extends EventDispatcher implements IController
 		removeElementFromMap(brick);
 		const index:int = _bricks.indexOf(brick);
 		if (index >= 0) { _bricks.splice(index, 1); }
+	}
+
+	private function removeStone(stone:Stone):void {
+		removeElementFromMap(stone);
+		const index:int = _stones.indexOf(stone);
+		if (index >= 0) { _stones.splice(index, 1); }
 	}
 
 	private function removeElementFromMap(element:MapObject):void {

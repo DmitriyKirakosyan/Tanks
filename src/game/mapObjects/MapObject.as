@@ -5,16 +5,23 @@ import game.*;
 	public class MapObject extends Sprite {
 		private var _hp:Number; // -1 -- infinity life
 		private var _maxHp:Number;
+		private var _destroyed:Boolean;
 
 		public function MapObject() {
 			super();
+			_hp = 10;
+			_maxHp = 10;
+			_destroyed = false;
 			drawRectangle();
 		}
 
 		public function damage(value:Number):void {
 			_hp -= value;
 			if (_hp < 0) { _hp = 0; }
+			if (_hp == 0) { _destroyed = true; }
 		}
+
+		public function get destroyed():Boolean { return _destroyed; }
 
 		public function get maxHp():Number { return _maxHp; }
 		public function get hp():Number { return _hp; }
