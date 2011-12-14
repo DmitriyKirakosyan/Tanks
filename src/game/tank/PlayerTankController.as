@@ -17,13 +17,16 @@ public class PlayerTankController extends TankController{
 
 	override public function init(tankVO:TankVO):void {
 		super.init(tankVO);
-		tank.isPlayer = true;
-		highlightPlayerTank();
 		var matrixPoint:Point = _mapMatrix.getMatrixPoint(new Point(300, 300));
 		tank.x = matrixPoint.x;
 		tank.y = matrixPoint.y;
 		_mapMatrix.setTankCell(tank.x,  tank.y,  1);
 		tank.addReloadBar(gunController.reloadController.reloadBar);
+	}
+
+	override protected function createTank(tankVO:TankVO):void {
+		tank = Tank.createPlayerTank(tankVO);
+		highlightPlayerTank();
 	}
 
 	private function highlightPlayerTank():void {

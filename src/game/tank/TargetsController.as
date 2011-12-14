@@ -106,7 +106,7 @@ import flash.utils.Timer;
 		/* Internal functions */
 		
 		private function createTarget():void {
-			var strength:int = int(Math.random() * 3);
+			var strength:int = int(Math.random() * 3); // 0 - BaseBot, 1 - AdvanceBot, 2 - HardBot
 			var enemyTank:TankBotController = new TankBotController(_container, _mapMatrix, strength);
 			enemyTank.addEventListener(TankEvent.MOVING_COMPLETE, onEnemyMovingComplete);
 			enemyTank.addEventListener(TankShotingEvent.WAS_SHOT, onEnemyShotEvent);

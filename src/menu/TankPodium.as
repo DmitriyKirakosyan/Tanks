@@ -19,6 +19,8 @@ import game.tank.Tank;
 import game.tank.weapon.TankGun;
 import game.tank.TankVO;
 
+import mx.containers.TabNavigator;
+
 import state.UserState;
 
 public class TankPodium extends EventDispatcher implements IScene{
@@ -48,7 +50,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 	public function TankPodium(container:Sprite) {
 		_container = container;
 		_paper = new PaperView();
-		_tank = new Tank(new TankVO());
+		_tank = Tank.createPlayerTank(new TankVO());
 		_tank.x = MapMatrix.MATRIX_WIDTH/2;
 		_tank.y = MapMatrix.MATRIX_HEIGHT/2;
 		createTankSwitchBtns();
@@ -234,7 +236,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 		vo.tankBase = _tank.vo.tankBase == 0 ? 1 : 0;
 		vo.weaponType = _weapon.type;
 		vo.ability = 1;
-		_tank = new Tank(vo);
+		_tank = Tank.createPlayerTank(vo);
 		const distance:Number = Math.abs(_defaultTankPoint.x -point.x);
 		_tank.x = point.x < _defaultTankPoint.x ? point.x + 2*distance :point.x - 2 * distance;
 		_tank.alpha = 0;

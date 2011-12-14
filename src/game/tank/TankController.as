@@ -58,11 +58,13 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 	public function get gunController():TankGunController { return _gunController; }
 
 	public function init(tankVO:TankVO):void {
-		tank = new Tank(tankVO);
+		createTank(tankVO);
 		_gunController = new TankGunController(tank);
 		_container.addChild(tank);
 	}
 
+	protected function createTank(tankVO:TankVO):void { //for override
+	}
 
 	public function remove():void {
 		TweenMax.killTweensOf(tank);

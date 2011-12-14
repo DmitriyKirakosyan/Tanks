@@ -22,10 +22,11 @@ public class TankBotController extends TankController{
 
 	private var _waitTimer:Timer;
 
-	private const BASE_BOT:uint = 0;
-	private const ADVANCE_BOT:uint = 1;
+	public static const BASE_BOT:uint = 0;
+	public static const ADVANCE_BOT:uint = 1;
+	public static const HARD_BOT:uint = 2;
 
-	public function TankBotController(container:Sprite, mapMatrix:MapMatrix, strength:uint = 0) {
+	public function TankBotController(container:Sprite, mapMatrix:MapMatrix, strength:uint = BASE_BOT) {
 		super(container, mapMatrix);
 		_strength = strength;
 		_waitTimer = new Timer(3000);
@@ -33,9 +34,13 @@ public class TankBotController extends TankController{
 
 	override public function init(tankVO:TankVO):void {
 		super.init(tankVO);
-		if (_strength > 0) {
-			tank.filters = _strength == 1 ? [new GlowFilter()] : [new GlowFilter(0)];
+		if (_strength != BASE_BOT) {
+			tank.filters = _strength == ADVANCE_BOT ? [new GlowFilter()] : [new GlowFilter(0)];
 		}
+	}
+
+	override protected function createTank(tankVO:TankVO):void {
+		tank = Tank.createBotTank(tankVO, _strength);
 	}
 
 	public function setTargetTank(targetTank:Tank):void {

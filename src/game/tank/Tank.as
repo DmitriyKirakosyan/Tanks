@@ -6,6 +6,7 @@ import flash.display.Sprite;
 import game.events.TankDestructionEvent;
 
 import game.mapObjects.MapObject;
+import game.mapObjects.ObjectsHp;
 import game.tank.ability.TankAbility;
 import game.tank.destruction.TankDestroyMethod;
 import game.tank.destruction.TankDestroyMethodFactory;
@@ -27,8 +28,20 @@ public class Tank extends MapObject {
 	private var _speedup:Number = 0;
 	private var maxSpeedup:Number = .5;
 
-	public function Tank(vo:TankVO) {
-		_isPlayer = false;
+	public static function createBotTank(vo:TankVO, strength:uint):Tank {
+		var hp:Number = strength == TankBotController.BASE_BOT ? ObjectsHp.FIST_BOT :
+										strength == TankBotController.ADVANCE_BOT ? ObjectsHp.SECOND_BOT : ObjectsHp.THIRD_BOT;
+		return new Tank(vo, false, hp);
+	}
+
+	public static function createPlayerTank(vo:TankVO):Tank {
+		return new Tank(vo, true, ObjectsHp.PLAYER);
+	}
+
+	public function Tank(vo:TankVO, isPlayer:Boolean, hp:Number) {
+		_isPlayer = isPlayer;
+		setHp(hp);
+		setHp(isPlayer ? ObjectsHp.PLAYER : ObjectsHp.FIST_BOT);
 		_vo = vo;
 
 		createTankBase();
