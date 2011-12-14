@@ -160,9 +160,11 @@ public class GameController extends EventDispatcher implements IScene{
 
 	private function onStageMouseDown(event:MouseEvent):void {
 		const point:Point = new Point(event.stageX, event.stageY);
-		if (!_tankController.isPointOnTank(point) && _tankController.wannaShot) {
-			_tankController.setTarget(point);
-			_tankController.shot();
+		if (!_tankController.isPointOnTank(point)) {
+			if (_tankController.wannaShot) {
+				_tankController.setTarget(point);
+				_tankController.shot();
+			}
 			_mouseDown = true;
 		}
 	}
