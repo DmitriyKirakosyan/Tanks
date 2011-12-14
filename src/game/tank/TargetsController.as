@@ -108,19 +108,26 @@ import flash.utils.Timer;
 		private function createTarget():void {
 			var strength:int = int(Math.random() * 3);
 			var enemyTank:TankBotController = new TankBotController(_container, _mapMatrix, strength);
+			enemyTank.addEventListener(TankEvent.MOVING_COMPLETE, onEnemyMovingComplete);
+			enemyTank.addEventListener(TankShotingEvent.WAS_SHOT, onEnemyShotEvent);
+
 			var tankVO:TankVO = new TankVO();
 			tankVO.weaponType = 1;
 			enemyTank.init(new TankVO());
-			var rndX:int = Math.random() * MapMatrix.MATRIX_WIDTH;
-			var rndY:int = Math.random() * MapMatrix.MATRIX_HEIGHT;
-			enemyTank.tank.x = rndX;
-			enemyTank.tank.y = rndY;
+			moveEnemyFromBackstage(enemyTank);
 			if (_playerTank && !enemyTank.hasTargetTank()) { enemyTank.setTargetTank(_playerTank); }
 			_enemyControllers.push(enemyTank);
-			moveEnemyTank(enemyTank);
-			enemyTank.addEventListener(TankEvent.MOVING_COMPLETE, onEnemyMovingComplete);
-			enemyTank.addEventListener(TankShotingEvent.WAS_SHOT, onEnemyShotEvent);
 		}
+
+		private function moveEnemyFromBackstage(enemy:TankController):void {
+			var rnd:Number = Math.random();
+			var x:Number = rnd < .5 ? (1 + rnd*2 * (MapMatrix.MATRIX_WIDTH-1)) : rnd < 7.5 ? -1 : MapMatrix.MATRIX_WIDTH;
+			var y:Number = rnd > .5 ? (1 + rnd*2 * (MapMatrix.MATRIX_HEIGHT-1)) : rnd < 2.5 ? 0 : MapMatrix.MATRIX_HEIGHT;
+			enemy.tank.x = x;
+			enemy.tank.y = y;
+			moveEnemyTank(enemy);
+		}
+
 		private function removeEnemyTankListeners(enemyTankController:TankController):void {
 			enemyTankController.removeEventListener(TankShotingEvent.WAS_SHOT, onEnemyShotEvent);
 			enemyTankController.removeEventListener(TankEvent.MOVING_COMPLETE, onEnemyMovingComplete);
@@ -136,7 +143,6 @@ import flash.utils.Timer;
 		
 		
 		private function moveEnemyTank(enemyTankController:TankController):void {
-
 			var toPoint:Point = (TankBotController(enemyTankController)).getTargetMovePoint();
 			if (!toPoint) {
 				toPoint = new Point(int(Math.random()*MapMatrix.MATRIX_WIDTH),
