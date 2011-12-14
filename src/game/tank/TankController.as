@@ -104,7 +104,9 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 		TweenMax.killTweensOf(tank);
 		tank.bam();
 		tank.addEventListener(TankDestructionEvent.TANK_DESTRAYED, onTankDestroyed);
-		_mapMatrix.clearTankCell(_nextPoint.x, _nextPoint.y);
+		if (_nextPoint) {
+			_mapMatrix.clearTankCell(_nextPoint.x, _nextPoint.y);
+		}
 	}
 
 	public function readyForMoving():void {

@@ -31,14 +31,12 @@ public class MouseDrawController extends EventDispatcher{
 
 	private var _container:Sprite;
 	private var _drawingContainer:Sprite;
-//		private var _rectanglesContainer:Sprite;
 
-	private var _currentPathPart:Shape;
+	private var _currentPathPart:Sprite;
 
 	private var _currentPoint:Point;
 
-	private var _pathParts:Vector.<Shape>;
-//		private var _rectangles:Vector.<Shape>;
+	private var _pathParts:Vector.<Sprite>;
 
 	private var _drawing:Boolean;
 	private var _arrowAngle:Number;
@@ -83,14 +81,13 @@ public class MouseDrawController extends EventDispatcher{
 			trace("[MouseDrawingController.removePart] why no parts??");
 			return;
 		}
-		const part:Shape = _pathParts[0];
+		const part:Sprite = _pathParts[0];
 		removePartFromContainer(part);
 		_pathParts.shift();
 		var numShapesForRemove:int = 0;
 		for each (var pathShape:PathShape in _pathShapes) {
 			if (part.hitTestPoint(pathShape.x,  pathShape.y)) {
 				numShapesForRemove++;
-				removePathShapeFromContainer(pathShape);
 			} else { break; }
 		}
 		_pathShapes.splice(0, numShapesForRemove);
@@ -106,19 +103,18 @@ public class MouseDrawController extends EventDispatcher{
 	/* Internal functions */
 
 	private function createNewPathPart(point:Point):void {
-		if (!_pathParts) { _pathParts = new Vector.<Shape>(); }
-		_currentPathPart = new Shape();
+		if (!_pathParts) { _pathParts = new Vector.<Sprite>(); }
+		_currentPathPart = new Sprite();
 
 		var pathArrow:PathShape = PathShape.createArrow();
 		var correctingPoint:Point = _mapMatrix.getStagePoint(_mapMatrix.getMatrixPoint(point));
 		pathArrow.x = correctingPoint.x;
 		pathArrow.y = correctingPoint.y;
+		pathArrow.scaleX = pathArrow.scaleY = 1.5;
 		addNewPathShape(pathArrow);
+		_currentPathPart.addChild(pathArrow);
 		pathArrow.filters = [new GlowFilter(0x91e600, 1, 40, 40, 20)];
 		TweenMax.to(pathArrow, .8, {glowFilter:{color:0x91e600, alpha:.5, blurX:4, strength : 4, blurY:4, ease : Elastic.easeOut}});
-		drawPartRectangle(point);
-		//_currentPathPart.graphics.moveTo(_currentPoint.x, _currentPoint.y);
-		//_currentPathPart.graphics.lineStyle(2, 0x00ff00);
 		_pathParts.push(_currentPathPart);
 
 		_drawingContainer.addChild(_currentPathPart);
@@ -150,22 +146,13 @@ public class MouseDrawController extends EventDispatcher{
 		}
 	}
 	
-	private function getAngle(arrow:Sprite):Number {
-			var dx:Number = arrow.x - _container.mouseX;
-			var dy:Number = arrow.y - _container.mouseY;
-			var angle:Number = Math.atan2(dy, dx)*180/Math.PI;
-			return angle;
-	}
-
 	private function drawPathPartsToCurrentPoint():void {
 		var lastPoint:Point = _mapMatrix.getStagePoint(getLastMovePoint());
 		var tempPoint:Point;
 		var distance:Number = Point.distance(lastPoint, _currentPoint);
 		if (lastPoint) {
 			for (var i:int = 0; i < distance; i+= 10) {
-				tempPoint = Point.interpolate(lastPoint, _currentPoint, i/distance);
-				//tempPoint.x = int(tempPoint.x + .5);
-				//tempPoint.y = int(tempPoint.y + .5);
+				tempPoint = Point.interpolate(lastPoint, _currentPoint, 1 - i/distance);
 				addNewPathPartIfNeed(tempPoint);
 			}
 		} else {
@@ -181,43 +168,8 @@ public class MouseDrawController extends EventDispatcher{
 		}
 	}
 
-	//refact this shit
-	//TODO баг с исчезанием стрелок под конец пути, проявляется во время стрельбы. 
-	//Стрелки прикольно выглядят когда убираешь закраску квадаров движения
-	//Знаю, полный отстой, но не знаю как лучше, если без квадратиков то езда танка
-	//по этим стрелкам выглядит слегка не корректной
-	private function drawShapePathToCurrentPoint():void {
-		if (!_drawing) { return; }
-		var lastPoint:Point = (_pathShapes && _pathShapes.length > 0) ?
-													new Point(_pathShapes[_pathShapes.length-1].x, _pathShapes[_pathShapes.length-1].y) : null;
-		var newPathShape:Sprite;
-		if (!lastPoint) {
-			newPathShape = PathShape.createCircleShape();
-			addNewPathShape(newPathShape);
-			newPathShape.x = _currentPoint.x;
-			newPathShape.y = _currentPoint.y;
-			_arrowAngle = getAngle(newPathShape);
-			newPathShape.rotation = 90 + _arrowAngle;
-		} else {
-			var nowPoint:Point = new Point(_currentPoint.x, _currentPoint.y);
-			var lineLength:Number = Point.distance(lastPoint, nowPoint);
-			var tempPoint:Point;
-			for (var i:int = 20; i < lineLength; i+= 20) {
-				newPathShape = PathShape.createCircleShape();
-				tempPoint = Point.interpolate(nowPoint, lastPoint, i / lineLength);
-				newPathShape.x = tempPoint.x;
-				newPathShape.y = tempPoint.y;
-				_arrowAngle = getAngle(newPathShape);
-				newPathShape.rotation = 90 + _arrowAngle;
-				newPathShape.filters = [new GlowFilter(0x91e600, 1, 40, 40, 20)];
-				TweenMax.to(newPathShape, .8, {glowFilter:{color:0x91e600, alpha:.5, blurX:4, strength : 4, blurY:4, ease : Elastic.easeOut}});
-				addNewPathShape(newPathShape);
-			}
-		}
-	}
-
 	private function addNewPathShape(pathShape:Sprite):void {
-		_drawingContainer.addChild(pathShape);
+//		_drawingContainer.addChild(pathShape);
 		if (!_pathShapes) { _pathShapes = new Vector.<Sprite>(); }
 		_pathShapes.push(pathShape);
 	}
@@ -254,7 +206,7 @@ public class MouseDrawController extends EventDispatcher{
 	private function removePath():void {
 		if (_pathOfMatrixPoints) {
 			if (_pathParts && _pathParts.length > 0) {
-				for each (var part:Shape in _pathParts) {
+				for each (var part:Sprite in _pathParts) {
 					TweenMax.killTweensOf(part);
 					_drawingContainer.removeChild(part);
 				}
@@ -263,9 +215,6 @@ public class MouseDrawController extends EventDispatcher{
 			_pathOfMatrixPoints = null;
 		}
 		if (_pathShapes)  {
-			for each (var pathShape:PathShape in _pathShapes) {
-				_drawingContainer.removeChild(pathShape);
-			}
 			_pathShapes = null;
 		}
 	}
@@ -276,29 +225,9 @@ public class MouseDrawController extends EventDispatcher{
 		dispatchEvent(new DrawingControllerEvent(DrawingControllerEvent.WANT_START_DRAW));
 	}
 
-	/*
-	private function newPathAndShow():void {
-		if (!_pathOfMatrixPoints || _pathOfMatrixPoints.length == 0) { return; }
-		_drawingContainer.graphics.clear();
-		_drawingContainer.graphics.lineStyle(2, 0x00ff00);
-		_drawingContainer.graphics.moveTo(_pathOfMatrixPoints[0].x * cellWidth + cellWidth/2,
-																			_pathOfMatrixPoints[0].y * cellWidth + cellWidth/2);
-		for each (var point:Point in _pathOfMatrixPoints) {
-			_drawingContainer.graphics.lineTo(point.x * cellWidth + cellWidth/2,
-																				point.y * cellWidth + cellWidth/2);
-		}
-		TweenMax.to(_drawingContainer, .08, {alpha: 1});
-	}
-	 *
-	 */
-
-	private function removePartFromContainer(part:Shape):void {
+	private function removePartFromContainer(part:Sprite):void {
 		TweenMax.to(part, .4, {alpha : 0,
 								onComplete : function():void { _drawingContainer.removeChild(part); }});
-	}
-	private function removePathShapeFromContainer(pathShape:PathShape):void {
-		TweenMax.to(pathShape, .4, {alpha : 0,
-								onComplete : function():void { _drawingContainer.removeChild(pathShape); }});
 	}
 
 	private function get cellWidth():int { return GameController.CELL; }
