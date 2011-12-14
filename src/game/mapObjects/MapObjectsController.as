@@ -240,11 +240,13 @@ public class MapObjectsController extends EventDispatcher implements IController
 
 	private function checkHitEnemyTank(bullet:Bullet):void {
 		for each (var enemyTank:Tank in _targetsController.getEnemyTanks()) {
-			if (enemyTank != bullet.selfTank &&
-				bullet.hitTestObject(enemyTank)) {
+			if (enemyTank != bullet.selfTank && bullet.hitTestObject(enemyTank)) {
 				removeBullet(bullet);
-				showBamOnTank(new Point(enemyTank.originX, enemyTank.originY));  //TODO all ok?
-				removeEnemyTank(enemyTank);
+				enemyTank.damage(bullet.damageStrength);
+				if (enemyTank.destroyed) {
+					showBamOnTank(new Point(enemyTank.originX, enemyTank.originY));  //TODO all ok?
+					removeEnemyTank(enemyTank);
+				}
 				break;
 			}
 		}
@@ -278,8 +280,8 @@ public class MapObjectsController extends EventDispatcher implements IController
 		if (_playerTank != bullet.selfTank && bullet.hitTestObject(_playerTank)) {
 			removeBullet(bullet);
 			if (!_playerTank.hasDefence()) {
-				dispatchEvent(new DamageObjectEvent(DamageObjectEvent.DAMAGE_PLAYER_TANK, _playerTank));
-				showBamOnTank(new Point(_playerTank.originX, _playerTank.originY));
+				dispatchEvent(new DamageObjectEvent(DamageObjectEvent.DAMAGE_PLAYER_TANK, _playerTank, bullet.damageStrength));
+				//showBamOnTank(new Point(_playerTank.originX, _playerTank.originY));
 			}
 		}
 	}

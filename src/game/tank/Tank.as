@@ -41,7 +41,6 @@ public class Tank extends MapObject {
 	public function Tank(vo:TankVO, isPlayer:Boolean, hp:Number) {
 		_isPlayer = isPlayer;
 		setHp(hp);
-		setHp(isPlayer ? ObjectsHp.PLAYER : ObjectsHp.FIST_BOT);
 		_vo = vo;
 
 		createTankBase();
@@ -97,9 +96,9 @@ public class Tank extends MapObject {
 		addChild(reloadBar);
 	}
 
-	public function tankDamage():void{
-		_liveTab.scaleX -= .5;
-		if (_liveTab.scaleX < 0) { _liveTab.scaleX = 0; }
+	override public function damage(value:Number):void{
+		super.damage(value);
+		_liveTab.scaleX = hp/maxHp;
 	}
 
 	public function updateLive():void {

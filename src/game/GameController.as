@@ -140,8 +140,8 @@ public class GameController extends EventDispatcher implements IScene{
 	/* event handlers */
 
 	private function onPlayerDamage(event:DamageObjectEvent):void {
-		_tankController.tank.tankDamage();
-		if(_tankController.tank.isDead()) {
+		_tankController.tank.damage(event.damageValue);
+		if(_tankController.tank.destroyed) {
 			_tankController.bam();
 			_mapObjectsController.targetsController.cleanTargetTank();
 			_container.addEventListener(MouseEvent.CLICK, onClick);
