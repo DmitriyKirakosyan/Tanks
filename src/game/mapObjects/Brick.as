@@ -18,6 +18,8 @@ package game.mapObjects {
 		
 		override public function damage(value:Number):void {
 			super.damage(value);
+			this.scaleX = .5 + hp/maxHp/2;
+			this.scaleY = .5 + hp/maxHp/2;
 			if (hp < maxHp/2) {
 				breakBrick();
 			}

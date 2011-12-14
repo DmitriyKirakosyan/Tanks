@@ -16,6 +16,12 @@ import game.mapObjects.MapObject;
 			this.y = point.y;
 			this.addChild(_view);
 		}
+
+		override public function damage(value:Number):void {
+			super.damage(value);
+			this.scaleX = .5 + hp/maxHp/2;
+			this.scaleY = .5 + hp/maxHp/2;
+		}
 		
 	}
 }
