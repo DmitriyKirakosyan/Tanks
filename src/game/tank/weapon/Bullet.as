@@ -13,6 +13,7 @@ public class Bullet extends Sprite implements IControllerWithTime {
 	private var _speed:Number;
 	private var _selfTank:Tank;
 	private var _type:uint;
+	private var _damageStrength:Number;
 
 	private var _bulletEffect:BulletEffect;
 
@@ -20,22 +21,29 @@ public class Bullet extends Sprite implements IControllerWithTime {
 
 	private var speedCoef:Number = 200;
 
+	public static const TAIL_ROCKET_STRENGTH:Number = 8;
+	public static const ROCKET_STRENGTH:Number = 5;
+	public static const MINIGUN_STRENGTH:Number = .6;
+
 	public static function createTailRocketBullet(selfTank:Tank):Bullet {
-		return new Bullet(selfTank,  TankGun.TAIL_ROCKET);
+		return new Bullet(selfTank,  TankGun.TAIL_ROCKET, TAIL_ROCKET_STRENGTH);
 	}
 	public static function createMinigunBullet(selfTank:Tank):Bullet {
-		return new Bullet(selfTank, TankGun.MINIGUN);
+		return new Bullet(selfTank, TankGun.MINIGUN, MINIGUN_STRENGTH);
 	}
 	public static function createRocketBullet(selfTank:Tank):Bullet {
-		return new Bullet(selfTank);
+		return new Bullet(selfTank, TankGun.ROCKET, ROCKET_STRENGTH);
 	}
 
-	public function Bullet(selfTank:Tank, type:uint = TankGun.ROCKET):void {
+	public function Bullet(selfTank:Tank, type:uint, damageStrength:Number):void {
 		_type = type;
+		_damageStrength = damageStrength;
 		_selfTank = selfTank;
 		_bulletEffect = createBulletEffect();
 		drawBulletPointOn(this);
 	}
+
+	public function get damageStrength():Number { return _damageStrength; }
 
 	public function setPosition(point:Point):void {
 		this.x = point.x;

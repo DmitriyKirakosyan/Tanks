@@ -4,6 +4,7 @@ import game.*;
 
 	public class MapObject extends Sprite {
 		private var _hp:Number; // -1 -- infinity life
+		private var _maxHp:Number;
 
 		public function MapObject() {
 			super();
@@ -15,8 +16,12 @@ import game.*;
 			if (_hp < 0) { _hp = 0; }
 		}
 
+		public function get maxHp():Number { return _maxHp; }
 		public function get hp():Number { return _hp; }
-		protected function setHp(value:Number):void { _hp = value; }
+		protected function setHp(value:Number):void {
+			_hp = value;
+			_maxHp = value;
+		}
 
 		override public function set x(value:Number):void {
 			super.x = value * GameController.CELL + GameController.CELL/2;

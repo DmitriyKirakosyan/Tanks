@@ -265,7 +265,7 @@ public class MapObjectsController extends EventDispatcher implements IController
 			if (bullet.hitTestObject(brick)) {
 				removeBullet(bullet);
 				if (brick.damaged) { removeBrick(brick);
-				} else { brick.damage(); }
+				} else { brick.damage(bullet.damageStrength); }
 				break;
 			}
 		}
