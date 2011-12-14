@@ -8,6 +8,7 @@ package game.mapObjects {
 		
 		public function Brick(point:Point) {
 			super();
+			setHp()
 			_damaged = false;
 			this.x = point.x;
 			this.y = point.y;
@@ -17,7 +18,8 @@ package game.mapObjects {
 			this.addChild(brick);
 		}
 		
-		public function damage():void {
+		override public function damage(value:Number):void {
+			super.damage(value);
 			_damaged = true;
 			const damagedBrick:DamagedBriksView = new DamagedBriksView();
 			damagedBrick.x = -damagedBrick.width/2;

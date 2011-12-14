@@ -3,10 +3,20 @@ import game.*;
 	import flash.display.Sprite;
 
 	public class MapObject extends Sprite {
+		private var _hp:Number; // -1 -- infinity life
+
 		public function MapObject() {
 			super();
 			drawRectangle();
 		}
+
+		public function damage(value:Number):void {
+			_hp -= value;
+			if (_hp < 0) { _hp = 0; }
+		}
+
+		public function get hp():Number { return _hp; }
+		protected function setHp(value:Number):void { _hp = value; }
 
 		override public function set x(value:Number):void {
 			super.x = value * GameController.CELL + GameController.CELL/2;
