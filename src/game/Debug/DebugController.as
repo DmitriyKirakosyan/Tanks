@@ -41,19 +41,19 @@ import game.tank.TankController;
 			_container.graphics.beginFill(0xD4D4D4, .5);
 			_container.graphics.drawRoundRect(5, -110, 590, 80, 10);
 			_container.graphics.endFill();
-			//_container.visible = false;
 			_gameController = gameController;
-			createButtons();
 			
 			_debugContainer.addEventListener(MouseEvent.CLICK, onKeyDown);
 		}
 			
 		public function open():void {
 			drawMatrix();
+			createButtons();
 			addButtons();
 		}
 		public function close():void {
 			removeButtons();
+			removeOtherObjListeners();
 			_debugContainer.removeChild(_matrix);
 		}
 		
@@ -95,6 +95,7 @@ import game.tank.TankController;
 				_matrix.graphics.lineTo(MapMatrix.MATRIX_WIDTH * GameController.CELL, j * GameController.CELL);
 			}
 			_debugContainer.addChild(_matrix);
+			_debugContainer.addChild(_container);
 		}
 		
 		private function createButtons():void {
@@ -104,7 +105,6 @@ import game.tank.TankController;
 			_container.addChild(_buttons);
 		}
 		private function addButtons():void {
-			_debugContainer.addChild(_container);
 			_buttons.stopAddTankButton.addEventListener(MouseEvent.CLICK, tankAddController);
 			_buttons.dragTankButton.addEventListener(MouseEvent.CLICK, enemyTankMoveController);
 			_buttons.removeMapObjButton.addEventListener(MouseEvent.CLICK, removeMapObjects);
@@ -132,6 +132,9 @@ import game.tank.TankController;
 				_buttons.newGameBtn.removeEventListener(MouseEvent.CLICK, newGame);
 			}
 		}
+		private function removeOtherObjListeners():void {
+			if (_container.contains(_buttons)) { _container.removeChild(_buttons); }
+		}
 		/*Map Editor*/
 		private function removeMapObjects(event:MouseEvent):void {
 			_gameController.mapObjectsController.removeMapObjects();
@@ -148,7 +151,7 @@ import game.tank.TankController;
 		private function saveMap(event:MouseEvent):void {
 			_gameController.mapEditor.saveMap();
 		}
-		//TODO сделать кнопку для saveMap() и пофиг на выдает ошибку "null"
+		//TODO сделать кнопку для saveMap()
 
 
 		/* Add Enemy or Not */
@@ -184,7 +187,8 @@ import game.tank.TankController;
 		}
 		private function tankMoveON(event:MouseEvent):void {
 			for each (var enemy:Tank in _enemies) {
-				if (enemy.hitTestPoint(_container.mouseX, _container.mouseY)) {
+				if (enemy.hitTestPoint(_debugContainer.mouseX, _debugContainer.mouseY)) {
+					
 					_playerTank = enemy;
 					stopTank(enemy);
 					_gameController.container.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
@@ -200,34 +204,36 @@ import game.tank.TankController;
 		}
 			
 		private function onMouseMove(event:MouseEvent):void {
-			_playerTank.originX = _gameController.container.mouseX;
-			_playerTank.originY = _gameController.container.mouseY;
+			_playerTank.originX = _debugContainer.mouseX;
+			_playerTank.originY = _debugContainer.mouseY;
 		}
 		
 		private function stopTank(tank:Tank):void {
 			for each (var tankController:TankController in _enemyControllers) {
 				if (tank == tankController.tank) {
-					tankController.movingTimeline.vars["onComplete"] = null;
-					tankController.movingTimeline.killTweensOf(tank);
-	//				tankController.autoAttackTimer.stop();
+					/*tankController.movingTimeline.vars["onComplete"] = null;
+					tankController.movingTimeline.killTweensOf(tank);*/
+					tankController.pause();
 					break;
 				}
 			}
 		}
-		private function playTank(tank:Tank):void{
+		private function playTank(tank:Tank):void {
 			for each (var tankController:TankController in _enemyControllers) {
 				if (tank == tankController.tank) {
-						_gameController.targetsController.moveEnemy = tankController;
-						_gameController.container.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
-//						tankController.autoAttackTimer.start();
+					_gameController.targetsController.moveEnemy = tankController;
+					_gameController.container.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 					break;
 				}
 			}
 		}
+		
+		//Pause & Resume Game
 		private function pauseGame(event:MouseEvent):void {
 			if (!_tikTak) { _gameController.timeController.pauseWorld(); _buttons.pauseGameBtn.gotoAndStop(2); _tikTak = true; return; }
 			if (_tikTak) { _gameController.timeController.resumeWorld(); _buttons.pauseGameBtn.gotoAndStop(1); _tikTak = false; return; }
 		}
+		//Change Gun
 		private function changeGun(event:MouseEvent):void {
 			switch (_gunType) {
 				case 0 :
@@ -245,6 +251,7 @@ import game.tank.TankController;
 				default : return;
 			}
 		}
+		//Restart Game
 		private function newGame(event:MouseEvent):void {
 			_gameController.startNewGame();
 		}

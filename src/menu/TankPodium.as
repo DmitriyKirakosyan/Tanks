@@ -19,12 +19,12 @@ import game.tank.Tank;
 import game.tank.weapon.TankGun;
 import game.tank.TankVO;
 
-import mx.containers.TabNavigator;
+//import mx.containers.TabNavigator;
 
 import state.UserState;
 
 public class TankPodium extends EventDispatcher implements IScene{
-	private var _paper:PaperView;
+	private var _paper:GameBckg;
 
 	//tank switching
 	private var _tank:Tank;
@@ -44,15 +44,15 @@ public class TankPodium extends EventDispatcher implements IScene{
 
 	private var _container:Sprite;
 
-	private var _playBtn:Sprite;
+	private var _playBtn:NewGameBtn;
 	private var _playBtnTxt:TextField;
 
 	public function TankPodium(container:Sprite) {
 		_container = container;
-		_paper = new PaperView();
+		_paper = new GameBckg();
 		_tank = Tank.createPlayerTank(new TankVO());
-		_tank.x = MapMatrix.MATRIX_WIDTH/2;
-		_tank.y = MapMatrix.MATRIX_HEIGHT/2;
+		_tank.x = (MapMatrix.MATRIX_WIDTH - _tank.width/32)/2;
+		_tank.y = 10.5;//MapMatrix.MATRIX_HEIGHT/2;
 		createTankSwitchBtns();
 		createWeapon();
 		createWeaponSwitchBtns();
@@ -116,11 +116,12 @@ public class TankPodium extends EventDispatcher implements IScene{
 	}
 
 	private function createPlayBtn():void {
-		_playBtn = new Sprite();
-		_playBtn.graphics.beginFill(0xafafaf, .5);
-		_playBtn.graphics.drawRect(-20, -20, 40, 40);
+		_playBtn = new NewGameBtn();
 		_playBtn.x = 300;
-		_playBtn.y = 100;
+		_playBtn.y = 350;
+		_playBtn.gotoAndStop(1);
+		/*_playBtn.graphics.beginFill(0xafafaf, .5);
+		_playBtn.graphics.drawRect(-20, -20, 40, 40);
 		_playBtnTxt = new TextField();
 		_playBtnTxt.x = -10;
 		_playBtnTxt.y = -10;
@@ -128,7 +129,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 		_playBtnTxt.selectable = false;
 		_playBtnTxt.autoSize = TextFieldAutoSize.LEFT;
 		_playBtnTxt.mouseEnabled = false;
-		_playBtn.addChild(_playBtnTxt);
+		_playBtn.addChild(_playBtnTxt);*/
 		_playBtn.addEventListener(MouseEvent.MOUSE_OVER, onPlayBtnMouseOver);
 		_playBtn.addEventListener(MouseEvent.MOUSE_OUT, onPlayBtnMouseOut);
 		_playBtn.addEventListener(MouseEvent.CLICK, onPlayBtnClick);
@@ -167,9 +168,11 @@ public class TankPodium extends EventDispatcher implements IScene{
 	}
 
 	private function onPlayBtnMouseOver(event:MouseEvent):void {
+		_playBtn.gotoAndStop(2);
 		TweenMax.to(_playBtn, .4, {glowFilter:{color:0x91e600, alpha:1, blurX:10, strength : 4, blurY:10}});
 	}
 	private function onPlayBtnMouseOut(event:MouseEvent):void {
+		_playBtn.gotoAndStop(1);
 		TweenMax.to(_playBtn, 4., {glowFilter:{color:0x91e600, alpha:0, strength : 10, blurX:300, blurY:300}});
 	}
 
