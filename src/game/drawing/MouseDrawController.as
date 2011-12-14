@@ -66,10 +66,17 @@ public class MouseDrawController extends EventDispatcher{
 		return null;
 	}
 
+	public function getFirstMovePoint():Point {
+		if (_pathOfMatrixPoints && _pathOfMatrixPoints.length > 0) {
+			return _pathOfMatrixPoints[0];
+		}
+		return null;
+	}
+
 	public function startDrawTankPath():void {
 		removePath();
 		_pathOfMatrixPoints = new Vector.<Point>();
-		createNewPathPart(_currentPoint);
+		//createNewPathPart(_currentPoint);
 		_pathOfMatrixPoints.push(_mapMatrix.getMatrixPoint(new Point(_currentPoint.x, _currentPoint.y)));
 		//_drawingContainer.graphics.moveTo(_currentMousePoint.x, _currentMousePoint.y);
 		_drawing = true;
