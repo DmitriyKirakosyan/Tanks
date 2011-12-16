@@ -114,9 +114,16 @@ public class MouseDrawController extends EventDispatcher{
 		_currentPathPart = new Sprite();
 
 		var pathArrow:PathShape = PathShape.createArrow();
-		var correctingPoint:Point = _mapMatrix.getStagePoint(_mapMatrix.getMatrixPoint(point));
+		var matrixPoint:Point = _mapMatrix.getMatrixPoint(point);
+		var correctingPoint:Point = _mapMatrix.getStagePoint(matrixPoint);
 		pathArrow.x = correctingPoint.x;
 		pathArrow.y = correctingPoint.y;
+		var lastMovePoint:Point = getLastMovePoint();
+		if (lastMovePoint) {
+			pathArrow.rotation = (lastMovePoint.x < matrixPoint.x) ? 90 :
+														(lastMovePoint.x > matrixPoint.x) ? -90 :
+														(lastMovePoint.y < matrixPoint.y) ? 180 : 0;
+		}
 		pathArrow.scaleX = pathArrow.scaleY = 1.5;
 		addNewPathShape(pathArrow);
 		_currentPathPart.addChild(pathArrow);
