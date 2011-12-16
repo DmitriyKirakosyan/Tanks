@@ -115,6 +115,10 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 		_movingTimeline = new TimelineMax({onComplete : onMovingComplete});
 		_movingTimeline.stop();
 		_movingTimeline.timeScale = _scaleTime;
+
+		//fuck this :(
+		clearTankCell();
+		_mapMatrix.setTankCell(int(tank.x + .5), int(tank.y + .5), 1);
 	}
 
 	public function setMovingPath(path:Vector.<Point>):void {
@@ -196,14 +200,18 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 		}
 		_direction.rotateIfNeed(tank, point);
 
+		clearTankCell();
+		_mapMatrix.setTankCell(point.x,  point.y, 1);
+		dispatchEvent(new TankEvent(TankEvent.COME_TO_CELL));
+		_nextPoint = point;
+	}
+
+	private function clearTankCell() {
 		//fuck this please anybody
 		if (_nextPoint) {
 			_mapMatrix.clearTankCell(_nextPoint.x, _nextPoint.y);
 		}
 		_mapMatrix.clearTankCell(int(tank.x + .5), int(tank.y + .5));
-		_mapMatrix.setTankCell(point.x,  point.y, 1);
-		dispatchEvent(new TankEvent(TankEvent.COME_TO_CELL));
-		_nextPoint = point;
 	}
 
 	private function onGunRotateComplete(event:GunRotateCompleteEvent):void {
