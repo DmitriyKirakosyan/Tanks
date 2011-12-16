@@ -109,7 +109,7 @@ public class MouseDrawController extends EventDispatcher{
 
 	/* Internal functions */
 
-	private function createNewPathPart(point:Point):void {
+	private function createNewPathPart(point:Point, lastMovePoint:Point):void {
 		if (!_pathParts) { _pathParts = new Vector.<Sprite>(); }
 		_currentPathPart = new Sprite();
 
@@ -118,17 +118,16 @@ public class MouseDrawController extends EventDispatcher{
 		var correctingPoint:Point = _mapMatrix.getStagePoint(matrixPoint);
 		pathArrow.x = correctingPoint.x;
 		pathArrow.y = correctingPoint.y;
-		var lastMovePoint:Point = getLastMovePoint();
 		if (lastMovePoint) {
-			pathArrow.rotation = (lastMovePoint.x < matrixPoint.x) ? 90 :
-														(lastMovePoint.x > matrixPoint.x) ? -90 :
-														(lastMovePoint.y < matrixPoint.y) ? 180 : 0;
+			pathArrow.rotation = (lastMovePoint.x < matrixPoint.x) ? -90 :
+														(lastMovePoint.x > matrixPoint.x) ? 90 :
+														(lastMovePoint.y > matrixPoint.y) ? 180 : 0;
 		}
 		pathArrow.scaleX = pathArrow.scaleY = 1.5;
 		addNewPathShape(pathArrow);
 		_currentPathPart.addChild(pathArrow);
-		pathArrow.filters = [new GlowFilter(0x91e600, 1, 40, 40, 20)];
-		TweenMax.to(pathArrow, .8, {glowFilter:{color:0x91e600, alpha:.5, blurX:4, strength : 4, blurY:4, ease : Elastic.easeOut}});
+		pathArrow.filters = [new GlowFilter(0x91e600, 1, 40, 40, 20, 1, true)];
+		TweenMax.to(pathArrow, .8, {glowFilter:{color:0x91e600, blurX:10, strength : 10, blurY:10, inner:false, ease : Elastic.easeOut}});
 		_pathParts.push(_currentPathPart);
 
 		_drawingContainer.addChild(_currentPathPart);
@@ -176,8 +175,9 @@ public class MouseDrawController extends EventDispatcher{
 
 	private function addNewPathPartIfNeed(point:Point):void {
 		if (newPoint(point)) {
+			var lastPoint:Point = getLastMovePoint();
 			addPointToPath(point);
-			createNewPathPart(point);
+			createNewPathPart(point, lastPoint);
 			dispatchEvent(new DrawingControllerEvent(DrawingControllerEvent.NEW_MOVE_POINT));
 		}
 	}

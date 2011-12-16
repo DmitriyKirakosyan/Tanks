@@ -20,6 +20,7 @@ import flash.utils.Timer;
 		private var _container:Sprite;
 		private var _mapMatrix:MapMatrix;
 		private var _playerTank:Tank;
+		private var _levelStrength:Number;
 		
 		public function TargetsController(container:Sprite, mapMatrix:MapMatrix) {
 			_container = container;
@@ -69,6 +70,7 @@ import flash.utils.Timer;
 					_enemyControllers[i].bam();
 					removeEnemyTankListeners(_enemyControllers[i]);
 					_enemyControllers.splice(i, 1);
+					_levelStrength += .3;
 					break;
 				}
 			}
@@ -84,6 +86,7 @@ import flash.utils.Timer;
 		public function init():void {
 			for (var i:int = 0; i < Math.random() * 3; i++) { createTarget(); }
 			startTimer();
+			_levelStrength = .01;
 		}
 
 		public function remove():void {
@@ -106,7 +109,8 @@ import flash.utils.Timer;
 		/* Internal functions */
 		
 		private function createTarget():void {
-			var strength:int = int(Math.random() * 3); // 0 - BaseBot, 1 - AdvanceBot, 2 - HardBot
+			// 0 - BaseBot, 1 - AdvanceBot, 2 - HardBot
+			var strength:int = Math.random()/_levelStrength > .5 ? 0 : Math.random()/_levelStrength * 5 > .5 ? 1 : 2;
 			var enemyTank:TankBotController = new TankBotController(_container, _mapMatrix, strength);
 			enemyTank.addEventListener(TankEvent.MOVING_COMPLETE, onEnemyMovingComplete);
 			enemyTank.addEventListener(TankShotingEvent.WAS_SHOT, onEnemyShotEvent);
