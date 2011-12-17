@@ -84,9 +84,9 @@ import flash.utils.Timer;
 		}
 
 		public function init():void {
-			for (var i:int = 0; i < Math.random() * 3; i++) { createTarget(); }
-			startTimer();
 			_levelStrength = .01;
+			for (var i:int = 0; i < Math.random() * 7; i++) { createTarget(); }
+			startTimer();
 		}
 
 		public function remove():void {
@@ -110,7 +110,7 @@ import flash.utils.Timer;
 		
 		private function createTarget():void {
 			// 0 - BaseBot, 1 - AdvanceBot, 2 - HardBot
-			var strength:int = Math.random()/_levelStrength > .5 ? 0 : Math.random()/_levelStrength * 5 > .5 ? 1 : 2;
+			var strength:int = Math.random() < 1/_levelStrength ? 0 : Math.random()< 1/_levelStrength*5 ? 1 : 2;
 			var enemyTank:TankBotController = new TankBotController(_container, _mapMatrix, strength);
 			enemyTank.addEventListener(TankEvent.MOVING_COMPLETE, onEnemyMovingComplete);
 			enemyTank.addEventListener(TankShotingEvent.WAS_SHOT, onEnemyShotEvent);
@@ -125,11 +125,22 @@ import flash.utils.Timer;
 
 		private function moveEnemyFromBackstage(enemy:TankController):void {
 			var rnd:Number = Math.random();
-			var x:Number = rnd < .5 ? (1 + rnd*2 * (MapMatrix.MATRIX_WIDTH-1)) : rnd < 7.5 ? -1 : MapMatrix.MATRIX_WIDTH;
-			var y:Number = rnd > .5 ? (1 + rnd*2 * (MapMatrix.MATRIX_HEIGHT-1)) : rnd < 2.5 ? 0 : MapMatrix.MATRIX_HEIGHT;
+			trace("rnd "  + rnd);
+			var x:Number = rnd < .5 ? (1 + int(rnd*2 * (MapMatrix.MATRIX_WIDTH-1))) : rnd < 7.5 ? -1 : MapMatrix.MATRIX_WIDTH;
+			var y:Number = rnd > .5 ? (1 + int((rnd-.5)*2 * (MapMatrix.MATRIX_HEIGHT-1))) : rnd < 2.5 ? -1 : MapMatrix.MATRIX_HEIGHT;
+			trace("x : " + x + ", y : " + y);
 			enemy.tank.x = x;
 			enemy.tank.y = y;
 			moveEnemyTank(enemy);
+			var toPoint:Point;
+			if (x < 0) { toPoint = new Point(x + 1, y);
+			} else if (x == MapMatrix.MATRIX_WIDTH) { toPoint = new Point(x-1, y);
+			} else if (y < 0) { toPoint = new Point(x,  y + 1);
+			} else { toPoint = new Point(x, y-1); }
+
+			const path:Vector.<Point> = new Vector.<Point>();
+			path.push(toPoint);
+			addPathToEnemyTankController(path, enemy);
 		}
 
 		private function removeEnemyTankListeners(enemyTankController:TankController):void {

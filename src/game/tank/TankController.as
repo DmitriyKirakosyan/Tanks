@@ -118,7 +118,9 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 
 		//fuck this :(
 		clearTankCell();
-		_mapMatrix.setTankCell(int(tank.x + .5), int(tank.y + .5), 1);
+		var correctedX:int = tank.x < 0 ? tank.x - .5 : tank.x + .5;
+		var correctedY:int = tank.y < 0 ? tank.y - .5 : tank.y + .5;
+		_mapMatrix.setTankCell(correctedX, correctedY, 1);
 	}
 
 	public function setMovingPath(path:Vector.<Point>):void {
@@ -206,7 +208,7 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 		_nextPoint = point;
 	}
 
-	private function clearTankCell() {
+	private function clearTankCell():void {
 		//fuck this please anybody
 		if (_nextPoint) {
 			_mapMatrix.clearTankCell(_nextPoint.x, _nextPoint.y);
