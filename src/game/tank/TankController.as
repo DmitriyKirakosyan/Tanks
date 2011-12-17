@@ -230,7 +230,7 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 	}
 
 	private function ejectBullet():void {
-		showShotEffect(_gunController.getBulletPoint());
+		showShotEffect(_gunController.getBulletPoint(), _gunController.targetRotation);
 		const bullet:Bullet = _gunController.createBullet();
 		bullet.moveTo(_bulletPoint);
 		_container.addChild(bullet);
@@ -240,20 +240,17 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 		_wannaShot = false;
 	}
 
-	private function showShotEffect(point:Point):void {
+	private function showShotEffect(point:Point, angle:Number):void {
 		var effect:Shot = new Shot();
-		/*effect.graphics.beginFill(0xffaadd);
-		effect.graphics.drawCircle(0, 0, 10);
-		effect.graphics.endFill();*/
 		effect.x = point.x;
 		effect.y = point.y;
-		effect.rotation = 90;
-		//effect.scaleX = effect.scaleY = .1;
-		effect.alpha = 0;
+		effect.rotation = angle;
+		//effect.scaleX = effect.scaleY = .7;
+		effect.alpha = .3;
 		_container.addChild(effect);
 		var timeline:TimelineLite = new TimelineLite({onComplete : function():void {_container.removeChild(effect); }});
-		timeline.append(TweenLite.to(effect, 1, { alpha : 1}));
-		timeline.append(TweenLite.to(effect, 1, {alpha : .5}));
+		timeline.append(TweenMax.to(effect, .001, {glowFilter:{color:0xFF0000, alpha: 1, blurX: 3, strength : 10, blurY: 3}}));
+		timeline.append(TweenLite.to(effect, .3, {alpha: .3}));
 	}
 
 	private function onReloadComplete(event:Event):void {

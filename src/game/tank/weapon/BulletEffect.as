@@ -6,6 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 package game.tank.weapon {
+import flash.filters.GlowFilter;
 import com.greensock.TweenMax;
 import com.greensock.easing.Linear;
 
@@ -50,7 +51,7 @@ public class BulletEffect {
 
 	/* Internal functions */
 
-	private function drawTail():void {
+	private function drawTail():void { //TODO чем отличается это от того что ниже???
 		if (!_bullet.container) { return; }
 		var bulletTailPart:Sprite = new Sprite();
 		_bullet.drawBulletPointOn(bulletTailPart);
@@ -65,15 +66,17 @@ public class BulletEffect {
 
 	private function drawMinigunTail():void {
 		if (!_bullet.container) { return; }
-		var bulletTailPart:Sprite = new Sprite();
-		bulletTailPart.graphics.lineStyle(1, 0x0fafaf);
-		bulletTailPart.graphics.lineTo(0, -10);
+		var bulletTailPart:MiniBullet = new MiniBullet();
+		//bulletTailPart.graphics.lineStyle(1, 0x0fafaf);
+		//bulletTailPart.graphics.lineTo(0, -10);
+		bulletTailPart.scaleX = bulletTailPart.scaleY = .4;
 		bulletTailPart.rotation = _bullet.rotation + 180;
 		bulletTailPart.x = _bullet.x;
 		bulletTailPart.y = _bullet.y;
-		bulletTailPart.alpha = .6;
+		bulletTailPart.filters = [new GlowFilter(0xFFF000,.6,1,1,14,1)];
+		bulletTailPart.alpha = .8;
 		_bullet.container.addChild(bulletTailPart);
-		TweenMax.to(bulletTailPart, 1.5, { alpha : 0, ease : Linear.easeNone,
+		TweenMax.to(bulletTailPart, .5, { alpha: 0, ease : Linear.easeNone,
 									onComplete: function():void { _bullet.container.removeChild(bulletTailPart); } });
 	}
 

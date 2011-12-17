@@ -41,7 +41,7 @@ public class TankGun extends Sprite{
 		this.addChild(new MiniGun());
 	}
 	private function createTailRocket():void {
-		this.addChild(new RocketGunView());
+		this.addChild(new RocketGun());
 	}
 
 }

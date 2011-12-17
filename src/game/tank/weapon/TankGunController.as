@@ -57,7 +57,7 @@ public class TankGunController extends EventDispatcher implements IControllerWit
 			_reloadController.resume();
 		}
 	}
-
+	public function get targetRotation():Number { return _targetRotation; }
 	public function get rotating():Boolean { return _rotating; }
 	public function get gun():TankGun { return _gun; }
 	public function get reloadController():GunReloadController { return _reloadController; }

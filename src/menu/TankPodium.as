@@ -1,5 +1,6 @@
 
 package menu {
+import flash.events.Event;
 import com.greensock.TweenMax;
 import com.greensock.easing.Linear;
 
@@ -97,6 +98,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 		_container.addEventListener(MouseEvent.MOUSE_DOWN, onTankMouseDown);
 		_container.addEventListener(MouseEvent.MOUSE_UP, onTankMouseUp);
 		_container.addEventListener(MouseEvent.MOUSE_MOVE, onTankMouseMove);
+		
 		for each (var switchBtn:Sprite in [_tankSwitchLeftBtn, _tankSwitchRightBtn, _weaponSwitchLeftBtn, _weaponSwitchRightBtn]) {
 			switchBtn.addEventListener(MouseEvent.MOUSE_OVER, onSwitchBtnMouseOver);
 			switchBtn.addEventListener(MouseEvent.MOUSE_OUT, onSwitchBtnMouseOut);
@@ -133,6 +135,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 		_playBtn.addEventListener(MouseEvent.MOUSE_OVER, onPlayBtnMouseOver);
 		_playBtn.addEventListener(MouseEvent.MOUSE_OUT, onPlayBtnMouseOut);
 		_playBtn.addEventListener(MouseEvent.CLICK, onPlayBtnClick);
+		
 	}
 
 	private function createTankSwitchBtns():void {
@@ -168,12 +171,20 @@ public class TankPodium extends EventDispatcher implements IScene{
 	}
 
 	private function onPlayBtnMouseOver(event:MouseEvent):void {
-		_playBtn.gotoAndStop(2);
-		TweenMax.to(_playBtn, .4, {glowFilter:{color:0x91e600, alpha:1, blurX:10, strength : 4, blurY:10}});
+		_playBtn.addEventListener(Event.ENTER_FRAME, animationNext);
+		_playBtn.removeEventListener(Event.ENTER_FRAME, animationPrev);
+		//TweenMax.to(_playBtn, .4, {glowFilter:{color:0x91e600, alpha:1, blurX:10, strength : 4, blurY:10}});
 	}
 	private function onPlayBtnMouseOut(event:MouseEvent):void {
-		_playBtn.gotoAndStop(1);
-		TweenMax.to(_playBtn, 4., {glowFilter:{color:0x91e600, alpha:0, strength : 10, blurX:300, blurY:300}});
+		_playBtn.removeEventListener(Event.ENTER_FRAME, animationNext);
+		_playBtn.addEventListener(Event.ENTER_FRAME, animationPrev);
+		//TweenMax.to(_playBtn, 4., {glowFilter:{color:0x91e600, alpha:0, strength : 10, blurX:300, blurY:300}});
+	}
+	private function animationNext(event:Event):void {
+		if ( _playBtn.currentFrame <= 11) { _playBtn.nextFrame(); }
+	}
+	private function animationPrev(event:Event):void {
+		if ( _playBtn.currentFrame > 11) { _playBtn.nextFrame(); }
 	}
 
 	private function onPlayBtnClick(event:MouseEvent):void {
