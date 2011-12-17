@@ -120,6 +120,7 @@ public class GameController extends EventDispatcher implements IScene{
 		_container.addEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
 		_container.addEventListener(MouseEvent.MOUSE_UP, onStageMouseUp);
 		_container.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+		_container.addEventListener(MouseEvent.ROLL_OUT, onContainerMouseOut);
 	}
 
 	private function removeListeners():void {
@@ -135,6 +136,7 @@ public class GameController extends EventDispatcher implements IScene{
 		_container.removeEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
 		_container.removeEventListener(MouseEvent.MOUSE_UP, onStageMouseUp);
 		_container.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+		_container.removeEventListener(MouseEvent.ROLL_OUT, onContainerMouseOut);
 	}
 
 	/* event handlers */
@@ -178,6 +180,10 @@ public class GameController extends EventDispatcher implements IScene{
 			_tankController.setTarget(_pointUnderMouse.clone());
 			_tankController.shot();
 		}
+	}
+
+	private function onContainerMouseOut(event:MouseEvent):void {
+		timeController.normalize();
 	}
 
 	private function onEnterFrame(event:Event):void {

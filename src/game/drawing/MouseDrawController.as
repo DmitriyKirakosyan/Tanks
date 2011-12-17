@@ -39,7 +39,9 @@ public class MouseDrawController extends EventDispatcher{
 	private var _pathParts:Vector.<Sprite>;
 
 	private var _drawing:Boolean;
-	private var _arrowAngle:Number;
+	private var _pathPartsCounter:int;
+
+	private const MAX_PATH_PARTS:int = 20;
 
 	public function MouseDrawController(container:Sprite, mapMatrix:MapMatrix) {
 		_mapMatrix = mapMatrix;
@@ -74,6 +76,7 @@ public class MouseDrawController extends EventDispatcher{
 	}
 
 	public function startDrawTankPath():void {
+		_pathPartsCounter = 0;
 		removePath();
 		_pathOfMatrixPoints = new Vector.<Point>();
 		//createNewPathPart(_currentPoint);
@@ -175,6 +178,11 @@ public class MouseDrawController extends EventDispatcher{
 
 	private function addNewPathPartIfNeed(point:Point):void {
 		if (newPoint(point)) {
+			if (_pathPartsCounter >= MAX_PATH_PARTS) {
+				stopDrawing();
+				return;
+			}
+			_pathPartsCounter++;
 			var lastPoint:Point = getLastMovePoint();
 			addPointToPath(point);
 			createNewPathPart(point, lastPoint);
