@@ -144,12 +144,12 @@ public class Tank extends MapObject {
 
 	private function createTankBase():void {
 		if (_vo.tankBase == 0) {
-			tankBase = new TankBaseView();
+			tankBase = new Tank1();
 		} else {
 			tankBase = new Sprite();
-			const brickView:BricksView = new BricksView();
-			brickView.x -= brickView.width/2;
-			brickView.y -= brickView.height/2;
+			const brickView:Tank2 = new Tank2();
+			//brickView.x -= brickView.width/2;
+			//brickView.y -= brickView.height/2;
 			tankBase.addChild(brickView);
 		}
 	}
