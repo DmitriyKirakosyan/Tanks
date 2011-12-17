@@ -24,7 +24,7 @@ public class TankGunController extends EventDispatcher implements IControllerWit
 	private var _targetRotation:Number;
 
 
-	private const GUN_SPEED:Number = 4;
+	private var _gunSpeed:Number = 4;
 
 	public function TankGunController(tank:Tank) {
 		_tank = tank;
@@ -32,6 +32,7 @@ public class TankGunController extends EventDispatcher implements IControllerWit
 			throw new Error("where is my tank?? [TankGunController]");
 		}
 		_type = tank.vo.weaponType;
+		_gunSpeed = _type == TankGun.MINIGUN ? 7 : _type == TankGun.ROCKET ? 5 : 3;
 		_gun = tank.gun;
 		_gunLength = _gun.height;
 		_reloadController = new GunReloadController(getReloadSpeed());
@@ -94,11 +95,11 @@ public class TankGunController extends EventDispatcher implements IControllerWit
 	}
 
 	private function onGunEnterFrame(event:Event):void {
-		if (Math.abs(_targetRotation - _gun.rotation) <= GUN_SPEED) {
+		if (Math.abs(_targetRotation - _gun.rotation) <= _gunSpeed) {
 			stopRotating();
 			return;
 		}
-		_gun.rotation += _rotationCoeff * GUN_SPEED;
+		_gun.rotation += _rotationCoeff * _gunSpeed;
 	}
 
 	private function getCoeffForAngle(angle:Number):int {
