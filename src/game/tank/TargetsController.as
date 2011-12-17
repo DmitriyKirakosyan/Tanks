@@ -159,8 +159,18 @@ import flash.utils.Timer;
 		private function moveEnemyTank(enemyTankController:TankController):void {
 			var toPoint:Point = (TankBotController(enemyTankController)).getTargetMovePoint();
 			if (!toPoint) {
-				toPoint = new Point(int(Math.random()*MapMatrix.MATRIX_WIDTH),
-														int(Math.random()*MapMatrix.MATRIX_HEIGHT));
+				var numAttempts:int = 30;
+				var attemptsCounter:int = 0;
+				do {
+					toPoint = new Point(int(Math.random()*MapMatrix.MATRIX_WIDTH),
+															int(Math.random()*MapMatrix.MATRIX_HEIGHT));
+					attemptsCounter++;
+				} while (!_mapMatrix.isFreeCell(toPoint.x, toPoint.y) && attemptsCounter < numAttempts);
+				if (!_mapMatrix.isFreeCell(toPoint.x, toPoint.y)) {
+					trace("ops");
+					toPoint = new Point(enemyTankController.tank.x == 0 ? enemyTankController.tank.x + 1 :
+															enemyTankController.tank.x - 1, enemyTankController.tank.y);
+				}
 			} else {
 				toPoint.x = int(toPoint.x);
 				toPoint.y = int(toPoint.y);
