@@ -68,13 +68,18 @@ public class Tank extends MapObject {
 	public function addDefense(defense:TankDefense):void {
 		if (defense) {
 			if (_defense) {
+				TweenMax.killTweensOf(_defense);
 				if (this.contains(_defense)) { this.removeChild(_defense); }
 			}
 			_defense = defense;
 			this.addChild(_defense);
 			var thisTank:Tank = this;
 			TweenMax.to(_defense, 2, { alpha : 0, onComplete: function():void {
-				if (thisTank.contains(_defense)) { thisTank.removeChild(_defense); }
+				if (thisTank.contains(_defense)) {
+					if (thisTank.contains(_defense)) {
+						thisTank.removeChild(_defense);
+					}
+				}
 				_defense = null;
 			}});
 		}

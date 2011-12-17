@@ -1,4 +1,7 @@
 package game.tank {
+import com.greensock.TimelineLite;
+import com.greensock.TweenLite;
+
 import flash.events.Event;
 import flash.geom.ColorTransform;
 
@@ -227,6 +230,7 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 	}
 
 	private function ejectBullet():void {
+		showShotEffect(_gunController.getBulletPoint());
 		const bullet:Bullet = _gunController.createBullet();
 		bullet.moveTo(_bulletPoint);
 		_container.addChild(bullet);
@@ -234,6 +238,21 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 		_gunController.reloadController.reload();
 		_gunController.reloadController.addEventListener(Event.COMPLETE, onReloadComplete);
 		_wannaShot = false;
+	}
+
+	private function showShotEffect(point:Point):void {
+		var effect:Sprite = new Sprite();
+		effect.graphics.beginFill(0xffaadd);
+		effect.graphics.drawCircle(0, 0, 10);
+		effect.graphics.endFill();
+		effect.x = point.x;
+		effect.y = point.y;
+		//effect.scaleX = effect.scaleY = .1;
+		effect.alpha = 0;
+		_container.addChild(effect);
+		var timeline:TimelineLite = new TimelineLite({onComplete : function():void {_container.removeChild(effect); }});
+		timeline.append(TweenLite.to(effect, 1, { alpha : 1}));
+		timeline.append(TweenLite.to(effect, 1, {alpha : .5}));
 	}
 
 	private function onReloadComplete(event:Event):void {

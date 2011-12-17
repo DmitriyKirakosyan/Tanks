@@ -122,7 +122,7 @@ public class TankGunController extends EventDispatcher implements IControllerWit
 		return result;
 	}
 
-	private function getBulletPoint():Point {
+	public function getBulletPoint():Point {
 		var angle:Number = (-_gun.rotation + 90);
 		var endX:Number = Math.cos(angle/180 * Math.PI) * _gunLength;
 		var endY:Number = -Math.sin(angle/180 * Math.PI) * _gunLength;
