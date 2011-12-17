@@ -241,12 +241,13 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 	}
 
 	private function showShotEffect(point:Point):void {
-		var effect:Sprite = new Sprite();
-		effect.graphics.beginFill(0xffaadd);
+		var effect:Shot = new Shot();
+		/*effect.graphics.beginFill(0xffaadd);
 		effect.graphics.drawCircle(0, 0, 10);
-		effect.graphics.endFill();
+		effect.graphics.endFill();*/
 		effect.x = point.x;
 		effect.y = point.y;
+		effect.rotation = 90;
 		//effect.scaleX = effect.scaleY = .1;
 		effect.alpha = 0;
 		_container.addChild(effect);

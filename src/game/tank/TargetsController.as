@@ -28,7 +28,6 @@ import flash.utils.Timer;
 			_enemyControllers = new Vector.<TankBotController>();
 			initTimer();
 		}
-		
 
 		public function addPlayerTank(tank:Tank):void {
 			_playerTank = tank;
