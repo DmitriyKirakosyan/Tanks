@@ -181,7 +181,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 		//TweenMax.to(_playBtn, 4., {glowFilter:{color:0x91e600, alpha:0, strength : 10, blurX:300, blurY:300}});
 	}
 	private function animationNext(event:Event):void {
-		if ( _playBtn.currentFrame <= 11) { _playBtn.nextFrame(); }
+		_playBtn.nextFrame();
 	}
 	private function animationPrev(event:Event):void {
 		_playBtn.prevFrame();
