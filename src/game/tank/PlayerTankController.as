@@ -26,7 +26,7 @@ public class PlayerTankController extends TankController{
 
 	override protected function createTank(tankVO:TankVO):void {
 		tank = Tank.createPlayerTank(tankVO);
-		highlightPlayerTank();
+		//highlightPlayerTank();
 	}
 
 	private function highlightPlayerTank():void {

@@ -126,8 +126,8 @@ public class MouseDrawController extends EventDispatcher{
 		pathArrow.scaleX = pathArrow.scaleY = 1.5;
 		addNewPathShape(pathArrow);
 		_currentPathPart.addChild(pathArrow);
-		pathArrow.filters = [new GlowFilter(0x91e600, 1, 40, 40, 20, 1, true)];
-		TweenMax.to(pathArrow, .8, {glowFilter:{color:0x91e600, blurX:10, strength : 10, blurY:10, inner:false, ease : Elastic.easeOut}});
+		pathArrow.filters = [new GlowFilter(0x91e600, 1, 20, 20, 10, 1, false)];
+		TweenMax.to(pathArrow, .8, {glowFilter:{color:0x91e600, blurX:5, strength : 5, blurY:5, inner:false, ease : Elastic.easeOut}});
 		_pathParts.push(_currentPathPart);
 
 		_drawingContainer.addChild(_currentPathPart);

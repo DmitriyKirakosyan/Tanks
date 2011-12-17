@@ -48,7 +48,7 @@ public class Tank extends MapObject {
 
 		_liveTab = new LiveTab();
 		this.addChild(_liveTab);
-		this.addChild(tankBase);
+		this.addChildAt(tankBase, 0);
 	}
 
 	public function get gun():TankGun {
@@ -144,13 +144,11 @@ public class Tank extends MapObject {
 
 	private function createTankBase():void {
 		if (_vo.tankBase == 0) {
-			tankBase = new Tank1();
+			tankBase = new TankBase1();
 		} else {
 			tankBase = new Sprite();
-			const brickView:Tank2 = new Tank2();
-			//brickView.x -= brickView.width/2;
-			//brickView.y -= brickView.height/2;
-			tankBase.addChild(brickView);
+			const baseView:TankBase2 = new TankBase2();
+			tankBase.addChild(baseView);
 		}
 	}
 
