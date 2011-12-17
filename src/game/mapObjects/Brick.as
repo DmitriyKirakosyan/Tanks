@@ -4,6 +4,7 @@ package game.mapObjects {
 	import game.mapObjects.MapObject;
 
 	public class Brick extends MapObject {
+		private var _damagedBrick:DamagedBriksView;
 
 		public function Brick(point:Point) {
 			super();
@@ -18,11 +19,11 @@ package game.mapObjects {
 		
 		override public function damage(value:Number):void {
 			super.damage(value);
-			this.scaleX = .75 + hp/maxHp/4;
-			this.scaleY = .75 + hp/maxHp/4;
-			if (hp < maxHp/2) {
+			if (!_damagedBrick) {
 				breakBrick();
 			}
+			_damagedBrick.alpha = 1-hp/maxHp;
+
 		}
 		
 		public function get damaged():Boolean { return hp < maxHp/2; }
@@ -30,10 +31,10 @@ package game.mapObjects {
 		/* Internal functions */
 
 		private function breakBrick():void {
-			const damagedBrick:DamagedBriksView = new DamagedBriksView();
-			damagedBrick.x = -damagedBrick.width/2;
-			damagedBrick.y = -damagedBrick.height/2;
-			this.addChild(damagedBrick);
+			_damagedBrick = new DamagedBriksView();
+			_damagedBrick.x = -_damagedBrick.width/2;
+			_damagedBrick.y = -_damagedBrick.height/2;
+			this.addChild(_damagedBrick);
 		}
 	}
 }

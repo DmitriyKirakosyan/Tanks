@@ -106,8 +106,9 @@ public class Tank extends MapObject {
 		_liveTab.scaleX = hp/maxHp;
 	}
 
-	public function updateLive():void {
-		_liveTab.scaleX = 1;
+	public function updateLive(value:Number):void {
+		super.plusHp(value);
+		_liveTab.scaleX = hp/maxHp;
 	}
 
 	public function get vo():TankVO { return _vo; }

@@ -151,7 +151,7 @@ public class TankGunController extends EventDispatcher implements IControllerWit
 	}
 
 	private function getReloadSpeed():Number {
-		return _type == TankGun.MINIGUN ? 9 : _type == TankGun.TAIL_ROCKET ? .5 : 2;
+		return _type == TankGun.MINIGUN ? 9 : _type == TankGun.TAIL_ROCKET ? .5 : 1;
 	}
 
 }

@@ -104,14 +104,15 @@ public class MapMatrix {
 	}
 
 	public function createMatrix():void {
-
+		var rnd:Number;
 		for (var i:int = 0; i < _matrix.length; ++i) {
 			for (var j:int = 0; j < MATRIX_HEIGHT; ++j) {
 				if (i == int(MATRIX_WIDTH/2) && j == int(MATRIX_HEIGHT/2)) {
 					_matrix[i][j] = MatrixItemIds.EMPTY;
 				} else {
-					_matrix[i][j] = Math.random() > .2 ?  MatrixItemIds.EMPTY :
-																Math.random() < .1 ? MatrixItemIds.STONE : MatrixItemIds.BRICKS;
+					rnd = Math.random();
+					_matrix[i][j] = rnd > .2 ?  MatrixItemIds.EMPTY :
+																rnd < .1 ? MatrixItemIds.STONE : MatrixItemIds.BRICKS;
 				}
 			}
 		}

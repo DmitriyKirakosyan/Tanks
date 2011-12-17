@@ -21,7 +21,7 @@ public class Bullet extends Sprite implements IControllerWithTime {
 
 	private var speedCoef:Number = 200;
 
-	public static const TAIL_ROCKET_STRENGTH:Number = 8;
+	public static const TAIL_ROCKET_STRENGTH:Number = 11;
 	public static const ROCKET_STRENGTH:Number = 5;
 	public static const MINIGUN_STRENGTH:Number = .6;
 

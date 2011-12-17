@@ -19,6 +19,7 @@ import flash.events.EventDispatcher;
 import flash.geom.Point;
 
 import game.events.TankEvent;
+import game.mapObjects.ObjectsHp;
 import game.mapObjects.bonus.GameBonus;
 import game.matrix.MapMatrix;
 import game.tank.weapon.Bullet;
@@ -176,7 +177,7 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 
 	public function applyBonus(bonusType:uint):void {
 		switch (bonusType) {
-			case GameBonus.MEDKIT : tank.updateLive();
+			case GameBonus.MEDKIT : tank.updateLive(ObjectsHp.MEDKIT_BONUS);
 			case GameBonus.TIME_DEFENSE : tank.addDefense(TankDefense.createTimeDefense());
 		}
 	}

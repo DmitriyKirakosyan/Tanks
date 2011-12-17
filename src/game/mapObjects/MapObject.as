@@ -21,6 +21,11 @@ import game.*;
 			if (_hp == 0) { _destroyed = true; }
 		}
 
+		public function plusHp(value:Number):void {
+			_hp += value;
+			if (_hp > _maxHp) { _hp = _maxHp; }
+		}
+
 		public function get destroyed():Boolean { return _destroyed; }
 
 		public function get maxHp():Number { return _maxHp; }

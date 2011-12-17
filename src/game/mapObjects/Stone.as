@@ -6,6 +6,8 @@ import game.mapObjects.MapObject;
 	public class Stone extends MapObject {
 		private var _view:StoneView;
 		
+		private var _damagedStone:DamagedBriksView;
+
 		public function Stone(point:Point) {
 			super();
 			setHp(ObjectsHp.STONE);
@@ -19,9 +21,19 @@ import game.mapObjects.MapObject;
 
 		override public function damage(value:Number):void {
 			super.damage(value);
-			this.scaleX = .75 + hp/maxHp/4;
-			this.scaleY = .75 + hp/maxHp/4;
+			if (!_damagedStone) {
+				breakStone();
+			}
+			_damagedStone.alpha = 1-hp/maxHp;
 		}
 		
+		/* Internal functions */
+
+		private function breakStone():void {
+			_damagedStone = new DamagedBriksView();
+			_damagedStone.x = -_damagedStone.width/2;
+			_damagedStone.y = -_damagedStone.height/2;
+			this.addChild(_damagedStone);
+		}
 	}
 }

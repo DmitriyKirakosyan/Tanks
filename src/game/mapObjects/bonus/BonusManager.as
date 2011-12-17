@@ -61,7 +61,9 @@ public class BonusManager extends EventDispatcher {
 
 	private function onBonusTimer(event:TimerEvent):void{
 		bonusTimer.stop();
-		addMedKit();
+		if (!activeBonuseList || activeBonuseList.length < 2) {
+			addMedKit();
+		}
 	}
 	private function addMedKit():void{
 		var gameBonus:GameBonus;
