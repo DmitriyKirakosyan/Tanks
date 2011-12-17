@@ -184,7 +184,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 		if ( _playBtn.currentFrame <= 11) { _playBtn.nextFrame(); }
 	}
 	private function animationPrev(event:Event):void {
-		if ( _playBtn.currentFrame > 11) { _playBtn.nextFrame(); }
+		_playBtn.prevFrame();
 	}
 
 	private function onPlayBtnClick(event:MouseEvent):void {
