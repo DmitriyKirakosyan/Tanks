@@ -1,6 +1,9 @@
 package game.mapObjects {
+import com.greensock.TimelineLite;
+import com.greensock.TweenLite;
 import com.greensock.TweenMax;
 import com.greensock.easing.Bounce;
+import com.greensock.easing.Linear;
 
 import flash.display.Sprite;
 import flash.events.Event;
@@ -19,6 +22,8 @@ import game.tank.TargetsController;
 import game.tank.weapon.Bullet;
 import game.tank.Tank;
 import game.time.GameTimeZone;
+
+import spark.effects.animation.Timeline;
 
 import tilemap.TileMap;
 
@@ -316,6 +321,26 @@ public class MapObjectsController extends EventDispatcher implements IController
 		bullet.remove();
 		const index:int = _bullets.indexOf(bullet);
 		if (index >= 0) { _bullets.splice(index, 1); }
+		bulletBamEffect(bullet.x,  bullet.y);
+	}
+
+	private function bulletBamEffect(x:Number,  y:Number):void {
+		var bamSprite:Sprite = new Sprite();
+		bamSprite.x = x;
+		bamSprite.y = y;
+		bamSprite.graphics.lineStyle(1, 0);
+		bamSprite.graphics.moveTo(2,  2);
+		bamSprite.graphics.lineTo(7, 7);
+		bamSprite.graphics.moveTo(-2,  2);
+		bamSprite.graphics.lineTo(-7, 7);
+		bamSprite.graphics.moveTo(2,  -2);
+		bamSprite.graphics.lineTo(7, - 7);
+		bamSprite.graphics.moveTo(-2,  -2);
+		bamSprite.graphics.lineTo(- 7, - 7);
+		bamSprite.scaleX = bamSprite.scaleY = .1;
+		_container.addChild(bamSprite);
+		TweenLite.to(bamSprite, .4, {scaleX : 1, scaleY : 1, ease : Linear.easeNone,
+																onComplete : function():void {_container.removeChild(bamSprite); }});
 	}
 
 	private function removeBrick(brick:Brick):void {
