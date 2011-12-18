@@ -55,8 +55,10 @@ public class Tank extends MapObject {
 
 	//for destroy methods
 	public function hide():void {
-		_gun.visible = false;
-		tankBase.visible = false;
+		_gun.alpha -=10;
+		tankBase.alpha -= 10;
+		//_gun.visible = false;
+		//tankBase.visible = false;
 	}
 
 	public function get gun():TankGun {

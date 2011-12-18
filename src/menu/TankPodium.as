@@ -144,9 +144,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 
 	private function createTankSwitchBtns():void {
 		_tankSwitchLeftBtn = new SwitchBtn();
-		_tankSwitchLeftBtn.buttonMode = true;
 		_tankSwitchRightBtn = new SwitchBtn();
-		_tankSwitchRightBtn.buttonMode = true;
 		_tankSwitchRightBtn.rotation = 180;
 		for each (var switchBtn:SwitchBtn in [_tankSwitchLeftBtn, _tankSwitchRightBtn]) {
 			/*switchBtn.graphics.beginFill(0x123f56);
@@ -167,9 +165,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 
 	private function createWeaponSwitchBtns():void {
 		_weaponSwitchLeftBtn = new SwitchBtn();
-		_weaponSwitchLeftBtn.buttonMode = true;
 		_weaponSwitchRightBtn = new SwitchBtn();
-		_weaponSwitchRightBtn.buttonMode = true;
 		_weaponSwitchRightBtn.rotation = 180;
 		for each (var switchBtn:SwitchBtn in [_weaponSwitchLeftBtn, _weaponSwitchRightBtn]) {
 			/*switchBtn.graphics.beginFill(0x1a3fa6);

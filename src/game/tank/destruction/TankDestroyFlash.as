@@ -25,8 +25,11 @@ public class TankDestroyFlash extends TankDestroyMethod{
 		if (_effectSprite) {
 			return;
 		}
-		tank.hide();
-		_effectSprite = new NewGameBtn();
+		//tank.hide();
+		_effectSprite = new Blow();
+		 new TweenMax(tank, 1.5, {alpha : 0});
+		 new TweenMax(_effectSprite, 1.5, {alpha : 0});
+		_effectSprite.scaleX = _effectSprite.scaleY = 1.3;
 		_effectSprite.addEventListener(Event.ENTER_FRAME, onEffectEnterFrame);
 		tank.addChild(_effectSprite);
 	}
