@@ -239,6 +239,9 @@ public class GameController extends EventDispatcher implements IScene{
 	}
 
 	private function showEndWindow():void {
+		if (_endWindow && _container.contains(_endWindow)) {
+			_container.removeChild(_endWindow);
+		}
 		_endWindow = new Sprite();
 		var bkg:Sprite = new Sprite();
 		bkg.graphics.beginFill(0x696969, .7);
