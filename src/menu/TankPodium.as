@@ -176,12 +176,18 @@ public class TankPodium extends EventDispatcher implements IScene{
 	}
 
 	private function onPlayBtnMouseOver(event:MouseEvent):void {
+		if (_playBtn.hasEventListener(Event.ENTER_FRAME)) {
+			_playBtn.removeEventListener(Event.ENTER_FRAME, animationNext);
+			_playBtn.removeEventListener(Event.ENTER_FRAME, animationPrev);
+		}
 		_playBtn.addEventListener(Event.ENTER_FRAME, animationNext);
-		_playBtn.removeEventListener(Event.ENTER_FRAME, animationPrev);
 		//TweenMax.to(_playBtn, .4, {glowFilter:{color:0x91e600, alpha:1, blurX:10, strength : 4, blurY:10}});
 	}
 	private function onPlayBtnMouseOut(event:MouseEvent):void {
-		_playBtn.removeEventListener(Event.ENTER_FRAME, animationNext);
+		if (_playBtn.hasEventListener(Event.ENTER_FRAME)) {
+			_playBtn.removeEventListener(Event.ENTER_FRAME, animationNext);
+			_playBtn.removeEventListener(Event.ENTER_FRAME, animationPrev);
+		}
 		_playBtn.addEventListener(Event.ENTER_FRAME, animationPrev);
 		//TweenMax.to(_playBtn, .4, {glowFilter:{color:0x91e600, alpha:0, strength : 10, blurX:300, blurY:300}});
 	}
