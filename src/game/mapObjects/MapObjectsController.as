@@ -164,7 +164,7 @@ public class MapObjectsController extends EventDispatcher implements IController
 	public function checkObjectsInteract():void {
 		checkHitBonus();
 	}
-
+	//TODO what need to do of this method? clear?
 	private function addTimeZone(timeZone:GameTimeZone):void {
 		if (!_timeZoneList) { _timeZoneList = new Vector.<GameTimeZone>(); }
 		if (timeZone && _timeZoneList.indexOf(timeZone) == -1) {

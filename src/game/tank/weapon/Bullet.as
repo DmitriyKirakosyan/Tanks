@@ -1,4 +1,6 @@
 package game.tank.weapon {
+import com.greensock.easing.Cubic;
+import com.greensock.TweenLite;
 import game.IControllerWithTime;
 import game.tank.*;
 
@@ -117,7 +119,7 @@ public class Bullet extends Sprite implements IControllerWithTime {
 	private function createBulletEffect():BulletEffect {
 		if (_type == TankGun.TAIL_ROCKET) { return BulletEffect.createRocketTailEffect(this);
 		} else if (_type == TankGun.MINIGUN) { return BulletEffect.createMinigunTailEffect(this); }
-
+		
 		return null;
 	}
 }

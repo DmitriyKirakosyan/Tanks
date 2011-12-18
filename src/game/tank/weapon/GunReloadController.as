@@ -1,5 +1,4 @@
 package game.tank.weapon {
-import com.bit101.components.ProgressBar;
 import com.greensock.TweenMax;
 
 import flash.display.Sprite;
@@ -9,7 +8,7 @@ import flash.events.EventDispatcher;
 import game.IControllerWithTime;
 
 public class GunReloadController extends EventDispatcher implements IControllerWithTime{
-	private var _reloadBar:ProgressBar;
+	private var _reloadBar:ReloadBar;
 	private var _reloading:Boolean;
 	private var _reloadTween:TweenMax;
 
@@ -45,7 +44,7 @@ public class GunReloadController extends EventDispatcher implements IControllerW
 			_reloadTween.vars["onComplete"] = null;
 			TweenMax.killTweensOf(_reloadBar);
 		}
-		_reloadTween = new TweenMax(_reloadBar, 1/_speed, { value : 100, onComplete : onReloadComplete });
+		_reloadTween = new TweenMax(_reloadBar, 1/_speed, { scaleX : 1, onComplete : onReloadComplete });
 	}
 
 	public function get reloadBar():Sprite {
@@ -56,16 +55,13 @@ public class GunReloadController extends EventDispatcher implements IControllerW
 
 	private function onReloadComplete():void {
 		_reloading = false;
-		_reloadBar.value = 0;
+		_reloadBar.scaleX = 0;
 		dispatchEvent(new Event(Event.COMPLETE));
 	}
 
 	private function createReloadBar():void {
-		_reloadBar = new ProgressBar();
-		_reloadBar.maximum = 100;
-		_reloadBar.value = 0;
-		_reloadBar.width = 40;
+		_reloadBar = new ReloadBar();
+		_reloadBar.scaleX = 0;
 	}
-
 }
 }

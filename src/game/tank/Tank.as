@@ -115,8 +115,8 @@ public class Tank extends MapObject {
 
 	public function addReloadBar(reloadBar:Sprite):void {
 		this.reloadBar = reloadBar;
-		reloadBar.x = this.x - this.width/2;
-		reloadBar.y = this.y + 20;
+		reloadBar.x = this.x - this.width/2-5;
+		reloadBar.y = this.y + 25;
 		addChild(reloadBar);
 	}
 
@@ -166,6 +166,7 @@ public class Tank extends MapObject {
 
 	private function addGun(gun:TankGun):void {
 		_gun = gun;
+		gun.rotation = tankBase.rotation;
 		this.addChild(gun);
 	}
 
