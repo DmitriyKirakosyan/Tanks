@@ -260,7 +260,6 @@ public class GameController extends EventDispatcher implements IScene{
 		var tanksSprite:Sprite = new Sprite();
 		var tank:Tank;
 		var textField:TextField;
-		if (UserState.instance.firstKilledNum > 0) {
 			tank = Tank.createBotTank(new TankVO(), TankBotController.BASE_BOT);
 			tank.originY += tank.height/2;
 			tank.originX += tank.width/2;
@@ -268,7 +267,6 @@ public class GameController extends EventDispatcher implements IScene{
 			textField = createScoreTF(UserState.instance.firstKilledNum);
 			textField.x = tank.width + 10;
 			tanksSprite.addChild(textField);
-		}
 		if (UserState.instance.secondKilledNum > 0) {
 			tank = Tank.createBotTank(new TankVO(), TankBotController.ADVANCE_BOT);
 			tank.originX = tank.width + 30 + tank.width/2;
