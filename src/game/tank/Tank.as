@@ -18,6 +18,7 @@ public class Tank extends MapObject {
 	public var _defense:TankDefense;
 	public var tankBase:Sprite;
 	private var _liveTab:LiveTab;
+	private var _liveTabBckg:LiveTab;
 	public var reloadBar:Sprite;
 
 	private var _vo:TankVO;
@@ -38,7 +39,7 @@ public class Tank extends MapObject {
 	public static function createPlayerTank(vo:TankVO):Tank {
 		return new Tank(vo, true, ObjectsHp.PLAYER);
 	}
-
+	//TODO LiveTab
 	public function Tank(vo:TankVO, isPlayer:Boolean, hp:Number) {
 		_isPlayer = isPlayer;
 		setHp(hp);
@@ -48,8 +49,13 @@ public class Tank extends MapObject {
 		addGun(new TankGun(vo.weaponType));
 
 		_liveTab = new LiveTab();
-		_liveTab.scaleY = .6;
-		_liveTab.y = -18;
+		_liveTabBckg = new LiveTab();
+		
+		_liveTab.scaleY =  .6; _liveTabBckg.scaleY = .6;
+		_liveTab.y = -18; _liveTabBckg.y = -18;
+		_liveTab.x = _liveTab.x - _liveTab.width/2; _liveTabBckg.x = _liveTabBckg.x - _liveTabBckg.width/2;
+		_liveTabBckg.alpha = .3;
+		this.addChild(_liveTabBckg);
 		this.addChild(_liveTab);
 		this.addChildAt(tankBase, 0);
 	}
@@ -64,6 +70,7 @@ public class Tank extends MapObject {
 		return _gun;
 	}
 	public function get liveTab():LiveTab { return _liveTab; }
+	public function get liveTabBckg():LiveTab { return _liveTabBckg; }
 	
 	public function get ability():uint { return _vo.ability; }
 

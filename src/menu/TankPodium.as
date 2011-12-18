@@ -55,6 +55,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 		_paper = new GameBckg();
 		_tank = Tank.createPlayerTank(new TankVO());
 		_tank.liveTab.visible = false;
+		_tank.liveTabBckg.visible = false;
 		_tank.x = (MapMatrix.MATRIX_WIDTH - _tank.width/32)/2;
 		_tank.y = 10.5;//MapMatrix.MATRIX_HEIGHT/2;
 		createTankSwitchBtns();
@@ -277,6 +278,8 @@ public class TankPodium extends EventDispatcher implements IScene{
 		vo.weaponType = _weapon.type;
 		vo.ability = 1;
 		_tank = Tank.createPlayerTank(vo);
+		_tank.liveTab.visible = false;
+		_tank.liveTabBckg.visible = false;
 		const distance:Number = Math.abs(_defaultTankPoint.x -point.x);
 		_tank.x = point.x < _defaultTankPoint.x ? point.x + 2*distance :point.x - 2 * distance;
 		_tank.alpha = 0;

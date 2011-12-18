@@ -1,4 +1,5 @@
 package game.mapObjects {
+import game.tank.weapon.TankGun;
 import com.greensock.TimelineLite;
 import com.greensock.TweenLite;
 import com.greensock.TweenMax;
@@ -330,10 +331,11 @@ public class MapObjectsController extends EventDispatcher implements IController
 	}
 
 	private function bulletBamEffect(x:Number,  y:Number):void {
-		var bamSprite:Sprite = new Sprite();
+		var bamSprite:BulletBam = new BulletBam();
 		bamSprite.x = x;
 		bamSprite.y = y;
-		bamSprite.graphics.lineStyle(1, 0);
+		bamSprite.rotation = _playerTank.gun.rotation;
+		/*bamSprite.graphics.lineStyle(1, 0);
 		bamSprite.graphics.moveTo(2,  2);
 		bamSprite.graphics.lineTo(7, 7);
 		bamSprite.graphics.moveTo(-2,  2);
@@ -341,10 +343,10 @@ public class MapObjectsController extends EventDispatcher implements IController
 		bamSprite.graphics.moveTo(2,  -2);
 		bamSprite.graphics.lineTo(7, - 7);
 		bamSprite.graphics.moveTo(-2,  -2);
-		bamSprite.graphics.lineTo(- 7, - 7);
-		bamSprite.scaleX = bamSprite.scaleY = .1;
+		bamSprite.graphics.lineTo(- 7, - 7);*/
+		bamSprite.scaleX = bamSprite.scaleY = .05;
 		_container.addChild(bamSprite);
-		TweenLite.to(bamSprite, .4, {scaleX : 1, scaleY : 1, ease : Linear.easeNone,
+		TweenLite.to(bamSprite, .4, {scaleX : .3, scaleY : .3, ease : Linear.easeNone,
 																onComplete : function():void {_container.removeChild(bamSprite); }});
 	}
 
