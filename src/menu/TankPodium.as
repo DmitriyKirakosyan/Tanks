@@ -54,6 +54,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 		_container = container;
 		_paper = new GameBckg();
 		_tank = Tank.createPlayerTank(new TankVO());
+		_tank.liveTab.visible = false;
 		_tank.x = (MapMatrix.MATRIX_WIDTH - _tank.width/32)/2;
 		_tank.y = 10.5;//MapMatrix.MATRIX_HEIGHT/2;
 		createTankSwitchBtns();
@@ -121,6 +122,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 
 	private function createPlayBtn():void {
 		_playBtn = new NewGameBtn();
+		_playBtn.buttonMode = true;
 		_playBtn.x = 300;
 		_playBtn.y = 350;
 		_playBtn.gotoAndStop(1);
@@ -142,7 +144,9 @@ public class TankPodium extends EventDispatcher implements IScene{
 
 	private function createTankSwitchBtns():void {
 		_tankSwitchLeftBtn = new SwitchBtn();
+		_tankSwitchLeftBtn.buttonMode = true;
 		_tankSwitchRightBtn = new SwitchBtn();
+		_tankSwitchRightBtn.buttonMode = true;
 		_tankSwitchRightBtn.rotation = 180;
 		for each (var switchBtn:SwitchBtn in [_tankSwitchLeftBtn, _tankSwitchRightBtn]) {
 			/*switchBtn.graphics.beginFill(0x123f56);
@@ -163,7 +167,9 @@ public class TankPodium extends EventDispatcher implements IScene{
 
 	private function createWeaponSwitchBtns():void {
 		_weaponSwitchLeftBtn = new SwitchBtn();
+		_weaponSwitchLeftBtn.buttonMode = true;
 		_weaponSwitchRightBtn = new SwitchBtn();
+		_weaponSwitchRightBtn.buttonMode = true;
 		_weaponSwitchRightBtn.rotation = 180;
 		for each (var switchBtn:SwitchBtn in [_weaponSwitchLeftBtn, _weaponSwitchRightBtn]) {
 			/*switchBtn.graphics.beginFill(0x1a3fa6);
