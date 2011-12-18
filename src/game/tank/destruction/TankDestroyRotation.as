@@ -42,13 +42,13 @@ public class TankDestroyRotation extends TankDestroyMethod{
 		tank.addChild(_effectSprite);
 		
         _bamTimeline.insert(
-            new TweenMax(tank.tankBase, 1.3, {x : tank.tankBase.x + Math.random()*80-40,
-                                                                y : tank.tankBase.y + Math.random()*80-40,
-                                                                rotation : tank.tankBase.rotation + Math.random()*100})
+            new TweenMax(tank.tankBase, 1.3, {x : tank.tankBase.x + Math.random()*40-20,
+                                                                y : tank.tankBase.y + Math.random()*40-20,
+                                                                rotation : tank.tankBase.rotation + Math.random()*50})
         );
         _bamTimeline.insert(
-            new TweenMax(tank.gun, 1.2, {x : tank.gun.x + Math.random()*400-300,
-                                                            y : tank.tankBase.y + Math.random()*400-300,
+            new TweenMax(tank.gun, 1.2, {x : tank.gun.x + Math.random()*100-50,
+                                                            y : tank.tankBase.y + Math.random()*100-50,
                                                             rotation : tank.tankBase.rotation + Math.random()*300})
         );
        

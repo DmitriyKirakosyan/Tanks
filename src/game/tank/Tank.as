@@ -9,6 +9,7 @@ import game.mapObjects.MapObject;
 import game.mapObjects.ObjectsHp;
 import game.tank.ability.TankAbility;
 import game.tank.destruction.TankDestroyMethod;
+import game.tank.destruction.TankDestroyMethod;
 import game.tank.destruction.TankDestroyMethodFactory;
 import game.tank.weapon.TankGun;
 
@@ -138,7 +139,7 @@ public class Tank extends MapObject {
 	}
 
 	public function bam():void {
-		_destroyMethod = TankDestroyMethodFactory.createRandomMethod(this);
+		_destroyMethod = TankDestroyMethodFactory.createMethodById(0, this);
 		_destroyMethod.addEventListener(TankDestructionEvent.TANK_DESTRAYED, onDestroyComplete);
 		_destroyMethod.destroy();
 		if (_liveTab && this.contains(_liveTab)) { this.removeChild(_liveTab); }
