@@ -51,6 +51,12 @@ public class Tank extends MapObject {
 		this.addChildAt(tankBase, 0);
 	}
 
+	//for destroy methods
+	public function hide():void {
+		_gun.visible = false;
+		tankBase.visible = false;
+	}
+
 	public function get gun():TankGun {
 		return _gun;
 	}

@@ -255,7 +255,6 @@ public class MapObjectsController extends EventDispatcher implements IController
 					if (bullet.selfTank == _playerTank) {
 						addScore(enemyTank);
 					}
-					showBamOnTank(new Point(enemyTank.originX, enemyTank.originY));  //TODO all ok?
 					removeEnemyTank(enemyTank);
 				}
 				break;
