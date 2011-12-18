@@ -47,6 +47,8 @@ public class Tank extends MapObject {
 		addGun(new TankGun(vo.weaponType));
 
 		_liveTab = new LiveTab();
+		_liveTab.scaleY = .6;
+		_liveTab.y = -18;
 		this.addChild(_liveTab);
 		this.addChildAt(tankBase, 0);
 	}
@@ -54,7 +56,8 @@ public class Tank extends MapObject {
 	public function get gun():TankGun {
 		return _gun;
 	}
-
+	public function get liveTab():LiveTab { return _liveTab; }
+	
 	public function get ability():uint { return _vo.ability; }
 
 	public function get baseRotation():Number { return tankBase.rotation; }
@@ -163,6 +166,5 @@ public class Tank extends MapObject {
 		dispatchEvent(new TankDestructionEvent(TankDestructionEvent.TANK_DESTRAYED));
 		trace("[Tank.onDestroyComplete] me destroed");
 	}
-
 }
 }
