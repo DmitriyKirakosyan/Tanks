@@ -24,7 +24,7 @@ public class TankDestroyRotation extends TankDestroyMethod{
     public function TankDestroyRotation(tank:Tank) {
         super(tank);
     }
-
+	//TODO rafuckt this =) maybe too
     override public function destroy():void {
 		 _bamTimeline = new TimelineMax({onComplete : onBamComplete});
 		
@@ -51,7 +51,6 @@ public class TankDestroyRotation extends TankDestroyMethod{
                                                             y : tank.tankBase.y + Math.random()*100-50,
                                                             rotation : tank.tankBase.rotation + Math.random()*300})
         );
-       
     }
 	private function onEffectEnterFrame(event:Event):void {
 		if (_effectSprite.currentFrame >= _effectSprite.totalFrames) {

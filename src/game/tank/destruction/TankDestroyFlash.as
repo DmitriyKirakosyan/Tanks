@@ -21,7 +21,7 @@ public class TankDestroyFlash extends TankDestroyMethod{
 	public function TankDestroyFlash(tank:Tank):void {
 		super(tank);
 	}
-	
+	//TODO rafuckt this =)
 	override public function destroy():void {
 		if (_effectSprite) {
 			return;
