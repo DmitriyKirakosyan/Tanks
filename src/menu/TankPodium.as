@@ -38,10 +38,12 @@ public class TankPodium extends EventDispatcher implements IScene{
 	private var _weaponSwitchRightBtn:SwitchBtn;
 
 	private var _defaultTankPoint:Point;
-	private var _dragBackTween:TweenMax;
+	private var _dragBackTankTween:TweenMax;
 	private var _dragTank:Boolean;
 
 	private var _defaultWeaponPoint:Point;
+	private var _dragBackWeaponTween:TweenMax;
+	private var _dragWeapon:Boolean;
 
 	private var _container:Sprite;
 
@@ -96,8 +98,8 @@ public class TankPodium extends EventDispatcher implements IScene{
 
 	private function addListeners():void {
 		_container.addEventListener(MouseEvent.MOUSE_DOWN, onTankMouseDown);
-		_container.addEventListener(MouseEvent.MOUSE_UP, onTankMouseUp);
-		_container.addEventListener(MouseEvent.MOUSE_MOVE, onTankMouseMove);
+		_container.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+		_container.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 		
 		for each (var switchBtn:Sprite in [_tankSwitchLeftBtn, _tankSwitchRightBtn, _weaponSwitchLeftBtn, _weaponSwitchRightBtn]) {
 			switchBtn.addEventListener(MouseEvent.MOUSE_OVER, onSwitchBtnMouseOver);
@@ -108,8 +110,8 @@ public class TankPodium extends EventDispatcher implements IScene{
 	
 	private function removeListeners():void {
 		_container.removeEventListener(MouseEvent.MOUSE_DOWN, onTankMouseDown);
-		_container.removeEventListener(MouseEvent.MOUSE_UP, onTankMouseUp);
-		_container.removeEventListener(MouseEvent.MOUSE_MOVE, onTankMouseMove);
+		_container.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+		_container.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 		for each (var switchBtn:Sprite in [_tankSwitchLeftBtn, _tankSwitchRightBtn, _weaponSwitchLeftBtn, _weaponSwitchRightBtn]) {
 			switchBtn.removeEventListener(MouseEvent.MOUSE_OVER, onSwitchBtnMouseOver);
 			switchBtn.removeEventListener(MouseEvent.MOUSE_OUT, onSwitchBtnMouseOut);
@@ -223,17 +225,28 @@ public class TankPodium extends EventDispatcher implements IScene{
 	private function onTankMouseDown(event:MouseEvent):void {
 		if (_tank.hitTestPoint(event.stageX, event.stageY)) {
 			_dragTank = true;
-			if (_dragBackTween) { _dragBackTween.kill(); }
+			if (_dragBackTankTween) { _dragBackTankTween.kill(); }
+		} else if (_weapon.hitTestPoint(event.stageX, event.stageY)) {
+			_dragWeapon = true;
+			if (_dragBackWeaponTween) { _dragBackWeaponTween.kill(); }
 		}
 	}
-	private function onTankMouseUp(event:MouseEvent):void {
+	private function onMouseUp(event:MouseEvent):void {
 		_dragTank = false;
+		_dragWeapon = false;
 		if (Math.abs(_tank.x - _defaultTankPoint.x) < .6) {
 			if (_tank.x != _defaultTankPoint.x) {
-				_dragBackTween = new TweenMax(_tank, .4, {x : _defaultTankPoint.x});
+				_dragBackTankTween = new TweenMax(_tank, .4, {x : _defaultTankPoint.x});
 			}
 		} else {
 			switchTanks();
+		}
+		if (Math.abs(_weapon.x - _defaultWeaponPoint.x) < 20) {
+			if (_weapon.x != _defaultWeaponPoint.x) {
+				_dragBackWeaponTween = new TweenMax(_weapon, .4, {x : _defaultWeaponPoint.x});
+			}
+		} else {
+			switchWeapons();
 		}
 	}
 
@@ -270,7 +283,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 	private function switchWeapons(direction:uint = 0):void {
 		var coef:int;
 		if (direction != 0) { coef = direction; } else {
-			coef = _tank.x > _defaultWeaponPoint.x ? 1 : -1;
+			coef = _weapon.x > _defaultWeaponPoint.x ? 1 : -1;
 		}
 		TweenMax.killTweensOf(_weapon);
 		TweenMax.to(_weapon,  .3, {x : _weapon.x + coef * 60, scaleX : 4, scaleY : .1, blurFilter:{blurX:20},
@@ -298,10 +311,13 @@ public class TankPodium extends EventDispatcher implements IScene{
 															blurFilter:{blurX:0}, onComplete : function():void { _weapon.filters = []; }});
 	}
 
-	private function onTankMouseMove(event:MouseEvent):void {
-			if (_dragTank) {
-				_tank.originX = event.stageX;
-			}
+	private function onMouseMove(event:MouseEvent):void {
+		if (_dragTank) {
+			_tank.originX = event.stageX;
+		} else
+		if (_dragWeapon) {
+			_weapon.x = event.stageX;
+		}
 	}
 
 	private function switchScene():void {
