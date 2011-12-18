@@ -58,7 +58,7 @@ public class TankBotController extends TankController{
 
 	public function setTargetTank(targetTank:Tank):void {
 		_targetTank = targetTank;
-		if (!this.hasEventListener(TankEvent.COME_TO_CELL)) {
+		if (!this.hasEventListener(Event.ENTER_FRAME)) {
 			tank.addEventListener(Event.ENTER_FRAME, onTankEnterFrame);
 		}
 	}
@@ -85,8 +85,8 @@ public class TankBotController extends TankController{
 		onMovingComplete();
 	}
 
-	override protected function onTankDestroyed(event:TankDestructionEvent):void {
-		super.onTankDestroyed(event);
+	override public function bam():void {
+		super.bam();
 		tank.removeEventListener(Event.ENTER_FRAME, onTankEnterFrame);
 	}
 
