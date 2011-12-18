@@ -5,12 +5,14 @@
  */
 package game.tank {
 import flash.display.Sprite;
+import flash.events.Event;
 import flash.events.TimerEvent;
 import flash.filters.GlowFilter;
 import flash.geom.Point;
 import flash.utils.Timer;
 
 import game.GameController;
+import game.events.TankDestructionEvent;
 
 import game.events.TankEvent;
 
@@ -22,12 +24,16 @@ public class TankBotController extends TankController{
 
 	private var _waitTimer:Timer;
 
+	private const UPDATE_FRAME_PERIOD:int = 10;
+	private var _currentUpdateCounter:int;
+
 	public static const BASE_BOT:uint = 0;
 	public static const ADVANCE_BOT:uint = 1;
 	public static const HARD_BOT:uint = 2;
 
 	public function TankBotController(container:Sprite, mapMatrix:MapMatrix, strength:uint = BASE_BOT) {
 		super(container, mapMatrix);
+		_currentUpdateCounter = 0;
 		_strength = strength;
 		_waitTimer = new Timer(3000);
 	}
@@ -39,6 +45,11 @@ public class TankBotController extends TankController{
 		}
 	}
 
+	override public function remove():void {
+		super.remove();
+		tank.removeEventListener(Event.ENTER_FRAME, onTankEnterFrame);
+	}
+
 	public function get strength():uint { return _strength; }
 
 	override protected function createTank(tankVO:TankVO):void {
@@ -48,14 +59,14 @@ public class TankBotController extends TankController{
 	public function setTargetTank(targetTank:Tank):void {
 		_targetTank = targetTank;
 		if (!this.hasEventListener(TankEvent.COME_TO_CELL)) {
-			this.addEventListener(TankEvent.COME_TO_CELL, onTankComeToCell);
+			tank.addEventListener(Event.ENTER_FRAME, onTankEnterFrame);
 		}
 	}
 
 	public function removeTargetTank():void {
 		if (_targetTank) {
 			_targetTank = null;
-			this.removeEventListener(TankEvent.COME_TO_CELL, onTankComeToCell);
+			tank.removeEventListener(Event.ENTER_FRAME, onTankEnterFrame);
 		}
 	}
 
@@ -74,7 +85,19 @@ public class TankBotController extends TankController{
 		onMovingComplete();
 	}
 
-	private function onTankComeToCell(event:TankEvent):void {
+	override protected function onTankDestroyed(event:TankDestructionEvent):void {
+		super.onTankDestroyed(event);
+		tank.removeEventListener(Event.ENTER_FRAME, onTankEnterFrame);
+	}
+
+	private function onTankEnterFrame(event:Event):void {
+		if (_currentUpdateCounter >= UPDATE_FRAME_PERIOD) {
+			updateTankThink();
+			_currentUpdateCounter = 0;
+		} else { _currentUpdateCounter++; }
+	}
+
+	private function updateTankThink():void {
 		if (!_targetTank || !this.wannaShot) { return; }
 		if (Math.abs(_targetTank.originX - tank.originX) < GameController.CELL ||
 				Math.abs(_targetTank.originY - tank.originY) < GameController.CELL) {

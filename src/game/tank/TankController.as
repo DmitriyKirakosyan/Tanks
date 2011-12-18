@@ -184,7 +184,7 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 
 	/* Internal functions */
 
-	private function onTankDestroyed(event:TankDestructionEvent):void {
+	protected function onTankDestroyed(event:TankDestructionEvent):void {
 		if (!_container.contains(tank)) {
 			trace("tank not on container, fix it [TankController.onTankDestoryed]");
 			return;
