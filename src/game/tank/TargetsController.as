@@ -96,6 +96,17 @@ import flash.utils.Timer;
 			}
 			_enemyControllers = new Vector.<TankBotController>();
 		}
+
+		public function strengthOf(tank:Tank):uint {
+			var result = TankBotController.BASE_BOT;
+			for each (var tankController in _enemyControllers) {
+				if (tankController.tank == tank) {
+					result = tankController.strength;
+					break;
+				}
+			}
+			return result;
+		}
 		
 		/* For Debug */
 		

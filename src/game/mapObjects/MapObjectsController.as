@@ -18,12 +18,15 @@ import game.mapObjects.bonus.BonusManager;
 import game.mapObjects.bonus.GameBonus;
 import game.matrix.MapMatrix;
 import game.matrix.MatrixItemIds;
+import game.tank.TankBotController;
 import game.tank.TargetsController;
 import game.tank.weapon.Bullet;
 import game.tank.Tank;
 import game.time.GameTimeZone;
 
 import spark.effects.animation.Timeline;
+
+import state.UserState;
 
 import tilemap.TileMap;
 
@@ -249,6 +252,9 @@ public class MapObjectsController extends EventDispatcher implements IController
 				removeBullet(bullet);
 				enemyTank.damage(bullet.damageStrength);
 				if (enemyTank.destroyed) {
+					if (bullet.selfTank == _playerTank) {
+						addScore(enemyTank);
+					}
 					showBamOnTank(new Point(enemyTank.originX, enemyTank.originY));  //TODO all ok?
 					removeEnemyTank(enemyTank);
 				}
@@ -364,6 +370,19 @@ public class MapObjectsController extends EventDispatcher implements IController
 	private function removeEnemyTank(tank:Tank):void {
 		_targetsController.killEnemyTank(tank);
 	}
-		
+
+	private function addScore(enemyTank:Tank):void {
+		switch (_targetsController.strengthOf(enemyTank)) {
+			case TankBotController.ADVANCE_BOT :
+				UserState.instance.incSecondKilledNum();
+				break;
+			case TankBotController.HARD_BOT :
+				UserState.instance.incThirdKilledNum();
+				break;
+			default  :
+				UserState.instance.incFirstKilledNum();
+		}
+	}
+
 }
 }

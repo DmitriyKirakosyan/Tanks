@@ -39,6 +39,8 @@ public class TankBotController extends TankController{
 		}
 	}
 
+	public function get strength():uint { return _strength; }
+
 	override protected function createTank(tankVO:TankVO):void {
 		tank = Tank.createBotTank(tankVO, _strength);
 	}

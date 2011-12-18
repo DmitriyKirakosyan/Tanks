@@ -7,8 +7,7 @@ import game.SceneController;
 [SWF(width=600, height=600, frameRate=25)]
 	public class Main extends Sprite {
 		private var container:Sprite; 
-		public var gameController:GameController;
-		
+
 		public function Main() {
 			container = new Sprite(); 
 			this.addChild(container);

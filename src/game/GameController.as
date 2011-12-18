@@ -1,5 +1,10 @@
 package game {
+import com.bit101.components.Text;
+
 import flash.events.Event;
+import flash.filters.BlurFilter;
+import flash.text.TextField;
+import flash.text.TextFieldAutoSize;
 
 import game.Debug.DebugController;
 import game.events.DamageObjectEvent;
@@ -8,7 +13,10 @@ import game.events.SceneEvent;
 import game.mapObjects.MapEditor;
 import game.mapObjects.bonus.GameBonus;
 import game.tank.PlayerTankController;
+import game.tank.Tank;
+import game.tank.TankBotController;
 import game.tank.TankMovementListener;
+import game.tank.TankVO;
 import game.tank.ability.TankAbility;
 
 import pathfinder.Pathfinder;
@@ -38,6 +46,7 @@ public class GameController extends EventDispatcher implements IScene{
 	private var _timeController:TimeController;
 	private var _debugController:DebugController;
 	private var _mouseDown:Boolean;
+	private var _endWindow:Sprite;
 
 	private var _pointUnderMouse:Point;
 
@@ -55,7 +64,7 @@ public class GameController extends EventDispatcher implements IScene{
 		_tankController.init(UserState.instance.tankVO);
 		initMapObjectsController();
 		addListeners();
-		_debugController.open();
+		//_debugController.open();
 	}
 
 	public function remove():void {
@@ -64,7 +73,7 @@ public class GameController extends EventDispatcher implements IScene{
 		_mouseDrawController.remove();
 		_tankController.remove();
 		_mapObjectsController.remove();
-		_debugController.close();
+		//_debugController.close();
 		_mouseDown = false;
 	}
 
@@ -94,7 +103,7 @@ public class GameController extends EventDispatcher implements IScene{
 		_mapObjectsController = new MapObjectsController(_mapMatrix, _container);
 		_tankMovementListener = new TankMovementListener(_tankController, _mapObjectsController, _mouseDrawController);
 		_timeController = new TimeController(_container);
-		_debugController = new DebugController(_container, this);
+		//_debugController = new DebugController(_container, this);
 		_mapEditor = new MapEditor(_container, _mapObjectsController, _mapMatrix);
 		initTimeController();
 	}
@@ -146,6 +155,7 @@ public class GameController extends EventDispatcher implements IScene{
 		if(_tankController.tank.destroyed) {
 			_tankController.bam();
 			_mapObjectsController.targetsController.cleanTargetTank();
+			showEndWindow();
 			_container.addEventListener(MouseEvent.CLICK, onClick);
 		} else {
 			_mapObjectsController.dropBonus(GameBonus.MEDKIT);
@@ -156,6 +166,7 @@ public class GameController extends EventDispatcher implements IScene{
 	}
 
 	private function onClick(event:MouseEvent):void {
+		hideEndWindow();
 		_container.removeEventListener(MouseEvent.CLICK, onClick);
 		dispatchEvent(new SceneEvent(SceneEvent.WANT_REMOVE));
 	}
@@ -225,6 +236,75 @@ public class GameController extends EventDispatcher implements IScene{
 				_timeController.slowDown();
 			}
 		}
+	}
+
+	private function showEndWindow():void {
+		_endWindow = new Sprite();
+		var bkg:Sprite = new Sprite();
+		bkg.graphics.beginFill(0x696969, .7);
+		bkg.graphics.drawRect(-100, -50, 200, 100);
+		bkg.graphics.endFill();
+		bkg.filters = [new BlurFilter()];
+		_endWindow.addChild(bkg);
+		_endWindow.x = MapMatrix.MATRIX_HEIGHT * GameController.CELL/2;
+		_endWindow.y = MapMatrix.MATRIX_WIDTH * GameController.CELL/2;
+		showResultOnEndWindow();
+		_container.addChild(_endWindow);
+	}
+
+	private function showResultOnEndWindow():void {
+		if (!_endWindow) { return; }
+		var tanksSprite:Sprite = new Sprite();
+		var tank:Tank;
+		var textField:TextField;
+		if (UserState.instance.firstKilledNum > 0) {
+			tank = Tank.createBotTank(new TankVO(), TankBotController.BASE_BOT);
+			tank.originY += tank.height/2;
+			tank.originX += tank.width/2;
+			tanksSprite.addChild(tank);
+			textField = createScoreTF(UserState.instance.firstKilledNum);
+			textField.x = tank.width + 10;
+			tanksSprite.addChild(textField);
+		}
+		if (UserState.instance.secondKilledNum > 0) {
+			tank = Tank.createBotTank(new TankVO(), TankBotController.ADVANCE_BOT);
+			tank.originX = tank.width + 30 + tank.width/2;
+			tank.originY += tank.height/2;
+			tanksSprite.addChild(tank);
+			textField = createScoreTF(UserState.instance.secondKilledNum);
+			textField.x = tank.width*2 + 40;
+			tanksSprite.addChild(textField);
+		}
+		if (UserState.instance.thirdKilledNum > 0) {
+			tank = Tank.createBotTank(new TankVO(), TankBotController.HARD_BOT);
+			tank.originX = tank.width*2 + 60 + tank.width/2;
+			tank.originY += tank.height/2;
+			tanksSprite.addChild(tank);
+			textField = createScoreTF(UserState.instance.firstKilledNum);
+			textField.x = tank.width + 10;
+			tanksSprite.addChild(textField);
+			textField = createScoreTF(UserState.instance.thirdKilledNum);
+			textField.x = tank.width*3 + 70;
+			tanksSprite.addChild(textField);
+		}
+		tanksSprite.y = -tanksSprite.height/2;
+		tanksSprite.x = -tanksSprite.width/2;
+		_endWindow.addChild(tanksSprite);
+	}
+
+	private function createScoreTF(value:int):TextField {
+		var result:TextField = new TextField();
+		result.selectable = false;
+		result.autoSize = TextFieldAutoSize.LEFT;
+		result.text = String(value);
+		result.y = 20;
+		result.textColor = 0xffffff
+		return result;
+	}
+
+	private function hideEndWindow():void {
+		if (_container.contains(_endWindow)) { _container.removeChild(_endWindow); }
+
 	}
 
 }
