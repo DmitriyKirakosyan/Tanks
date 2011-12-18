@@ -70,6 +70,10 @@ public class TankBotController extends TankController{
 
 	public function hasTargetTank():Boolean { return _targetTank != null; }
 
+	public function standHere():void {
+		onMovingComplete();
+	}
+
 	private function onTankComeToCell(event:TankEvent):void {
 		if (!_targetTank || !this.wannaShot) { return; }
 		if (Math.abs(_targetTank.originX - tank.originX) < GameController.CELL ||

@@ -4,6 +4,7 @@ import game.events.TankShotingEvent;
 import game.events.TankEvent;
 import game.matrix.MapMatrix;
 import game.tank.TankBotController;
+import game.tank.TankBotController;
 
 import pathfinder.Pathfinder;
 import game.events.TargetsControllerEvent;
@@ -114,7 +115,7 @@ import flash.utils.Timer;
 		public function get enemyControllers():Vector.<TankBotController> { return _enemyControllers; }
 		public function get timerAddTank():Timer { return _timer; }
 		public function get playerTank():Tank { return _playerTank; }
-		public function set moveEnemy(value:TankController):void { moveEnemyTank(value); }
+		public function set moveEnemy(value:TankController):void { moveEnemyTank(value as TankBotController); }
 		
 		/* Internal functions */
 		
@@ -133,7 +134,7 @@ import flash.utils.Timer;
 			_enemyControllers.push(enemyTank);
 		}
 
-		private function moveEnemyFromBackstage(enemy:TankController):void {
+		private function moveEnemyFromBackstage(enemy:TankBotController):void {
 			var rnd:Number = Math.random();
 			trace("rnd "  + rnd);
 			var x:Number = rnd < .5 ? (1 + int(rnd*2 * (MapMatrix.MATRIX_WIDTH-1))) : rnd < 7.5 ? -1 : MapMatrix.MATRIX_WIDTH;
@@ -159,7 +160,7 @@ import flash.utils.Timer;
 		}
 		
 		private function onEnemyMovingComplete(event:TankEvent):void {
-				moveEnemyTank(event.tankController);
+				moveEnemyTank(event.tankController as TankBotController);
 		}
 		
 		private function onEnemyShotEvent(event:TankShotingEvent):void {
@@ -167,7 +168,7 @@ import flash.utils.Timer;
 		}
 		
 		
-		private function moveEnemyTank(enemyTankController:TankController):void {
+		private function moveEnemyTank(enemyTankController:TankBotController):void {
 			var toPoint:Point = (TankBotController(enemyTankController)).getTargetMovePoint();
 			if (!toPoint) {
 				var numAttempts:int = 30;
@@ -188,6 +189,9 @@ import flash.utils.Timer;
 			}
 			const path:Vector.<Point> = Pathfinder.getPath(new Point(enemyTankController.tank.x, enemyTankController.tank.y),
 																										toPoint);
+			if (path.length == 0) {
+				enemyTankController.standHere();
+			}
 			addPathToEnemyTankController(path, enemyTankController);
 		}	
 	

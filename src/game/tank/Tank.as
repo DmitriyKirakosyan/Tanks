@@ -1,6 +1,8 @@
 package game.tank {
 import com.greensock.TweenMax;
 
+import flash.display.DisplayObject;
+
 import flash.display.Sprite;
 
 import game.events.TankDestructionEvent;
@@ -54,7 +56,7 @@ public class Tank extends MapObject {
 		_liveTab.scaleY =  .6; _liveTabBckg.scaleY = .6;
 		_liveTab.y = -18; _liveTabBckg.y = -18;
 		_liveTab.x = _liveTab.x - _liveTab.width/2; _liveTabBckg.x = _liveTabBckg.x - _liveTabBckg.width/2;
-		_liveTabBckg.alpha = .3;
+		_liveTabBckg.alpha = .18;
 		this.addChild(_liveTabBckg);
 		this.addChild(_liveTab);
 		this.addChildAt(tankBase, 0);
@@ -150,7 +152,9 @@ public class Tank extends MapObject {
 		if (_liveTab && this.contains(_liveTab)) { this.removeChild(_liveTab); }
 	}
 
-
+	override public function hitTestObject(object:DisplayObject):Boolean {
+		return tankBase.hitTestObject(object) || _gun.hitTestObject(object);
+	}
 
 	public function updateSpeedup():void { _speedup = 0; }
 

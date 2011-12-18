@@ -27,8 +27,11 @@ public class Pathfinder{
 		if (cantWalk(from, to)) { return bestPath; }
 		init(from, to);
 		waveAlg(_from, _from, _to, cloneMatrix());
-		if (bestPath.length == 0) { waveAlg(_from, _from, _to, makeFreeMatrix()); }
-		bestPath.push(to);
+		if (bestPath.length != 0) {
+			bestPath.shift();
+			bestPath.push(to);
+		}
+		//if (bestPath.length == 0) { waveAlg(_from, _from, _to, makeFreeMatrix()); }
 		return  bestPath;
 	}
 	
@@ -101,7 +104,6 @@ public class Pathfinder{
 	private static function getPathFromPathMatrix(currentPoint:Point):Vector.<Point>{
 		var currentPath:Vector.<Point> = new Vector.<Point>;
 		recursionPathGetter(currentPoint, currentPath);
-		currentPath.shift();
 		return currentPath;
 	}
 	private static function recursionPathGetter(currPoint:Point, currPath:Vector.<Point>):Point{

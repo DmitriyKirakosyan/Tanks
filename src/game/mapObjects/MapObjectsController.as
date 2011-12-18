@@ -249,7 +249,7 @@ public class MapObjectsController extends EventDispatcher implements IController
 
 	private function checkHitEnemyTank(bullet:Bullet):void {
 		for each (var enemyTank:Tank in _targetsController.getEnemyTanks()) {
-			if (enemyTank != bullet.selfTank && bullet.hitTestObject(enemyTank)) {
+			if (enemyTank != bullet.selfTank && enemyTank.hitTestObject(bullet)) {
 				removeBullet(bullet);
 				enemyTank.damage(bullet.damageStrength);
 				if (enemyTank.destroyed) {
@@ -288,7 +288,7 @@ public class MapObjectsController extends EventDispatcher implements IController
 	private function checkHitPlayerTank(bullet:Bullet):void {
 		if (_playerTankKilled || !_playerTank) { return; }
 
-		if (_playerTank != bullet.selfTank && bullet.hitTestObject(_playerTank)) {
+		if (_playerTank != bullet.selfTank && _playerTank.hitTestObject(bullet)) {
 			removeBullet(bullet);
 			if (!_playerTank.hasDefence()) {
 				dispatchEvent(new DamageObjectEvent(DamageObjectEvent.DAMAGE_PLAYER_TANK, _playerTank, bullet.damageStrength));
