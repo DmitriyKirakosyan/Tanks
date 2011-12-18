@@ -167,7 +167,7 @@ public class MouseDrawController extends EventDispatcher{
 		var tempPoint:Point;
 		var distance:Number = Point.distance(lastPoint, _currentPoint);
 		if (lastPoint) {
-			for (var i:int = 0; i < distance; i+= 10) {
+			for (var i:int = 0; i < distance; i+= 3) {
 				tempPoint = Point.interpolate(lastPoint, _currentPoint, 1 - i/distance);
 				addNewPathPartIfNeed(tempPoint);
 			}

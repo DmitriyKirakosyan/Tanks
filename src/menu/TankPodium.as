@@ -205,12 +205,12 @@ public class TankPodium extends EventDispatcher implements IScene{
 
 	private function onSwitchBtnMouseOver(event:MouseEvent):void {
 		//event.target["alpha"] = .4;
-		TweenMax.to(event.target, .4, {glowFilter:{color:0x91e600, alpha:1, blurX:10, strength : 4, blurY:10}});
+		TweenMax.to(event.target, .4, {glowFilter:{color:0xb5b5b5, alpha:1, blurX:10, strength : 4, blurY:10}});
 	}
 
 	private function onSwitchBtnMouseOut(event:MouseEvent):void {
 		//event.target["alpha"] = 1;
-		TweenMax.to(event.target, 4, {glowFilter:{color:0x91e600, alpha:0, strength : 10, blurX:300, blurY:300}});
+		TweenMax.to(event.target, 4, {glowFilter:{color:0xb5b5b5, alpha:0, strength : 10, blurX:300, blurY:300}});
 	}
 
 	private function addPlayBtn():void {
