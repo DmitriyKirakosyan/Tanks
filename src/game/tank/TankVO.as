@@ -6,14 +6,27 @@
  * To change this template use File | Settings | File Templates.
  */
 package game.tank {
+import game.mapObjects.ObjectsHp;
+
 public class TankVO {
 	public var tankBase:uint;
 	public var destroyMethod:uint;
 	public var weaponType:uint;
+	public var hp:int;
+	public var speed:int;
 	public var ability:uint;
 
 	public static const DEFAULT_BASE:uint = 0;
 	public static const BRICK_BASE:uint = 1;
+
+	public function TankVO():void {
+		tankBase = DEFAULT_BASE;
+		destroyMethod = 0;
+		weaponType = 0;
+		hp = ObjectsHp.PLAYER;
+		speed = 5;
+		ability = 0; //coming soon
+	}
 
 	public function getClone():TankVO {
 		var res:TankVO = new TankVO();

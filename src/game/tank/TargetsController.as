@@ -115,8 +115,8 @@ import flash.utils.Timer;
 			enemyTank.addEventListener(TankShotingEvent.WAS_SHOT, onEnemyShotEvent);
 
 			var tankVO:TankVO = new TankVO();
-			tankVO.weaponType = 1;
-			enemyTank.init(new TankVO());
+			tankVO.weaponType = int(Math.random() * 3);
+			enemyTank.init(tankVO);
 			moveEnemyFromBackstage(enemyTank);
 			if (_playerTank && !enemyTank.hasTargetTank()) { enemyTank.setTargetTank(_playerTank); }
 			_enemyControllers.push(enemyTank);
