@@ -143,7 +143,7 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 	public function addPointToMovePath(point:Point):void {
 		if (!point) { return; }
 		const speedCoef:Number = _mapMatrix.getSpeedForTank(point);
-		_movingTimeline.append(new TweenMax(tank, speedCoef * (.9 - tank.speedup--),
+		_movingTimeline.append(new TweenMax(tank, speedCoef,
 					{x : point.x, y : point.y,
 					ease : Linear.easeNone,
 					onStart : onStartMoveToPathNode,
