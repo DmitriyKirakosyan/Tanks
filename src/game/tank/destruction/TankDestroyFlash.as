@@ -4,6 +4,7 @@
  * Time: 11:51 PM
  */
 package game.tank.destruction {
+import flash.filters.GlowFilter;
 import flash.display.MovieClip;
 import flash.display.Sprite;
 import flash.events.Event;
@@ -20,7 +21,7 @@ public class TankDestroyFlash extends TankDestroyMethod{
 	public function TankDestroyFlash(tank:Tank):void {
 		super(tank);
 	}
-
+	
 	override public function destroy():void {
 		if (_effectSprite) {
 			return;
@@ -30,6 +31,7 @@ public class TankDestroyFlash extends TankDestroyMethod{
 		 new TweenMax(tank, 1.5, {alpha : 0});
 		 new TweenMax(_effectSprite, 1.5, {alpha : 0});
 		_effectSprite.scaleX = _effectSprite.scaleY = 1.3;
+		_effectSprite.filters = [new GlowFilter(0x000000, .7,5,5,2,1,false,false)];
 		_effectSprite.addEventListener(Event.ENTER_FRAME, onEffectEnterFrame);
 		tank.addChild(_effectSprite);
 	}

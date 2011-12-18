@@ -6,6 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 package game.tank.destruction {
+import flash.filters.GlowFilter;
 import flash.events.Event;
 import flash.display.MovieClip;
 import game.events.TankDestructionEvent;
@@ -36,6 +37,7 @@ public class TankDestroyRotation extends TankDestroyMethod{
             new TweenMax(_effectSprite, 1.5, {alpha : 0})
         );
 		_effectSprite.scaleX = _effectSprite.scaleY = 1.3;
+		_effectSprite.filters = [new GlowFilter(0x000000, .7,5,5,2,1,false,false)];
 		_effectSprite.addEventListener(Event.ENTER_FRAME, onEffectEnterFrame);
 		tank.addChild(_effectSprite);
 		
