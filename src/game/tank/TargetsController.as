@@ -196,7 +196,7 @@ import flash.utils.Timer;
 		}
 		
 		private function createTargetForTimer (event:TimerEvent):void {
-			if (_enemyControllers.length < 5 && Math.random() < .5) {
+			if (_enemyControllers.length < 6 && Math.random() < .9) {
 				createTarget();
 			}
 		}
