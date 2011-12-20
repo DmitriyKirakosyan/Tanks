@@ -28,7 +28,7 @@ public class PathShape extends Sprite{
 		_type = type;
 		draw();
 	}
-
+	//TODO clear comments
 	private function draw():void {
 		/*this.graphics.beginFill(0xffffff);
 		if (_type == RECTANGLE) {

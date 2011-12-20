@@ -307,8 +307,8 @@ public class MapObjectsController extends EventDispatcher implements IController
 			dispatchEvent(GameBonusEvent.createBonusApplyToPlayerEvent(gameBonus));
 		}
 	}
-
-	private function showBamOnTank(point:Point, player:Boolean = false):void {
+	//TODO Я удалил эту кривую swc
+	/*private function showBamOnTank(point:Point, player:Boolean = false):void {
 		const bam:BamView = new BamView();
 		bam.x = point.x - bam.width/2;
 		bam.y = point.y - bam.height/2;
@@ -317,7 +317,7 @@ public class MapObjectsController extends EventDispatcher implements IController
 		_container.addChild(bam);
 		TweenMax.to(bam, .9, {scaleX : 1, scaleY : 1, alpha : 1, ease : Bounce.easeOut,
 								onComplete: function():void {if (!player) {_container.removeChild(bam); }}});
-	}
+	}*/
 
 	private function onBulletComplete(bullet:Bullet):void {
 		removeBullet(bullet);
