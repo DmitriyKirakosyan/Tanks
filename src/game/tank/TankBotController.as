@@ -40,9 +40,6 @@ public class TankBotController extends TankController{
 
 	override public function init(tankVO:TankVO):void {
 		super.init(tankVO);
-		if (_strength != BASE_BOT) {
-			tank.filters = _strength == ADVANCE_BOT ? [new GlowFilter()] : [new GlowFilter(0)];
-		}
 	}
 
 	override public function remove():void {

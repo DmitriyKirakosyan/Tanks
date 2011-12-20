@@ -4,11 +4,13 @@ import com.greensock.TweenMax;
 import flash.display.DisplayObject;
 
 import flash.display.Sprite;
+import flash.filters.GlowFilter;
 
 import game.events.TankDestructionEvent;
 
 import game.mapObjects.MapObject;
 import game.mapObjects.ObjectsHp;
+import game.tank.TankBotController;
 import game.tank.ability.TankAbility;
 import game.tank.destruction.TankDestroyMethod;
 import game.tank.destruction.TankDestroyMethod;
@@ -35,7 +37,9 @@ public class Tank extends MapObject {
 	public static function createBotTank(vo:TankVO, strength:uint):Tank {
 		var hp:Number = strength == TankBotController.BASE_BOT ? ObjectsHp.FIST_BOT :
 										strength == TankBotController.ADVANCE_BOT ? ObjectsHp.SECOND_BOT : ObjectsHp.THIRD_BOT;
-		return new Tank(vo, false, hp);
+		var tank:Tank = new Tank(vo, false, hp);
+		tank.filters = strength == TankBotController.ADVANCE_BOT ? [new GlowFilter()] : [new GlowFilter(0)];
+		return tank;
 	}
 
 	public static function createPlayerTank(vo:TankVO):Tank {

@@ -61,6 +61,10 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 	public function get wannaShot():Boolean { return _wannaShot; }
 	public function get gunController():TankGunController { return _gunController; }
 
+	/**
+	 * calls createTank function
+	 * @param tankVO -- tank vo
+	 */
 	public function init(tankVO:TankVO):void {
 		createTank(tankVO);
 		_gunController = new TankGunController(tank);

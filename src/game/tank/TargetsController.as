@@ -22,7 +22,7 @@ import flash.utils.Timer;
 		private var _mapMatrix:MapMatrix;
 		private var _playerTank:Tank;
 		private var _levelStrength:Number;
-		
+
 		public function TargetsController(container:Sprite, mapMatrix:MapMatrix) {
 			_container = container;
 			_mapMatrix = mapMatrix;
