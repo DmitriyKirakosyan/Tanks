@@ -48,9 +48,11 @@ public class TankPodium extends EventDispatcher implements IScene{
 	private var _container:Sprite;
 
 	private var _playBtn:NewGameBtn;
-	private var _playBtnTxt:TextField;
+
+	private var _closed:Boolean;
 
 	public function TankPodium(container:Sprite) {
+		_closed = true;
 		_container = container;
 		_paper = new GameBckg();
 		_tank = Tank.createPlayerTank(new TankVO());
@@ -67,6 +69,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 	}
 
 	public function open():void {
+		_closed = true;
 		_container.addChild(_paper);
 
 		_container.addChild(_tank);
@@ -94,6 +97,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 		_container.removeChild(_weaponSwitchRightBtn);
 
 		_container.removeChild(_paper);
+		_closed = true;
 	}
 
 	/* Internal functions */
@@ -119,6 +123,10 @@ public class TankPodium extends EventDispatcher implements IScene{
 			switchBtn.removeEventListener(MouseEvent.MOUSE_OUT, onSwitchBtnMouseOut);
 			switchBtn.removeEventListener(MouseEvent.CLICK, onSwitchBtnClick);
 		}
+	}
+
+	private function stopSwitching():void {
+
 	}
 
 	private function createPlayBtn():void {
@@ -271,6 +279,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 	}
 
 	private function onTankShiftComplete():void {
+		if (_closed) { return; }
 		if (_container.contains(_tank)) { _container.removeChild(_tank); }
 		const vo:TankVO = new TankVO();
 		const point:Point = new Point(_tank.x,  _tank.y);
@@ -302,6 +311,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 	}
 
 	private function onWeaponShiftComplete():void {
+		if (_closed) { return; }
 		if (_container.contains(_weapon)) { _container.removeChild(_weapon); }
 		const point:Point = new Point(_weapon.x,  _weapon.y);
 		var weaponType:uint;
