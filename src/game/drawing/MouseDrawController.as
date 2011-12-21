@@ -86,6 +86,11 @@ public class MouseDrawController extends EventDispatcher{
 		_container.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 	}
 
+	public function stopDrawing():void {
+		_container.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+		_drawing = false;
+	}
+
 	public function removePart():void {
 		if (!_pathParts || _pathParts.length == 0) {
 			trace("[MouseDrawingController.removePart] why no parts??");
@@ -201,11 +206,6 @@ public class MouseDrawController extends EventDispatcher{
 		if (_pathOfMatrixPoints) {
 			dispatchEvent(new DrawingControllerEvent(DrawingControllerEvent.DRAWING_COMPLETE));
 		}
-	}
-
-	private function stopDrawing():void {
-		_container.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-		_drawing = false;
 	}
 
 	private function newPoint(point:Point):Boolean {

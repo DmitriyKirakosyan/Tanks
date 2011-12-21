@@ -195,6 +195,7 @@ public class GameController extends EventDispatcher implements IScene{
 
 	private function onContainerMouseOut(event:MouseEvent):void {
 		timeController.normalize();
+		_mouseDrawController.stopDrawing();
 	}
 
 	private function onEnterFrame(event:Event):void {
