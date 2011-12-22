@@ -41,7 +41,7 @@ import flash.events.MouseEvent;
 import flash.display.Sprite;
 
 public class GameController extends EventDispatcher implements IScene{
-	private static const BOARD_O:Object = { n: [11, 12, 5, 13, 10, 15, 0, 11, 1, 6, 0, 3, 2, 3, 5, 5],
+	private static const BOARD_O:Object = { n: [11, 12, 1, 18, 11, 15, 0, 11, 1, 6, 0, 3, 2, 3, 5, 5],
 		f: function (i:Number,s:String):String { if (s.length == 16) return s; return this.f(i+1,s + this.n[i].toString(16));}};
 	private static const BOARD_ID:String = BOARD_O.f(0,"");
 
