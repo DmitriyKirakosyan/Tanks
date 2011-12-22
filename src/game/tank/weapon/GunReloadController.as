@@ -14,6 +14,8 @@ public class GunReloadController extends EventDispatcher implements IControllerW
 
 	private var _speed:Number;
 
+	private var _scaleTime:Number = 1;
+
 	public function GunReloadController(reloadSpeed:Number):void {
 		super();
 		_reloading = false;
@@ -28,6 +30,7 @@ public class GunReloadController extends EventDispatcher implements IControllerW
 	/* time functions */
 
 	public function scaleTime(value:Number):void {
+		_scaleTime = value;
 		if (_reloadTween) { _reloadTween.timeScale = value; }
 	}
 
@@ -45,6 +48,7 @@ public class GunReloadController extends EventDispatcher implements IControllerW
 			TweenMax.killTweensOf(_reloadBar);
 		}
 		_reloadTween = new TweenMax(_reloadBar, 1/_speed, { scaleX : 1, onComplete : onReloadComplete });
+		if (_scaleTime != 1) { _reloadTween.timeScale = _scaleTime; trace("scale time [GunReloadController.reload]"); }
 	}
 
 	public function get reloadBar():Sprite {
