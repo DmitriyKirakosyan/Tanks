@@ -61,7 +61,9 @@ public class MapObjectsController extends EventDispatcher implements IController
 	/*API*/
 
 	public function get targetsController():TargetsController { return _targetsController; }
-
+	public function get bricks():Vector.<Brick> { return _bricks; }
+	public function get stones():Vector.<Stone> { return _stones; }
+	
 	public function dropBonus(bonusType:uint):void { _bonusManager.dropBonus(bonusType); }
 
 	public function removeMapObjects():void {

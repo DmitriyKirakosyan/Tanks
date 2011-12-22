@@ -21,6 +21,7 @@ public class MapEditor {
 
 	private var _draggingContainer:Sprite;
 	private var _mapMatrix:MapMatrix;
+	private var _xmlMap:XML;
 
 	private var _cantPutFilter:GlowFilter = new GlowFilter();
 
@@ -43,12 +44,21 @@ public class MapEditor {
 	}
 
 	public function saveMap():void {
+		saveMapInXML();
 		var fileReference:FileReference = new FileReference();
-		fileReference.save(JSON.encode(_mapMatrix.matrix), "map");
+		fileReference.save(_xmlMap, "map.xml");
 	}
-
 	/* Internal functions */
-
+	private function saveMapInXML():void
+	{
+		//JSON.encode(_mapMatrix.matrix)
+		_xmlMap = new XML(<LEVEL></LEVEL>);
+		_xmlMap.BRICKS = _objectsController.bricks.length;
+		_xmlMap.STONES = _objectsController.stones.length;
+		_xmlMap.MAP_OBJECTS = _mapMatrix.matrix;
+		trace(_xmlMap);
+	}
+	
 	private function takeObject(object:MapObject):void {
 		_draggingObject = object;
 		_container.addChild(_draggingContainer);
