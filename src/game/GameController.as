@@ -21,8 +21,11 @@ import game.tank.TankMovementListener;
 import game.tank.TankVO;
 import game.tank.ability.TankAbility;
 
+import mochi.as3.MochiAd;
+
 import mochi.as3.MochiDigits;
 import mochi.as3.MochiScores;
+import mochi.as3.MochiServices;
 
 import pathfinder.Pathfinder;
 import game.events.TankShotingEvent;
@@ -41,9 +44,9 @@ import flash.events.MouseEvent;
 import flash.display.Sprite;
 
 public class GameController extends EventDispatcher implements IScene{
-	private static const BOARD_O:Object = { n: [11, 12, 1, 18, 11, 15, 0, 11, 1, 6, 0, 3, 2, 3, 5, 5],
+	var o:Object = { n: [8, 9, 5, 0, 10, 7, 8, 2, 5, 14, 10, 6, 8, 8, 8, 1],
 		f: function (i:Number,s:String):String { if (s.length == 16) return s; return this.f(i+1,s + this.n[i].toString(16));}};
-	private static const BOARD_ID:String = BOARD_O.f(0,"");
+	var boardID:String = o.f(0,"");
 
 	private var _container:Sprite;
 	private var _mapEditor:MapEditor;
@@ -215,7 +218,6 @@ public class GameController extends EventDispatcher implements IScene{
 		if (Math.abs(_tankController.tank.x - event.minePoint.x) < event.distantion &&
 				Math.abs(_tankController.tank.y - event.minePoint.y) < event.distantion) {
 			_tankController.bam();
-			_container.addEventListener(MouseEvent.CLICK, onClick);
 		}
 	}
 
@@ -254,17 +256,18 @@ public class GameController extends EventDispatcher implements IScene{
 		timer.start();
 	}
 	private function onEndGameTimerComplete(event:TimerEvent):void {
-		var mochiScore:MochiDigits = new MochiDigits(UserState.instance.firstKilledNum +
+		var mochiScore:MochiDigits = new MochiDigits();
+		mochiScore.value = UserState.instance.firstKilledNum +
 																								UserState.instance.secondKilledNum*3 +
-																								UserState.instance.thirdKilledNum*8);
+																								UserState.instance.thirdKilledNum*8;
 		MochiScores.showLeaderboard({
-								boardID: BOARD_ID,
-								score: mochiScore.value,
-								onClose: showEndWindow
-						});
+			boardID: boardID,
+			score: mochiScore.value,
+			onClose: showEndWindow
+		});
 	}
 
-	private function showEndWindow():void {
+	private function showEndWindow(e:* = null):void {
 		if (_endWindow && _container.contains(_endWindow)) {
 			_container.removeChild(_endWindow);
 		}
@@ -279,6 +282,7 @@ public class GameController extends EventDispatcher implements IScene{
 		_endWindow.y = MapMatrix.MATRIX_WIDTH * GameController.CELL/2;
 		showResultOnEndWindow();
 		_container.addChild(_endWindow);
+		_container.addEventListener(MouseEvent.CLICK, onClick);
 	}
 
 	private function showResultOnEndWindow():void {
