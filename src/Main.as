@@ -1,4 +1,6 @@
 package {
+import com.flashdynamix.utils.SWFProfiler;
+
 import flash.display.Sprite;
 
 import game.GameController;
@@ -15,6 +17,7 @@ import game.SceneController;
 			this.addChild(container);
 
 			new SceneController(container);
+			SWFProfiler.init(stage, container);
 		}
 
 	}
