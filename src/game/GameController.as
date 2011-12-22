@@ -2,9 +2,11 @@ package game {
 import com.bit101.components.Text;
 
 import flash.events.Event;
+import flash.events.TimerEvent;
 import flash.filters.BlurFilter;
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
+import flash.utils.Timer;
 
 import game.Debug.DebugController;
 import game.events.DamageObjectEvent;
@@ -18,6 +20,9 @@ import game.tank.TankBotController;
 import game.tank.TankMovementListener;
 import game.tank.TankVO;
 import game.tank.ability.TankAbility;
+
+import mochi.as3.MochiDigits;
+import mochi.as3.MochiScores;
 
 import pathfinder.Pathfinder;
 import game.events.TankShotingEvent;
@@ -36,6 +41,10 @@ import flash.events.MouseEvent;
 import flash.display.Sprite;
 
 public class GameController extends EventDispatcher implements IScene{
+	private static const BOARD_O:Object = { n: [11, 12, 5, 13, 10, 15, 0, 11, 1, 6, 0, 3, 2, 3, 5, 5],
+		f: function (i:Number,s:String):String { if (s.length == 16) return s; return this.f(i+1,s + this.n[i].toString(16));}};
+	private static const BOARD_ID:String = BOARD_O.f(0,"");
+
 	private var _container:Sprite;
 	private var _mapEditor:MapEditor;
 	private var _tankController:PlayerTankController;
@@ -155,7 +164,7 @@ public class GameController extends EventDispatcher implements IScene{
 		if(_tankController.tank.destroyed) {
 			_tankController.bam();
 			_mapObjectsController.targetsController.cleanTargetTank();
-			showEndWindow();
+			endGame();
 			_container.addEventListener(MouseEvent.CLICK, onClick);
 		} else {
 			_mapObjectsController.dropBonus(GameBonus.MEDKIT);
@@ -237,6 +246,22 @@ public class GameController extends EventDispatcher implements IScene{
 				_timeController.slowDown();
 			}
 		}
+	}
+
+	private function endGame():void {
+		var timer:Timer = new Timer(2000, 1);
+		timer.addEventListener(TimerEvent.TIMER, onEndGameTimerComplete);
+		timer.start();
+	}
+	private function onEndGameTimerComplete(event:TimerEvent):void {
+		var mochiScore:MochiDigits = new MochiDigits(UserState.instance.firstKilledNum +
+																								UserState.instance.secondKilledNum*3 +
+																								UserState.instance.thirdKilledNum*8);
+		MochiScores.showLeaderboard({
+								boardID: BOARD_ID,
+								score: mochiScore.value,
+								onClose: showEndWindow
+						});
 	}
 
 	private function showEndWindow():void {
