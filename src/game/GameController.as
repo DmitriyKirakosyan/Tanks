@@ -76,7 +76,7 @@ public class GameController extends EventDispatcher implements IScene{
 		_tankController.init(UserState.instance.tankVO);
 		initMapObjectsController();
 		addListeners();
-		//_debugController.open();
+		_debugController.open();
 	}
 
 	public function remove():void {
@@ -85,7 +85,7 @@ public class GameController extends EventDispatcher implements IScene{
 		_mouseDrawController.remove();
 		_tankController.remove();
 		_mapObjectsController.remove();
-		//_debugController.close();
+		_debugController.close();
 		_mouseDown = false;
 	}
 
@@ -115,7 +115,7 @@ public class GameController extends EventDispatcher implements IScene{
 		_mapObjectsController = new MapObjectsController(_mapMatrix, _container);
 		_tankMovementListener = new TankMovementListener(_tankController, _mapObjectsController, _mouseDrawController);
 		_timeController = new TimeController(_container);
-		//_debugController = new DebugController(_container, this);
+		_debugController = new DebugController(_container, this);
 		_mapEditor = new MapEditor(_container, _mapObjectsController, _mapMatrix);
 		initTimeController();
 	}
@@ -167,7 +167,8 @@ public class GameController extends EventDispatcher implements IScene{
 		if(_tankController.tank.destroyed) {
 			_tankController.bam();
 			_mapObjectsController.targetsController.cleanTargetTank();
-			endGame();
+			//endGame();
+            showEndWindow();
 			_container.addEventListener(MouseEvent.CLICK, onClick);
 		} else {
 			_mapObjectsController.dropBonus(GameBonus.MEDKIT);

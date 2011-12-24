@@ -111,6 +111,7 @@ import game.tank.TankController;
 			_buttons.addBrickBtn.addEventListener(MouseEvent.CLICK, addBrick);
 			_buttons.addStoneBtm.addEventListener(MouseEvent.CLICK, addStone);
 			_buttons.saveMapBtn.addEventListener(MouseEvent.CLICK, saveMap);
+            _buttons.loadMapBtn.addEventListener(MouseEvent.CLICK, loadMap);
 			_buttons.pauseGameBtn.addEventListener(MouseEvent.CLICK, pauseGame);
 			_buttons.changeGunBtn.addEventListener(MouseEvent.CLICK, changeGun);
 			_buttons.newGameBtn.addEventListener(MouseEvent.CLICK, newGame);
@@ -151,7 +152,9 @@ import game.tank.TankController;
 		private function saveMap(event:MouseEvent):void {
 			_gameController.mapEditor.saveMap();
 		}
-		//TODO сделать кнопку для saveMap()
+		private function loadMap(event:MouseEvent):void {
+            _gameController.mapEditor.loadMap();
+        }
 
 
 		/* Add Enemy or Not */

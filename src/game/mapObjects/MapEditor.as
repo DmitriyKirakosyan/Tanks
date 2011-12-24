@@ -7,9 +7,11 @@ package game.mapObjects {
 import com.adobe.serialization.json.JSON;
 
 import flash.display.Sprite;
+import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.filters.GlowFilter;
 import flash.geom.Point;
+import flash.net.FileFilter;
 import flash.net.FileReference;
 
 import game.mapObjects.MapObject;
@@ -21,6 +23,7 @@ public class MapEditor {
 
 	private var _draggingContainer:Sprite;
 	private var _mapMatrix:MapMatrix;
+    private var _fileRef:FileReference;
 	private var _xmlMap:XML;
 
 	private var _cantPutFilter:GlowFilter = new GlowFilter();
@@ -42,13 +45,40 @@ public class MapEditor {
 	public function takeStone():void {
 		takeObject(new Stone(new Point(0, 0)));
 	}
-
+    public function loadMap():void {
+        _fileRef = new FileReference();
+        _fileRef.addEventListener(Event.SELECT, onFileSelected);
+        var textTypeFilter:FileFilter = new FileFilter("XML Files (*.xml)", "*.xml");
+        _fileRef.browse([textTypeFilter]);
+    }
 	public function saveMap():void {
 		saveMapInXML();
 		var fileReference:FileReference = new FileReference();
 		fileReference.save(_xmlMap, "map.xml");
 	}
 	/* Internal functions */
+    private function onFileSelected(event:Event):void {
+        _fileRef.removeEventListener(Event.SELECT, onFileSelected);
+        _fileRef.addEventListener(Event.COMPLETE, onLoadComplete);
+		_fileRef.load();
+		trace("start load");
+    }
+
+    private function onLoadComplete(event:Event):void {
+       _fileRef.removeEventListener(Event.COMPLETE, onLoadComplete);
+       _xmlMap = new XML(_fileRef.data);
+        parseXML();
+    }
+
+    private function parseXML():void {
+        _objectsController.removeMapObjects();
+        var objects:String = _xmlMap.MAP_OBJECTS;
+        var mapObjects:Array = new Array;
+        mapObjects = objects.split(",");
+        _mapMatrix.createLoadMatrix(mapObjects);
+        _objectsController.drawObjects();
+    }
+
 	private function saveMapInXML():void
 	{
 		//JSON.encode(_mapMatrix.matrix)

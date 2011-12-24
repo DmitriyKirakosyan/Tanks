@@ -9,6 +9,7 @@ package game.Debug.DebugObjects {
 		private var _addBrickBtn:AddBrickBtn;
 		private var _addStoneBtn:AddStoneBtn;
 		private var _saveMapBtn:SaveMap;
+        private var _loadMapBtn:LoadMap;
 		private var _trashBtn:TrashBtn;
 		
 		private var _pauseGameBtn:PauseGame;
@@ -28,6 +29,7 @@ package game.Debug.DebugObjects {
 		public function get addBrickBtn():AddBrickBtn { return _addBrickBtn; }
 		public function get addStoneBtm():AddStoneBtn { return _addStoneBtn; }
 		public function get saveMapBtn():SaveMap { return _saveMapBtn; }
+        public function get loadMapBtn():LoadMap { return _loadMapBtn; }
 		public function get trashBtn():TrashBtn { return _trashBtn; }
 		public function get pauseGameBtn():PauseGame { return _pauseGameBtn; }
 		public function get changeGunBtn():ChangeGun { return _changeGunBtn; }
@@ -67,11 +69,17 @@ package game.Debug.DebugObjects {
 			super.addChild(_addStoneBtn);
 			
 			_saveMapBtn = new SaveMap();
-			_saveMapBtn.scaleX = _saveMapBtn.scaleY = .3;
-			_saveMapBtn.x = 370;
+			_saveMapBtn.scaleX = _saveMapBtn.scaleY = .22;
+			_saveMapBtn.x = 345;
 			_saveMapBtn.y = 20;
 			super.addChild(_saveMapBtn);
-			
+
+            _loadMapBtn = new LoadMap();
+			_loadMapBtn.scaleX = _loadMapBtn.scaleY = .22;
+			_loadMapBtn.x = 385;
+			_loadMapBtn.y = 20;
+			super.addChild(_loadMapBtn);
+
 			_trashBtn = new TrashBtn();
 			_trashBtn.scaleX = _trashBtn.scaleY = .3;
 			_trashBtn.x = 550;

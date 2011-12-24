@@ -117,6 +117,20 @@ public class MapMatrix {
 			}
 		}
 	}
+    public function createLoadMatrix(loadMatrix:Array):void {
+        var rnd:Number = 0;
+		for (var i:int = 0; i < _matrix.length; ++i) {
+            for (var j:int = 0; j < MATRIX_HEIGHT; ++j) {
+                if (i == int(MATRIX_WIDTH / 2) && j == int(MATRIX_HEIGHT / 2)) {
+                    _matrix[i][j] = MatrixItemIds.EMPTY;
+                    rnd++;
+                } else {
+                    _matrix[i][j] = loadMatrix[rnd];
+                    rnd++;
+                }
+            }
+		}
+    }
 
 	private function pointInMatrix(x:int, y:int):Boolean {
 		return x >= 0 && x < MATRIX_WIDTH && y >= 0 && y < MATRIX_HEIGHT;
