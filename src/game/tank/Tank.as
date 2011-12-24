@@ -17,6 +17,8 @@ import game.tank.destruction.TankDestroyMethod;
 import game.tank.destruction.TankDestroyMethodFactory;
 import game.tank.weapon.TankGun;
 
+import menu.TankPodium;
+
 public class Tank extends MapObject {
 	private var _gun:TankGun;
 	public var _defense:TankDefense;
@@ -179,22 +181,9 @@ public class Tank extends MapObject {
 	}
 
 	private function createTankBase():void {
-		if (_vo.tankBase == 1) {
-			_tankBase = new Sprite();
-			const baseView:TankBase2 = new TankBase2();
-			_tankBase.addChild(baseView);
-		} else if (_vo.tankBase == 2) {
-			_tankBase = new Sprite();
-			const enemyBaseView1:EnemyBase1 = new EnemyBase1();
-			_tankBase.addChild(enemyBaseView2);
-		} else if (_vo.tankBase == 3) {
-			_tankBase = new Sprite();
-			const enemyBaseView2:EnemyBase2 = new EnemyBase2();
-			_tankBase.addChild(enemyBaseView1);
-		} else {
-			_tankBase = new TankBase1();
-		}
-		this.addChildAt(_tankBase, 0);
+		if (_vo.tankBase < TankPodium.VALID_TANK_BASES.length) {
+			_tankBase = new TankPodium.VALID_TANK_BASES[_vo.tankBase];
+		}		this.addChildAt(_tankBase, 0);
 	}
 
 	private function onDestroyComplete(event:TankDestructionEvent):void {

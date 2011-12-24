@@ -22,6 +22,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 	private var _tank:Tank;
 
 	private var _tankBases:Vector.<Sprite>;
+	public static const VALID_TANK_BASES:Array = [TankBase1, TankBase2, EnemyBase1, EnemyBase2];
 
 	private var _container:Sprite;
 
@@ -99,11 +100,11 @@ public class TankPodium extends EventDispatcher implements IScene{
 	private function createTankBaseBtns():void {
 		_tankBases = new Vector.<Sprite>();
 		var tempBase:Sprite;
-		for (var i:int = 0; i < 2; ++i) {
-			tempBase = i == 0 ? new TankBase1 : new TankBase2;
+		for (var i:int = 0; i < VALID_TANK_BASES.length; ++i) {
+			tempBase = new VALID_TANK_BASES[i];
 			_tankBases.push(tempBase);
 			tempBase.y = _tank.originY + 100;
-			tempBase.x = _tank.originX - 75 + i * 150;
+			tempBase.x = _tank.originX - 50 *(VALID_TANK_BASES.length-1) + i * 100;
 			tempBase.addEventListener(MouseEvent.CLICK, onTankBaseClick);
 			tempBase.addEventListener(MouseEvent.MOUSE_OVER, onTankBaseMouseOver);
 			tempBase.addEventListener(MouseEvent.MOUSE_OUT, onTankBaseMouseOut);
@@ -112,9 +113,12 @@ public class TankPodium extends EventDispatcher implements IScene{
 
 	//fuck, but fast
 	private function onTankBaseClick(event:MouseEvent):void {
-		if (event.target instanceof TankBase1) {
-			_tank.updateBase(0);
-		} else { _tank.updateBase(1); }
+		for (var i:int = 0; i < VALID_TANK_BASES.length; ++i) {
+			//trace(Sprite(event.target)["constructor"]);
+			if (Sprite(event.target)["constructor"] == VALID_TANK_BASES[i]) {
+				_tank.updateBase(i);
+			}
+		}
 	}
 	private function onTankBaseMouseOver(event:MouseEvent):void {
 		event.target["filters"] = [new GlowFilter()];
