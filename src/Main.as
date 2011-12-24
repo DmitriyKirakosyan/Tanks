@@ -30,7 +30,7 @@ import mochi.as3.MochiServices;
 		}
 
 		private function start():void {
-			MochiServices.connect( _mochiads_game_id, stage);
+			//MochiServices.connect( _mochiads_game_id, stage);
 			container = new Sprite();
 			this.addChild(container);
 

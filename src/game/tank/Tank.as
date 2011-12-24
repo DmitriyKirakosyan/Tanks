@@ -112,11 +112,8 @@ public class Tank extends MapObject {
 
 	public function updateGun(weaponType:uint):void {
 		_vo.weaponType = weaponType;
-		addGun(new TankGun(weaponType));
-	}
-	public function removeGun():void {
 		if (_gun && this.contains(_gun)) { this.removeChild(_gun); }
-		_gun = null;
+		addGun(new TankGun(weaponType));
 	}
 
 	public function addReloadBar(reloadBar:Sprite):void {

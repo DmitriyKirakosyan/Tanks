@@ -1,5 +1,7 @@
 
 package menu {
+import com.greensock.TweenLite;
+
 import flash.events.Event;
 import com.greensock.TweenMax;
 import com.greensock.easing.Linear;
@@ -11,6 +13,8 @@ import flash.filters.BlurFilter;
 import flash.geom.Point;
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
+
+import game.drawing.GunSlotsAdapter;
 
 import game.events.SceneEvent;
 
@@ -27,19 +31,13 @@ import state.UserState;
 public class TankPodium extends EventDispatcher implements IScene{
 	private var _paper:GameBckg;
 
-	//tank switching
 	private var _tank:Tank;
-
-	//weapon switching
-	private var _weapon:TankGun;
-
-	private var _defaultTankPoint:Point;
-
-	private var _defaultWeaponPoint:Point;
 
 	private var _container:Sprite;
 
 	private var _playBtn:NewGameBtn;
+
+	private var _gunSlots:GunSlotsAdapter;
 
 	private var _closed:Boolean;
 
@@ -52,17 +50,17 @@ public class TankPodium extends EventDispatcher implements IScene{
 		_tank.liveTabBckg.visible = false;
 		_tank.x = (MapMatrix.MATRIX_WIDTH - _tank.width/32)/2;
 		_tank.y = 10.5;//MapMatrix.MATRIX_HEIGHT/2;
-		createWeapon();
-		_defaultTankPoint = new Point(_tank.x, _tank.y);
-		_defaultWeaponPoint = new Point(_weapon.x, _weapon.y);
 		createPlayBtn();
+		_gunSlots = new GunSlotsAdapter(this);
 	}
+
+	public function get container():Sprite { return _container; }
+	public function get tank():Tank { return _tank; }
 
 	public function open():void {
 		_closed = true;
 		_container.addChild(_paper);
 		_container.addChild(_tank);
-		_container.addChild(_weapon);
 
 		addPlayBtn();
 		addListeners();
@@ -73,7 +71,6 @@ public class TankPodium extends EventDispatcher implements IScene{
 		removeListeners();
 		TweenMax.killTweensOf(_tank);
 		_container.removeChild(_tank);
-		_container.removeChild(_weapon);
 		_container.removeChild(_paper);
 		_closed = true;
 	}
@@ -82,21 +79,14 @@ public class TankPodium extends EventDispatcher implements IScene{
 
 	private function addListeners():void {
 		_tank.addEventListener(MouseEvent.ROLL_OVER, onTankRollOver);
-		_tank.addEventListener(MouseEvent.ROLL_OUT, onTankRollOut);
 	}
 	
 	private function removeListeners():void {
 		_tank.removeEventListener(MouseEvent.ROLL_OVER, onTankRollOver);
-		_tank.removeEventListener(MouseEvent.ROLL_OVER, onTankRollOut);
 	}
 
 	private function onTankRollOver(event:MouseEvent):void {
-		TweenMax.to(_tank.tankBase, .3, {blurFilter:{blurX:10, blurY:10}});
-		//_tank.tankBase.filters = [new BlurFilter(10,10)];
-	}
-	private function onTankRollOut(event:MouseEvent):void {
-		TweenMax.to(_tank.tankBase, .3, {blurFilter:{blurX:0, blurY:0}});
-		//_tank.tankBase.filters = [];
+		_gunSlots.show();
 	}
 
 	private function createPlayBtn():void {
@@ -109,12 +99,6 @@ public class TankPodium extends EventDispatcher implements IScene{
 		_playBtn.addEventListener(MouseEvent.MOUSE_OUT, onPlayBtnMouseOut);
 		_playBtn.addEventListener(MouseEvent.CLICK, onPlayBtnClick);
 		
-	}
-
-	private function createWeapon():void {
-		_weapon = new TankGun();
-		_weapon.y = _tank.originY + 100;
-		_weapon.x = _tank.originX;
 	}
 
 	private function onPlayBtnMouseOver(event:MouseEvent):void {
