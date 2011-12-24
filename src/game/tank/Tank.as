@@ -53,23 +53,23 @@ public class Tank extends MapObject {
 		_isPlayer = isPlayer;
 		setHp(hp);
 		_vo = vo;
-
 		createTankBase();
 		addGun(new TankGun(vo.weaponType));
+		createLiveBar();
+		this.addChild(_liveTabBckg);
+		this.addChild(_liveTab);
+	}
 
+	private function createLiveBar():void {
 		_liveTab = new LiveBar();
 		_liveTabBckg = new LiveBar();
-		
 		_liveTab.scaleY =  .6; _liveTabBckg.scaleY = .6;
 		_liveTab.y = -18; _liveTabBckg.y = -18;
 		_liveTab.x = _liveTab.x - _liveTab.width/2; _liveTabBckg.x = _liveTabBckg.x - _liveTabBckg.width/2;
 		_liveTabBckg.alpha = .18;
-		this.addChild(_liveTabBckg);
-		this.addChild(_liveTab);
-		this.addChildAt(_tankBase, 0);
 	}
-	//TODO maybe hide() don't need
-	//for destroy methods 
+
+	//for destroy methods
 	public function hide():void {
 		_gun.visible = false;
 		_tankBase.visible = false;
@@ -114,6 +114,11 @@ public class Tank extends MapObject {
 		_vo.weaponType = weaponType;
 		if (_gun && this.contains(_gun)) { this.removeChild(_gun); }
 		addGun(new TankGun(weaponType));
+	}
+	public function updateBase(baseType:uint):void {
+		_vo.tankBase = baseType;
+		if (_tankBase && this.contains(_tankBase)) { this.removeChild(_tankBase); }
+		createTankBase();
 	}
 
 	public function addReloadBar(reloadBar:Sprite):void {
@@ -174,9 +179,7 @@ public class Tank extends MapObject {
 	}
 
 	private function createTankBase():void {
-		if (_vo.tankBase == 0) {
-			_tankBase = new TankBase1();
-		} else if (_vo.tankBase == 1) {
+		if (_vo.tankBase == 1) {
 			_tankBase = new Sprite();
 			const baseView:TankBase2 = new TankBase2();
 			_tankBase.addChild(baseView);
@@ -184,7 +187,10 @@ public class Tank extends MapObject {
 			_tankBase = new Sprite();
 			const enemyBaseView:EnemyBase1 = new EnemyBase1();
 			_tankBase.addChild(enemyBaseView);
+		} else {
+			_tankBase = new TankBase1();
 		}
+		this.addChildAt(_tankBase, 0);
 	}
 
 	private function onDestroyComplete(event:TankDestructionEvent):void {

@@ -1,30 +1,18 @@
 
 package menu {
-import com.greensock.TweenLite;
+import com.greensock.TweenMax;
 
 import flash.events.Event;
-import com.greensock.TweenMax;
-import com.greensock.easing.Linear;
-
 import flash.display.Sprite;
 import flash.events.EventDispatcher;
 import flash.events.MouseEvent;
-import flash.filters.BlurFilter;
-import flash.geom.Point;
-import flash.text.TextField;
-import flash.text.TextFieldAutoSize;
+import flash.filters.GlowFilter;
 
 import game.drawing.GunSlotsAdapter;
-
 import game.events.SceneEvent;
-
 import game.matrix.MapMatrix;
-
 import game.tank.Tank;
-import game.tank.weapon.TankGun;
 import game.tank.TankVO;
-
-//import mx.containers.TabNavigator;
 
 import state.UserState;
 
@@ -32,6 +20,8 @@ public class TankPodium extends EventDispatcher implements IScene{
 	private var _paper:GameBckg;
 
 	private var _tank:Tank;
+
+	private var _tankBases:Vector.<Sprite>;
 
 	private var _container:Sprite;
 
@@ -51,6 +41,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 		_tank.x = (MapMatrix.MATRIX_WIDTH - _tank.width/32)/2;
 		_tank.y = 10.5;//MapMatrix.MATRIX_HEIGHT/2;
 		createPlayBtn();
+		createTankBaseBtns();
 		_gunSlots = new GunSlotsAdapter(this);
 	}
 
@@ -61,7 +52,9 @@ public class TankPodium extends EventDispatcher implements IScene{
 		_closed = true;
 		_container.addChild(_paper);
 		_container.addChild(_tank);
-
+	 for each (var tankBase:Sprite in _tankBases) {
+		 _container.addChild(tankBase);
+	 }
 		addPlayBtn();
 		addListeners();
 	}
@@ -72,6 +65,9 @@ public class TankPodium extends EventDispatcher implements IScene{
 		TweenMax.killTweensOf(_tank);
 		_container.removeChild(_tank);
 		_container.removeChild(_paper);
+		for each (var tankBase:Sprite in _tankBases) {
+			_container.removeChild(tankBase);
+		}
 		_closed = true;
 	}
 
@@ -98,7 +94,33 @@ public class TankPodium extends EventDispatcher implements IScene{
 		_playBtn.addEventListener(MouseEvent.MOUSE_OVER, onPlayBtnMouseOver);
 		_playBtn.addEventListener(MouseEvent.MOUSE_OUT, onPlayBtnMouseOut);
 		_playBtn.addEventListener(MouseEvent.CLICK, onPlayBtnClick);
-		
+	}
+
+	private function createTankBaseBtns():void {
+		_tankBases = new Vector.<Sprite>();
+		var tempBase:Sprite;
+		for (var i:int = 0; i < 2; ++i) {
+			tempBase = i == 0 ? new TankBase1 : new TankBase2;
+			_tankBases.push(tempBase);
+			tempBase.y = _tank.originY + 100;
+			tempBase.x = _tank.originX - 75 + i * 150;
+			tempBase.addEventListener(MouseEvent.CLICK, onTankBaseClick);
+			tempBase.addEventListener(MouseEvent.MOUSE_OVER, onTankBaseMouseOver);
+			tempBase.addEventListener(MouseEvent.MOUSE_OUT, onTankBaseMouseOut);
+		}
+	}
+
+	//fuck, but fast
+	private function onTankBaseClick(event:MouseEvent):void {
+		if (event.target instanceof TankBase1) {
+			_tank.updateBase(0);
+		} else { _tank.updateBase(1); }
+	}
+	private function onTankBaseMouseOver(event:MouseEvent):void {
+		event.target["filters"] = [new GlowFilter()];
+	}
+	private function onTankBaseMouseOut(event:MouseEvent):void {
+		event.target["filters"] = [];
 	}
 
 	private function onPlayBtnMouseOver(event:MouseEvent):void {
