@@ -28,12 +28,6 @@ public class PlayerTankController extends TankController{
 		tank = Tank.createPlayerTank(tankVO);
 		//highlightPlayerTank();
 	}
-	//TODO подчистить ненужные методы
-	private function highlightPlayerTank():void {
-		var colorTank:ColorTransform = new ColorTransform();
-		colorTank.color = 0x0000ff;
-		tank.tankBase.transform.colorTransform = colorTank;
-	}
 
 }
 }

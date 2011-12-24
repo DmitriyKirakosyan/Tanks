@@ -18,9 +18,9 @@ import game.tank.destruction.TankDestroyMethodFactory;
 import game.tank.weapon.TankGun;
 
 public class Tank extends MapObject {
-	public var _gun:TankGun;
+	private var _gun:TankGun;
 	public var _defense:TankDefense;
-	public var tankBase:Sprite;
+	private var _tankBase:Sprite;
 	private var _liveTab:LiveBar;
 	private var _liveTabBckg:LiveBar;
 	public var reloadBar:Sprite;
@@ -66,24 +66,23 @@ public class Tank extends MapObject {
 		_liveTabBckg.alpha = .18;
 		this.addChild(_liveTabBckg);
 		this.addChild(_liveTab);
-		this.addChildAt(tankBase, 0);
+		this.addChildAt(_tankBase, 0);
 	}
 	//TODO maybe hide() don't need
 	//for destroy methods 
 	public function hide():void {
 		_gun.visible = false;
-		tankBase.visible = false;
+		_tankBase.visible = false;
 	}
 
-	public function get gun():TankGun {
-		return _gun;
-	}
+	public function get gun():TankGun { return _gun; }
+	public function get tankBase():Sprite { return _tankBase; }
 	public function get liveTab():LiveBar { return _liveTab; }
 	public function get liveTabBckg():LiveBar { return _liveTabBckg; }
 	
 	public function get ability():uint { return _vo.ability; }
 
-	public function get baseRotation():Number { return tankBase.rotation; }
+	public function get baseRotation():Number { return _tankBase.rotation; }
 
 	public function hasDefence():Boolean { return _defense != null; }
 
@@ -147,7 +146,7 @@ public class Tank extends MapObject {
 	public function get speedup():Number { return _speedup; }
 
 	public function remove():void {
-		if (this.contains(tankBase)) { this.removeChild(tankBase); } else { trace("remove but tankBase not contains [Tank.remove]"); }
+		if (this.contains(_tankBase)) { this.removeChild(_tankBase); } else { trace("remove but tankBase not contains [Tank.remove]"); }
 		if (this.contains(_gun)) { this.removeChild(_gun); }
 		if (reloadBar && this.contains(reloadBar)) { this.removeChild(reloadBar); }
 	}
@@ -160,34 +159,34 @@ public class Tank extends MapObject {
 	}
 
 	override public function hitTestObject(object:DisplayObject):Boolean {
-		return tankBase.hitTestObject(object) || _gun.hitTestObject(object);
+		return _tankBase.hitTestObject(object) || _gun.hitTestObject(object);
 	}
 
 	public function updateSpeedup():void { _speedup = 0; }
 
 	public function killTweens():void {
-		TweenMax.killTweensOf(tankBase);
+		TweenMax.killTweensOf(_tankBase);
 	}
 
 	/* Internal functions */
 
 	private function addGun(gun:TankGun):void {
 		_gun = gun;
-		gun.rotation = tankBase.rotation;
+		gun.rotation = _tankBase.rotation;
 		this.addChild(gun);
 	}
 
 	private function createTankBase():void {
 		if (_vo.tankBase == 0) {
-			tankBase = new TankBase1();
+			_tankBase = new TankBase1();
 		} else if (_vo.tankBase == 1) {
-			tankBase = new Sprite();
+			_tankBase = new Sprite();
 			const baseView:TankBase2 = new TankBase2();
-			tankBase.addChild(baseView);
+			_tankBase.addChild(baseView);
 		} else if (_vo.tankBase == 2) {
-			tankBase = new Sprite();
+			_tankBase = new Sprite();
 			const enemyBaseView:EnemyBase1 = new EnemyBase1();
-			tankBase.addChild(enemyBaseView);
+			_tankBase.addChild(enemyBaseView);
 		}
 	}
 
