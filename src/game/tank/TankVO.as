@@ -20,6 +20,7 @@ public class TankVO {
 	public static const BRICK_BASE:uint = 1;
 	
 	public static const ENEMY_BASE_1:uint = 2;
+    public static const ENEMY_BASE_2:uint = 3;
 
 	public function TankVO():void {
 		tankBase = DEFAULT_BASE;

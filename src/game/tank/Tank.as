@@ -35,7 +35,7 @@ public class Tank extends MapObject {
 	private var maxSpeedup:Number = .5;
 
 	public static function createBotTank(vo:TankVO, strength:uint):Tank {
-		vo.tankBase = TankVO.ENEMY_BASE_1;
+        vo.tankBase = strength + 2;
 		var hp:Number = strength == TankBotController.BASE_BOT ? ObjectsHp.FIST_BOT :
 										strength == TankBotController.ADVANCE_BOT ? ObjectsHp.SECOND_BOT : ObjectsHp.THIRD_BOT;
 		var tank:Tank = new Tank(vo, false, hp);
@@ -185,8 +185,12 @@ public class Tank extends MapObject {
 			_tankBase.addChild(baseView);
 		} else if (_vo.tankBase == 2) {
 			_tankBase = new Sprite();
-			const enemyBaseView:EnemyBase1 = new EnemyBase1();
-			_tankBase.addChild(enemyBaseView);
+			const enemyBaseView1:EnemyBase1 = new EnemyBase1();
+			_tankBase.addChild(enemyBaseView2);
+		} else if (_vo.tankBase == 3) {
+			_tankBase = new Sprite();
+			const enemyBaseView2:EnemyBase2 = new EnemyBase2();
+			_tankBase.addChild(enemyBaseView1);
 		} else {
 			_tankBase = new TankBase1();
 		}
