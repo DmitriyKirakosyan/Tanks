@@ -76,7 +76,7 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 
 	public function remove():void {
 		TweenMax.killTweensOf(tank);
-		tank.killTweens();
+		tank.remove();
 		_movingTimeline.kill();
 		if (_container.contains(tank)) {
 			_container.removeChild(tank);

@@ -41,9 +41,6 @@ public class Tank extends MapObject {
 		var hp:Number = strength == TankBotController.BASE_BOT ? ObjectsHp.FIST_BOT :
 										strength == TankBotController.ADVANCE_BOT ? ObjectsHp.SECOND_BOT : ObjectsHp.THIRD_BOT;
 		var tank:Tank = new Tank(vo, false, hp);
-		/*if (strength > 0) {
-			tank.filters = strength == TankBotController.ADVANCE_BOT ? [new GlowFilter()] : [new GlowFilter(0)];
-		}*/
 		return tank;
 	}
 
@@ -72,10 +69,10 @@ public class Tank extends MapObject {
 	}
 
 	//for destroy methods
-	public function hide():void {
-		_gun.visible = false;
-		_tankBase.visible = false;
-	}
+//	public function hide():void {
+//		_gun.visible = false;
+//		_tankBase.visible = false;
+//	}
 
 	public function get gun():TankGun { return _gun; }
 	public function get tankBase():Sprite { return _tankBase; }
@@ -150,9 +147,11 @@ public class Tank extends MapObject {
 	public function get speedup():Number { return _speedup; }
 
 	public function remove():void {
+		killTweens();
 		if (this.contains(_tankBase)) { this.removeChild(_tankBase); } else { trace("remove but tankBase not contains [Tank.remove]"); }
 		if (this.contains(_gun)) { this.removeChild(_gun); }
 		if (reloadBar && this.contains(reloadBar)) { this.removeChild(reloadBar); }
+		if (_destroyMethod) { _destroyMethod.stopDestroying(); }
 	}
 
 	public function bam():void {
@@ -168,11 +167,11 @@ public class Tank extends MapObject {
 
 	public function updateSpeedup():void { _speedup = 0; }
 
-	public function killTweens():void {
+	/* Internal functions */
+
+	private function killTweens():void {
 		TweenMax.killTweensOf(_tankBase);
 	}
-
-	/* Internal functions */
 
 	private function addGun(gun:TankGun):void {
 		_gun = gun;

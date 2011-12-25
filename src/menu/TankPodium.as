@@ -23,6 +23,9 @@ public class TankPodium extends EventDispatcher implements IScene{
 
 	private var _tankBases:Vector.<Sprite>;
 	public static const VALID_TANK_BASES:Array = [TankBase1, TankBase2, EnemyBase1, EnemyBase2, EnemyBase3];
+	public static const VALID_TANK_BASES_FOR_PLAYER = [TankBase1, TankBase2];
+
+	private const SCORE_NEED_FOR_TANK_UNLOCK:int = 2;
 
 	private var _container:Sprite;
 
@@ -31,6 +34,8 @@ public class TankPodium extends EventDispatcher implements IScene{
 	private var _gunSlots:GunSlotsAdapter;
 
 	private var _closed:Boolean;
+
+	private var _lock:Sprite;
 
 	public function TankPodium(container:Sprite) {
 		_closed = true;
@@ -58,6 +63,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 	 }
 		addPlayBtn();
 		addListeners();
+		checkForUnlockTank();
 	}
 
 	public function remove():void {
@@ -86,6 +92,16 @@ public class TankPodium extends EventDispatcher implements IScene{
 		_gunSlots.show();
 	}
 
+	private function checkForUnlockTank():void {
+		if (_tankBases.length>0 && UserState.instance.allScore() >= SCORE_NEED_FOR_TANK_UNLOCK) {
+			var tempBase:Sprite = _tankBases[1];
+			tempBase.addEventListener(MouseEvent.CLICK, onTankBaseClick);
+			tempBase.addEventListener(MouseEvent.MOUSE_OVER, onTankBaseMouseOver);
+			tempBase.addEventListener(MouseEvent.MOUSE_OUT, onTankBaseMouseOut);
+			if (_lock && tempBase.contains(_lock)) { tempBase.removeChild(_lock); }
+		}
+	}
+
 	private function createPlayBtn():void {
 		_playBtn = new NewGameBtn();
 		_playBtn.buttonMode = true;
@@ -100,14 +116,19 @@ public class TankPodium extends EventDispatcher implements IScene{
 	private function createTankBaseBtns():void {
 		_tankBases = new Vector.<Sprite>();
 		var tempBase:Sprite;
-		for (var i:int = 0; i < VALID_TANK_BASES.length; ++i) {
-			tempBase = new VALID_TANK_BASES[i];
+		for (var i:int = 0; i < VALID_TANK_BASES_FOR_PLAYER.length; ++i) {
+			tempBase = new VALID_TANK_BASES_FOR_PLAYER[i];
 			_tankBases.push(tempBase);
 			tempBase.y = _tank.originY + 100;
-			tempBase.x = _tank.originX - 50 *(VALID_TANK_BASES.length-1) + i * 100;
-			tempBase.addEventListener(MouseEvent.CLICK, onTankBaseClick);
-			tempBase.addEventListener(MouseEvent.MOUSE_OVER, onTankBaseMouseOver);
-			tempBase.addEventListener(MouseEvent.MOUSE_OUT, onTankBaseMouseOut);
+			tempBase.x = _tank.originX - 50 *(VALID_TANK_BASES_FOR_PLAYER.length-1) + i * 100;
+			if (i == 0) {
+				tempBase.addEventListener(MouseEvent.CLICK, onTankBaseClick);
+				tempBase.addEventListener(MouseEvent.MOUSE_OVER, onTankBaseMouseOver);
+				tempBase.addEventListener(MouseEvent.MOUSE_OUT, onTankBaseMouseOut);
+			} else {
+				_lock = new Lock();
+				tempBase.addChild(_lock);
+			}
 		}
 	}
 

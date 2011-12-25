@@ -72,6 +72,7 @@ public class GameController extends EventDispatcher implements IScene{
 	}
 
 	public function open():void {
+		UserState.instance.clearScore();
 		_mapObjectsController.init(); // first of all we need to create map and map objects
 		_tankController.init(UserState.instance.tankVO);
 		initMapObjectsController();
@@ -168,7 +169,7 @@ public class GameController extends EventDispatcher implements IScene{
 			_tankController.bam();
 			_mapObjectsController.targetsController.cleanTargetTank();
 			//endGame();
-            showEndWindow();
+			showEndWindow();
 			_container.addEventListener(MouseEvent.CLICK, onClick);
 		} else {
 			_mapObjectsController.dropBonus(GameBonus.MEDKIT);
@@ -258,9 +259,7 @@ public class GameController extends EventDispatcher implements IScene{
 	}
 	private function onEndGameTimerComplete(event:TimerEvent):void {
 		var mochiScore:MochiDigits = new MochiDigits();
-		mochiScore.value = UserState.instance.firstKilledNum +
-																								UserState.instance.secondKilledNum*3 +
-																								UserState.instance.thirdKilledNum*8;
+		mochiScore.value = UserState.instance.allScore();
 		MochiScores.showLeaderboard({
 			boardID: boardID,
 			score: mochiScore.value,

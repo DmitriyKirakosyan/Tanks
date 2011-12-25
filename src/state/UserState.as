@@ -40,5 +40,15 @@ public class UserState {
 	public function get secondKilledNum():int { return _secondKilledNum; }
 	public function get thirdKilledNum():int { return _thirdKilledNum; }
 
+	public function allScore():int {
+		return _firstKilledNum + 3*_secondKilledNum + 8*_thirdKilledNum;
+	}
+
+	public function clearScore():void {
+		_firstKilledNum = 0;
+		_secondKilledNum = 0;
+		_thirdKilledNum = 0;
+	}
+
 }
 }
