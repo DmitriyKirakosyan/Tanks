@@ -8,6 +8,7 @@
 package game.tank {
 import game.mapObjects.ObjectsHp;
 
+
 public class TankVO {
 	public var tankBase:uint;
 	public var destroyMethod:uint;
@@ -21,6 +22,7 @@ public class TankVO {
 	
 	public static const ENEMY_BASE_1:uint = 2;
     public static const ENEMY_BASE_2:uint = 3;
+    public static const ENEMY_BASE_3:uint = 4;
 
 	public function TankVO():void {
 		tankBase = DEFAULT_BASE;

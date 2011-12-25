@@ -41,9 +41,9 @@ public class Tank extends MapObject {
 		var hp:Number = strength == TankBotController.BASE_BOT ? ObjectsHp.FIST_BOT :
 										strength == TankBotController.ADVANCE_BOT ? ObjectsHp.SECOND_BOT : ObjectsHp.THIRD_BOT;
 		var tank:Tank = new Tank(vo, false, hp);
-		if (strength > 0) {
+		/*if (strength > 0) {
 			tank.filters = strength == TankBotController.ADVANCE_BOT ? [new GlowFilter()] : [new GlowFilter(0)];
-		}
+		}*/
 		return tank;
 	}
 
@@ -183,6 +183,7 @@ public class Tank extends MapObject {
 	private function createTankBase():void {
 		if (_vo.tankBase < TankPodium.VALID_TANK_BASES.length) {
 			_tankBase = new TankPodium.VALID_TANK_BASES[_vo.tankBase];
+            _tankBase.filters = [new GlowFilter(0)];
 		}		this.addChildAt(_tankBase, 0);
 	}
 

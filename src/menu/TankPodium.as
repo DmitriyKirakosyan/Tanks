@@ -22,7 +22,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 	private var _tank:Tank;
 
 	private var _tankBases:Vector.<Sprite>;
-	public static const VALID_TANK_BASES:Array = [TankBase1, TankBase2, EnemyBase1, EnemyBase2];
+	public static const VALID_TANK_BASES:Array = [TankBase1, TankBase2, EnemyBase1, EnemyBase2, EnemyBase3];
 
 	private var _container:Sprite;
 
