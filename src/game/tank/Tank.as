@@ -45,7 +45,7 @@ public class Tank extends MapObject {
 	}
 
 	public static function createPlayerTank(vo:TankVO):Tank {
-		return new Tank(vo, true, ObjectsHp.PLAYER);
+		return new Tank(vo, true, vo.hp);
 	}
 	//TODO LiveTab
 	public function Tank(vo:TankVO, isPlayer:Boolean, hp:Number) {
@@ -118,6 +118,10 @@ public class Tank extends MapObject {
 		_vo.tankBase = baseType;
 		if (_tankBase && this.contains(_tankBase)) { this.removeChild(_tankBase); }
 		createTankBase();
+		if (baseType == TankVO.TANK_BASE_2) {
+			_vo.speed = TankVO.SECOND_SPEED;
+			_vo.hp = ObjectsHp.PLAYER_SECOND;
+		}
 	}
 
 	public function addReloadBar(reloadBar:Sprite):void {

@@ -11,6 +11,7 @@ public class ObjectsHp {
 	public static const SECOND_BOT:Number = 30;
 	public static const THIRD_BOT:Number = 60;
 	public static const PLAYER:Number = 50;
+	public static const PLAYER_SECOND:Number = 75;
 	public static const MEDKIT_BONUS:Number = 15;
 }
 }

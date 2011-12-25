@@ -8,17 +8,25 @@
 package game.tank {
 import game.mapObjects.ObjectsHp;
 
+import mx.utils.NameUtil;
+
 
 public class TankVO {
 	public var tankBase:uint;
 	public var destroyMethod:uint;
 	public var weaponType:uint;
 	public var hp:int;
-	public var speed:int;
+	public var speed:Number;
 	public var ability:uint;
 
 	public static const DEFAULT_BASE:uint = 0;
 	public static const BRICK_BASE:uint = 1;
+
+	public static const FIRST_SPEED:Number = 5;
+	public static const SECOND_SPEED:Number = 7.5;
+
+	public static const TANK_BASE_1:uint = 0;
+	public static const TANK_BASE_2:uint = 1;
 	
 	public static const ENEMY_BASE_1:uint = 2;
     public static const ENEMY_BASE_2:uint = 3;
@@ -29,7 +37,7 @@ public class TankVO {
 		destroyMethod = 0;
 		weaponType = 0;
 		hp = ObjectsHp.PLAYER;
-		speed = 5;
+		speed = FIRST_SPEED;
 		ability = 0; //coming soon
 	}
 
@@ -39,6 +47,8 @@ public class TankVO {
 		res.destroyMethod = this.destroyMethod;
 		res.weaponType = this.weaponType;
 		res.ability = this.ability;
+		res.speed = this.speed;
+		res.hp = this.hp;
 		return res;
 	}
 }

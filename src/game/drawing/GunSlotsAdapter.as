@@ -122,7 +122,8 @@ public class GunSlotsAdapter extends Sprite{
 		hiding = true;
 		var thisSlots:GunSlotsAdapter = this;
 		TweenLite.to(this, .3, {alpha: 0, onComplete: function():void {
-			if (_podium.container.contains(thisSlots)) { _podium.container.removeChild(thisSlots);hiding = false;}
+			if (_podium.container.contains(thisSlots)) { _podium.container.removeChild(thisSlots); }
+			hiding = false;
 		}});
 	}
 

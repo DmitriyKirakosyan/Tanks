@@ -1,5 +1,6 @@
 
 package menu {
+import com.bit101.components.Text;
 import com.greensock.TweenMax;
 
 import flash.events.Event;
@@ -7,12 +8,17 @@ import flash.display.Sprite;
 import flash.events.EventDispatcher;
 import flash.events.MouseEvent;
 import flash.filters.GlowFilter;
+import flash.text.TextField;
+import flash.text.TextFieldAutoSize;
 
 import game.drawing.GunSlotsAdapter;
 import game.events.SceneEvent;
+import game.mapObjects.ObjectsHp;
 import game.matrix.MapMatrix;
 import game.tank.Tank;
 import game.tank.TankVO;
+
+import mx.core.TextFieldAsset;
 
 import state.UserState;
 
@@ -37,8 +43,13 @@ public class TankPodium extends EventDispatcher implements IScene{
 
 	private var _lock:Sprite;
 
+	private var _tutorialCounter:int;
+	private const MAX_TUTORIAL_COUNT:int = 2;
+	private var _tutorialView:Sprite;
+
 	public function TankPodium(container:Sprite) {
 		_closed = true;
+		_tutorialCounter = 0;
 		_container = container;
 		_paper = new GameBckg();
 		_tank = Tank.createPlayerTank(new TankVO());
@@ -48,6 +59,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 		_tank.y = 10.5;//MapMatrix.MATRIX_HEIGHT/2;
 		createPlayBtn();
 		createTankBaseBtns();
+		createTutorialView();
 		_gunSlots = new GunSlotsAdapter(this);
 	}
 
@@ -55,6 +67,8 @@ public class TankPodium extends EventDispatcher implements IScene{
 	public function get tank():Tank { return _tank; }
 
 	public function open():void {
+		tank.vo.speed = TankVO.FIRST_SPEED;
+		tank.vo.hp = ObjectsHp.PLAYER;
 		_closed = true;
 		_container.addChild(_paper);
 		_container.addChild(_tank);
@@ -75,6 +89,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 		for each (var tankBase:Sprite in _tankBases) {
 			_container.removeChild(tankBase);
 		}
+		if (_container.contains(_gunSlots)) { _container.removeChild(_gunSlots); }
 		_closed = true;
 	}
 
@@ -127,8 +142,30 @@ public class TankPodium extends EventDispatcher implements IScene{
 				tempBase.addEventListener(MouseEvent.MOUSE_OUT, onTankBaseMouseOut);
 			} else {
 				_lock = new Lock();
+				addTextToLock();
 				tempBase.addChild(_lock);
 			}
+		}
+	}
+
+	private function createTutorialView():void {
+		_tutorialView = new Sprite();
+		var leftView:Sprite = new Tutorial();
+		_tutorialView.addChild(leftView);
+		_tutorialView.x = _tutorialView.width/2;
+		_tutorialView.y = _tutorialView.height/2;
+	}
+
+	private function addTextToLock():void {
+		if (_lock) {
+			var tf:TextField = new TextField();
+			tf.selectable = false;
+			tf.autoSize = TextFieldAutoSize.LEFT;
+			tf.text = "50 points";
+			tf.x = -tf.textWidth/2;
+			tf.y = 26;
+			tf.textColor = 0x0fafdf;
+			_lock.addChild(tf);
 		}
 	}
 
@@ -136,7 +173,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 	private function onTankBaseClick(event:MouseEvent):void {
 		for (var i:int = 0; i < VALID_TANK_BASES.length; ++i) {
 			//trace(Sprite(event.target)["constructor"]);
-			if (Sprite(event.target)["constructor"] == VALID_TANK_BASES[i]) {
+			if (Sprite(event.target)["constructor"] == VALID_TANK_BASES_FOR_PLAYER[i]) {
 				_tank.updateBase(i);
 			}
 		}
@@ -170,6 +207,19 @@ public class TankPodium extends EventDispatcher implements IScene{
 	}
 
 	private function onPlayBtnClick(event:MouseEvent):void {
+		if (_tutorialCounter < 2) {
+			_tutorialCounter++;
+			_container.addChild(_tutorialView);
+			_tutorialView.addEventListener(MouseEvent.CLICK, onTutorialClick);
+		}
+	}
+	private function onTutorialClick(event:MouseEvent):void {
+		_tutorialView.removeEventListener(MouseEvent.CLICK, onTutorialClick);
+		_container.removeChild(_tutorialView);
+		startGame();
+	}
+
+	private function startGame():void {
 		UserState.instance.tankVO = _tank.vo.getClone();
 		switchScene();
 	}
