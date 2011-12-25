@@ -56,7 +56,7 @@ public class GameController extends EventDispatcher implements IScene{
 	private var _mapObjectsController:MapObjectsController;
 	private var _mouseDrawController:MouseDrawController;
 	private var _timeController:TimeController;
-	private var _debugController:DebugController;
+	//private var _debugController:DebugController;
 	private var _mouseDown:Boolean;
 	private var _endWindow:Sprite;
 
@@ -77,7 +77,7 @@ public class GameController extends EventDispatcher implements IScene{
 		_tankController.init(UserState.instance.tankVO);
 		initMapObjectsController();
 		addListeners();
-		_debugController.open();
+		//_debugController.open();
 	}
 
 	public function remove():void {
@@ -86,7 +86,7 @@ public class GameController extends EventDispatcher implements IScene{
 		_mouseDrawController.remove();
 		_tankController.remove();
 		_mapObjectsController.remove();
-		_debugController.close();
+		//_debugController.close();
 		_mouseDown = false;
 	}
 
@@ -116,7 +116,7 @@ public class GameController extends EventDispatcher implements IScene{
 		_mapObjectsController = new MapObjectsController(_mapMatrix, _container);
 		_tankMovementListener = new TankMovementListener(_tankController, _mapObjectsController, _mouseDrawController);
 		_timeController = new TimeController(_container);
-		_debugController = new DebugController(_container, this);
+		//_debugController = new DebugController(_container, this);
 		_mapEditor = new MapEditor(_container, _mapObjectsController, _mapMatrix);
 		initTimeController();
 	}

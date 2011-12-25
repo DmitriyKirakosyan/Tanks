@@ -136,10 +136,8 @@ import flash.utils.Timer;
 
 		private function moveEnemyFromBackstage(enemy:TankBotController):void {
 			var rnd:Number = Math.random();
-			trace("rnd "  + rnd);
 			var x:Number = rnd < .5 ? (1 + int(rnd*2 * (MapMatrix.MATRIX_WIDTH-1))) : rnd < 7.5 ? -1 : MapMatrix.MATRIX_WIDTH;
 			var y:Number = rnd > .5 ? (1 + int((rnd-.5)*2 * (MapMatrix.MATRIX_HEIGHT-1))) : rnd < 2.5 ? -1 : MapMatrix.MATRIX_HEIGHT;
-			trace("x : " + x + ", y : " + y);
 			enemy.tank.x = x;
 			enemy.tank.y = y;
 			moveEnemyTank(enemy);
