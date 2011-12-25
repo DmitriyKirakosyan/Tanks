@@ -168,9 +168,9 @@ public class GameController extends EventDispatcher implements IScene{
 		if(_tankController.tank.destroyed) {
 			_tankController.bam();
 			_mapObjectsController.targetsController.cleanTargetTank();
-			//endGame();
-			showEndWindow();
-			_container.addEventListener(MouseEvent.CLICK, onClick);
+			endGame();
+			//showEndWindow();
+			//_container.addEventListener(MouseEvent.CLICK, onClick);
 		} else {
 			_mapObjectsController.dropBonus(GameBonus.MEDKIT);
 		}
@@ -253,7 +253,7 @@ public class GameController extends EventDispatcher implements IScene{
 	}
 
 	private function endGame():void {
-		var timer:Timer = new Timer(2000, 1);
+		var timer:Timer = new Timer(3000, 1);
 		timer.addEventListener(TimerEvent.TIMER, onEndGameTimerComplete);
 		timer.start();
 	}

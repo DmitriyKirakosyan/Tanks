@@ -36,7 +36,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 	public static const VALID_TANK_BASES:Array = [TankBase1, TankBase2, EnemyBase1, EnemyBase2, EnemyBase3];
 	public static const VALID_TANK_BASES_FOR_PLAYER = [TankBase1, TankBase2];
 
-	private const SCORE_NEED_FOR_TANK_UNLOCK:int = 2;
+	private const SCORE_NEED_FOR_TANK_UNLOCK:int = 50;
 
 	private var _container:Sprite;
 
@@ -234,6 +234,8 @@ public class TankPodium extends EventDispatcher implements IScene{
 			_tutorialCounter++;
 			_container.addChild(_tutorialView);
 			_tutorialView.addEventListener(MouseEvent.CLICK, onTutorialClick);
+		} else {
+			startGame();
 		}
 	}
 	private function onTutorialClick(event:MouseEvent):void {
