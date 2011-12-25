@@ -43,10 +43,10 @@ public class TankGunController extends EventDispatcher implements IControllerWit
 	/* time functinos */
 
 	public function scaleTime(value:Number):void {
-		if (_reloadController.reloading) {
-			trace("reload controller speed down [TankGunController.scaleTime]");
+		//if (_reloadController.reloading) {
+		//	trace("reload controller speed down [TankGunController.scaleTime]");
 			_reloadController.scaleTime(value);
-		}
+		//}
 	}
 
 	public function pause():void {
