@@ -201,8 +201,10 @@ public class GameController extends EventDispatcher implements IScene{
 	private function onMouseMove(event:MouseEvent):void {
 		_pointUnderMouse.x = event.stageX;
 		_pointUnderMouse.y = event.stageY;
-		if (_mouseDown && _tankController.wannaShot) {
+		if (_mouseDown) {
 			_tankController.setTarget(_pointUnderMouse.clone());
+		}
+		if (_mouseDown && _tankController.wannaShot) {
 			_tankController.shot();
 		}
 	}
