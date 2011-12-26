@@ -3,7 +3,7 @@
  * Date: 12/24/11
  * Time: 3:44 PM
  */
-package game.drawing {
+package menu {
 import com.greensock.TweenLite;
 import com.greensock.TweenMax;
 

@@ -1,30 +1,20 @@
 
 package menu {
-import com.bit101.components.Text;
 import com.greensock.TweenMax;
-
-import flash.display.Shape;
 
 import flash.events.Event;
 import flash.display.Sprite;
 import flash.events.EventDispatcher;
 import flash.events.MouseEvent;
-import flash.filters.BlurFilter;
 import flash.filters.GlowFilter;
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
-import flash.text.TextFormat;
 
-import game.GameController;
-
-import game.drawing.GunSlotsAdapter;
 import game.events.SceneEvent;
 import game.mapObjects.ObjectsHp;
 import game.matrix.MapMatrix;
 import game.tank.Tank;
 import game.tank.TankVO;
-
-import mx.core.TextFieldAsset;
 
 import state.UserState;
 
@@ -51,7 +41,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 
 	private var _tutorialCounter:int;
 	private const MAX_TUTORIAL_COUNT:int = 2;
-	private var _tutorialView:Sprite;
+	private var _tutorialWindow:TutorialWindow;
 
 	public function TankPodium(container:Sprite) {
 		_closed = true;
@@ -65,7 +55,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 		_tank.y = 10.5;//MapMatrix.MATRIX_HEIGHT/2;
 		createPlayBtn();
 		createTankBaseBtns();
-		createTutorialView();
+		_tutorialWindow = new TutorialWindow();
 		_gunSlots = new GunSlotsAdapter(this);
 	}
 
@@ -154,52 +144,6 @@ public class TankPodium extends EventDispatcher implements IScene{
 		}
 	}
 
-	private function createTutorialView():void {
-		_tutorialView = new Sprite();
-		var leftView:Sprite = new Tutorial2();
-		var rightView:Sprite = new Tutorial1();
-		leftView.x = -leftView.width/4+10;
-		leftView.y = -leftView.height/4+10;
-		rightView.x = rightView.width/4;
-		rightView.y = rightView.height/4 +10;
-		leftView.filters = [new GlowFilter(0)];
-		rightView.filters = [new GlowFilter(0)];
-		//leftView.alpha = .85;
-		//rightView.alpha = .75;
-		_tutorialView.addChild(rightView);
-		_tutorialView.addChild(leftView);
-		_tutorialView.x = _tutorialView.width/2;
-		_tutorialView.y = _tutorialView.height/2;
-		var leftText:TextField = new TextField();
-		var rightText:TextField = new TextField();
-		leftText.selectable = rightText.selectable = false;
-		leftText.autoSize = rightText.autoSize = TextFieldAutoSize.LEFT
-		leftText.x = -100//leftView.width/2 + 5;
-		leftText.y = 60//-leftView.height/2 + 10;
-		var textFormat:TextFormat = new TextFormat(null, 22, 0x191970);
-		rightText.defaultTextFormat = textFormat;
-		textFormat.italic = true;
-		leftText.defaultTextFormat = textFormat;
-		rightText.defaultTextFormat = textFormat;
-		leftText.text = "click for attack";
-		rightText.text = "drag for move";
-		rightText.x = -70;
-		rightText.y = 130;
-		leftView.addChild(leftText);
-		rightView.addChild(rightText);
-
-		var bkg:Shape = new Shape();
-		bkg.graphics.beginFill(0xBEBEBE, .8);
-		var width:Number = MapMatrix.MATRIX_WIDTH*GameController.CELL;
-		var height:Number = MapMatrix.MATRIX_WIDTH*GameController.CELL;
-		bkg.graphics.drawRect(-width/2, -height/2, width, height);
-		bkg.graphics.endFill();
-		bkg.filters = [new BlurFilter()];
-		bkg.x = 5;
-		bkg.y = 29;
-		_tutorialView.addChildAt(bkg, 0);
-	}
-
 	private function addTextToLock():void {
 		if (_lock) {
 			var tf:TextField = new TextField();
@@ -251,17 +195,17 @@ public class TankPodium extends EventDispatcher implements IScene{
 	}
 
 	private function onPlayBtnClick(event:MouseEvent):void {
-		if (_tutorialCounter < 2) {
+		if (_tutorialWindow && _tutorialCounter < MAX_TUTORIAL_COUNT) {
 			_tutorialCounter++;
-			_container.addChild(_tutorialView);
-			_tutorialView.addEventListener(MouseEvent.CLICK, onTutorialClick);
+			_container.addChild(_tutorialWindow);
+			_tutorialWindow.addEventListener(MouseEvent.CLICK, onTutorialClick);
 		} else {
 			startGame();
 		}
 	}
 	private function onTutorialClick(event:MouseEvent):void {
-		_tutorialView.removeEventListener(MouseEvent.CLICK, onTutorialClick);
-		_container.removeChild(_tutorialView);
+		_tutorialWindow.removeEventListener(MouseEvent.CLICK, onTutorialClick);
+		_container.removeChild(_tutorialWindow);
 		startGame();
 	}
 

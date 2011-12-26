@@ -255,18 +255,21 @@ public class GameController extends EventDispatcher implements IScene{
 	}
 
 	private function endGame():void {
-		var timer:Timer = new Timer(3000, 1);
-		timer.addEventListener(TimerEvent.TIMER, onEndGameTimerComplete);
-		timer.start();
+		onEndGameTimerComplete(null);
+		//var timer:Timer = new Timer(3000, 1);
+		//timer.addEventListener(TimerEvent.TIMER, onEndGameTimerComplete);
+		//timer.start();
 	}
 	private function onEndGameTimerComplete(event:TimerEvent):void {
-		var mochiScore:MochiDigits = new MochiDigits();
-		mochiScore.value = UserState.instance.allScore();
-		MochiScores.showLeaderboard({
-			boardID: boardID,
-			score: mochiScore.value,
-			onClose: showEndWindow
-		});
+		if (Main.MOCHI_ON) {
+			var mochiScore:MochiDigits = new MochiDigits();
+			mochiScore.value = UserState.instance.allScore();
+			MochiScores.showLeaderboard({
+				boardID: boardID,
+				score: mochiScore.value,
+				onClose: showEndWindow
+			});
+		} else { showEndWindow(); }
 	}
 
 	private function showEndWindow(e:* = null):void {

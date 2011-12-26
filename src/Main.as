@@ -17,6 +17,8 @@ import mochi.as3.MochiServices;
 		//mochimedia.com
 		var _mochiads_game_id:String = "88119fe352061898";
 
+		public static var MOCHI_ON:Boolean = false;
+
 		public function Main() {
 			start();
 			/*
@@ -30,12 +32,17 @@ import mochi.as3.MochiServices;
 		}
 
 		private function start():void {
-			MochiServices.connect( _mochiads_game_id, stage);
+			//MochiServices.connect( _mochiads_game_id, stage, onMochiConnectError);
 			container = new Sprite();
 			this.addChild(container);
 
 			new SceneController(container);
-			SWFProfiler.init(stage, container);
+			//SWFProfiler.init(stage, container);
+		}
+
+		private function onMochiConnectError():void {
+			MOCHI_ON = false;
+			trace("Mochi connect fails");
 		}
 
 	}
