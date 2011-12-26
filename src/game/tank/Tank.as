@@ -33,11 +33,8 @@ public class Tank extends MapObject {
 
 	private var _isPlayer:Boolean;
 
-	private var _speedup:Number = 0;
-	private var maxSpeedup:Number = .5;
-
 	public static function createBotTank(vo:TankVO, strength:uint):Tank {
-        vo.tankBase = strength + 2;
+		vo.tankBase = strength + 2;
 		var hp:Number = strength == TankBotController.BASE_BOT ? ObjectsHp.FIST_BOT :
 										strength == TankBotController.ADVANCE_BOT ? ObjectsHp.SECOND_BOT : ObjectsHp.THIRD_BOT;
 		var tank:Tank = new Tank(vo, false, hp);
@@ -143,12 +140,6 @@ public class Tank extends MapObject {
 
 	public function get vo():TankVO { return _vo; }
 	public function get isPlayer():Boolean {return _isPlayer;}
-	public function set isPlayer(value:Boolean):void { _isPlayer = value; }
-	public function set speedup(value:Number):void {
-		value; //TODO refact it
-		if (_speedup < maxSpeedup) { _speedup+= .05; }
-	}
-	public function get speedup():Number { return _speedup; }
 
 	public function remove():void {
 		killTweens();
@@ -168,8 +159,6 @@ public class Tank extends MapObject {
 	override public function hitTestObject(object:DisplayObject):Boolean {
 		return _tankBase.hitTestObject(object) || _gun.hitTestObject(object);
 	}
-
-	public function updateSpeedup():void { _speedup = 0; }
 
 	/* Internal functions */
 
