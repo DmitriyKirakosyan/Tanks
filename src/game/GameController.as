@@ -58,7 +58,7 @@ public class GameController extends EventDispatcher implements IScene{
 	private var _timeController:TimeController;
 	//private var _debugController:DebugController;
 	private var _mouseDown:Boolean;
-	private var _endWindow:Sprite;
+	private var _endWindow:EndGameWindow;
 
 	private var _pointUnderMouse:Point;
 
@@ -276,66 +276,9 @@ public class GameController extends EventDispatcher implements IScene{
 		if (_endWindow && _container.contains(_endWindow)) {
 			_container.removeChild(_endWindow);
 		}
-		_endWindow = new Sprite();
-		var bkg:Sprite = new Sprite();
-		bkg.graphics.beginFill(0x696969, .7);
-		bkg.graphics.drawRect(-100, -50, 200, 100);
-		bkg.graphics.endFill();
-		bkg.filters = [new BlurFilter()];
-		_endWindow.addChild(bkg);
-		_endWindow.x = MapMatrix.MATRIX_HEIGHT * GameController.CELL/2;
-		_endWindow.y = MapMatrix.MATRIX_WIDTH * GameController.CELL/2;
-		showResultOnEndWindow();
+		_endWindow = new EndGameWindow();
 		_container.addChild(_endWindow);
 		_container.addEventListener(MouseEvent.CLICK, onClick);
-	}
-
-	private function showResultOnEndWindow():void {
-		if (!_endWindow) { return; }
-		var tanksSprite:Sprite = new Sprite();
-		var tank:Tank;
-		var textField:TextField;
-			tank = Tank.createBotTank(new TankVO(), TankBotController.BASE_BOT);
-			tank.originY += tank.height/2;
-			tank.originX += tank.width/2;
-			tanksSprite.addChild(tank);
-			textField = createScoreTF(UserState.instance.firstKilledNum);
-			textField.x = tank.width + 10;
-			tanksSprite.addChild(textField);
-		if (UserState.instance.secondKilledNum > 0) {
-			tank = Tank.createBotTank(new TankVO(), TankBotController.ADVANCE_BOT);
-			tank.originX = tank.width + 30 + tank.width/2;
-			tank.originY += tank.height/2;
-			tanksSprite.addChild(tank);
-			textField = createScoreTF(UserState.instance.secondKilledNum);
-			textField.x = tank.width*2 + 40;
-			tanksSprite.addChild(textField);
-		}
-		if (UserState.instance.thirdKilledNum > 0) {
-			tank = Tank.createBotTank(new TankVO(), TankBotController.HARD_BOT);
-			tank.originX = tank.width*2 + 60 + tank.width/2;
-			tank.originY += tank.height/2;
-			tanksSprite.addChild(tank);
-			textField = createScoreTF(UserState.instance.firstKilledNum);
-			textField.x = tank.width + 10;
-			tanksSprite.addChild(textField);
-			textField = createScoreTF(UserState.instance.thirdKilledNum);
-			textField.x = tank.width*3 + 70;
-			tanksSprite.addChild(textField);
-		}
-		tanksSprite.y = -tanksSprite.height/2;
-		tanksSprite.x = -tanksSprite.width/2;
-		_endWindow.addChild(tanksSprite);
-	}
-
-	private function createScoreTF(value:int):TextField {
-		var result:TextField = new TextField();
-		result.selectable = false;
-		result.autoSize = TextFieldAutoSize.LEFT;
-		result.text = String(value);
-		result.y = 20;
-		result.textColor = 0xffffff
-		return result;
 	}
 
 	private function hideEndWindow():void {
