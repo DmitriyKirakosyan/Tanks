@@ -55,7 +55,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 		_tank.y = 10.5;//MapMatrix.MATRIX_HEIGHT/2;
 		createPlayBtn();
 		createTankBaseBtns();
-		_tutorialWindow = new TutorialWindow();
+		//_tutorialWindow = new TutorialWindow();
 		_gunSlots = new GunSlotsAdapter(this);
 	}
 
