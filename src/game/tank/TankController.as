@@ -118,7 +118,6 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 	}
 
 	public function readyForMoving():void {
-		tank.updateSpeedup();
 		_movingTimeline.kill();
 		_movingTimeline = new TimelineMax({onComplete : onMovingComplete});
 		_movingTimeline.stop();

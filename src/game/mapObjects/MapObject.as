@@ -1,4 +1,6 @@
 package game.mapObjects {
+import flash.geom.Point;
+
 import game.*;
 	import flash.display.Sprite;
 
@@ -50,8 +52,16 @@ import game.*;
 		public function set originY(value:Number):void { super.y = value; }
 
 		public function correctMapPosition():void {
-			x = int (x + .5);
-			y = int (y + .5);
+			var correctedX:int = x < 0 ? x - .5 : x + .5;
+			var correctedY:int = y < 0 ? y - .5 : y + .5;
+			x = correctedX;
+			y = correctedY;
+		}
+
+		public function getCorrectedMapPosition():Point {
+			var correctedX:int = x < 0 ? x - .5 : x + .5;
+			var correctedY:int = y < 0 ? y - .5 : y + .5;
+			return new Point(correctedX, correctedY);
 		}
 
 		private function drawRectangle():void {

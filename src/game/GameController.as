@@ -2,6 +2,7 @@ package game {
 import com.bit101.components.Text;
 
 import flash.events.Event;
+import flash.events.KeyboardEvent;
 import flash.events.TimerEvent;
 import flash.filters.BlurFilter;
 import flash.text.TextField;
@@ -59,6 +60,7 @@ public class GameController extends EventDispatcher implements IScene{
 	//private var _debugController:DebugController;
 	private var _mouseDown:Boolean;
 	private var _endWindow:EndGameWindow;
+	private var _keyboardListener:KeyboardListener;
 
 	private var _pointUnderMouse:Point;
 
@@ -118,6 +120,7 @@ public class GameController extends EventDispatcher implements IScene{
 		_timeController = new TimeController(_container);
 		//_debugController = new DebugController(_container, this);
 		_mapEditor = new MapEditor(_container, _mapObjectsController, _mapMatrix);
+		_keyboardListener = new KeyboardListener(_container);
 		initTimeController();
 	}
 
@@ -143,6 +146,9 @@ public class GameController extends EventDispatcher implements IScene{
 		_container.addEventListener(MouseEvent.MOUSE_UP, onStageMouseUp);
 		_container.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 		_container.addEventListener(MouseEvent.ROLL_OUT, onContainerMouseOut);
+
+		_keyboardListener.addListeners();
+		_keyboardListener.addEventListener(KeyboardEvent.KEY_DOWN, onKeyboardKeyDown);
 	}
 
 	private function removeListeners():void {
@@ -159,6 +165,9 @@ public class GameController extends EventDispatcher implements IScene{
 		_container.removeEventListener(MouseEvent.MOUSE_UP, onStageMouseUp);
 		_container.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 		_container.removeEventListener(MouseEvent.ROLL_OUT, onContainerMouseOut);
+
+		_keyboardListener.removeListeners();
+		_keyboardListener.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyboardKeyDown);
 	}
 
 	/* event handlers */
@@ -206,6 +215,22 @@ public class GameController extends EventDispatcher implements IScene{
 		}
 		if (_mouseDown && _tankController.wannaShot) {
 			_tankController.shot();
+		}
+	}
+
+	private function onKeyboardKeyDown(event:KeyboardEvent):void {
+		switch (_keyboardListener.keyPressed) {
+			case KeyboardListener.LEFT:
+				_tankController.moveLeft();
+				break;
+			case KeyboardListener.RIGHT:
+				_tankController.moveRight();
+				break;
+			case KeyboardListener.UP:
+				_tankController.moveUp();
+				break;
+			default:
+				_tankController.moveDown();
 		}
 	}
 

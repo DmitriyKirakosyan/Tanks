@@ -26,7 +26,31 @@ public class PlayerTankController extends TankController{
 
 	override protected function createTank(tankVO:TankVO):void {
 		tank = Tank.createPlayerTank(tankVO);
-		//highlightPlayerTank();
+	}
+
+	public function moveUp():void {
+		if (tank.y == tank.getCorrectedMapPosition().y) {
+			readyForMoving();
+			addPointToMovePath(new Point(tank.x, tank.y - 1));
+		}
+	}
+	public function moveDown():void {
+		if (tank.y == tank.getCorrectedMapPosition().y) {
+			readyForMoving();
+			addPointToMovePath(new Point(tank.x, tank.y + 1));
+		}
+	}
+	public function moveLeft():void {
+		if (tank.x == tank.getCorrectedMapPosition().x) {
+			readyForMoving();
+			addPointToMovePath(new Point(tank.x - 1, tank.x));
+		}
+	}
+	public function moveRight():void {
+		if (tank.x == tank.getCorrectedMapPosition().x) {
+			readyForMoving();
+			addPointToMovePath(new Point(tank.x + 1, tank.y));
+		}
 	}
 
 }
