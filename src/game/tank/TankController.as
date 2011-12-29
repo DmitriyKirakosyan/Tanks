@@ -145,7 +145,7 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 
 	public function addPointToMovePath(point:Point):void {
 		if (!point) { return; }
-		const speedCoef:Number = tank.isPlayer ? 1 : _mapMatrix.getSpeedForTank(point);
+		const speedCoef:Number = _mapMatrix.getSpeedForTank(point);
 		_movingTimeline.append(new TweenMax(tank, speedCoef/(tank.vo.speed/5),
 					{x : point.x, y : point.y,
 					ease : Linear.easeNone,
@@ -202,8 +202,8 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 	protected function onStartMoveToPathNode(point:Point):void {
 		_direction.rotateIfNeed(tank, point);
 
-		//clearTankCell();
-		//_mapMatrix.setTankCell(point.x,  point.y, 1);
+		clearTankCell();
+		_mapMatrix.setTankCell(point.x,  point.y, 1);
 		dispatchEvent(new TankEvent(TankEvent.COME_TO_CELL));
 		_nextPoint = point;
 	}
