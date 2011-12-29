@@ -60,6 +60,18 @@ public class TankBotController extends TankController{
 		}
 	}
 
+	override protected function onStartMoveToPathNode(point:Point):void {
+		if (!_mapMatrix.isFreeTankCell(point.x,  point.y)) {
+			movingTimeline.vars["onComplete"] = null;
+			movingTimeline.kill();
+			tank.correctMapPosition();
+			onMovingComplete();
+			return;
+		} else {
+			super.onStartMoveToPathNode(point);
+		}
+	}
+
 	public function removeTargetTank():void {
 		if (_targetTank) {
 			_targetTank = null;

@@ -57,7 +57,7 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 		_mapMatrix = mapMatrix;
 	}
 
-	public function get movingTimeline():TimelineMax { return _movingTimeline; }
+	protected function get movingTimeline():TimelineMax { return _movingTimeline; }
 	public function get wannaShot():Boolean { return _wannaShot; }
 	public function get gunController():TankGunController { return _gunController; }
 
@@ -199,14 +199,7 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 		dispatchEvent(new TankEvent(TankEvent.MOVING_COMPLETE, this));
 	}
 
-	private function onStartMoveToPathNode(point:Point):void { 
-		if (!_mapMatrix.isFreeTankCell(point.x,  point.y)) {
-			_movingTimeline.vars["onComplete"] = null;
-			_movingTimeline.kill();
-			tank.correctMapPosition();
-			onMovingComplete();
-			return;
-		}
+	protected function onStartMoveToPathNode(point:Point):void {
 		_direction.rotateIfNeed(tank, point);
 
 		clearTankCell();

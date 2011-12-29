@@ -22,8 +22,8 @@ public class TankVO {
 	public static const DEFAULT_BASE:uint = 0;
 	public static const BRICK_BASE:uint = 1;
 
-	public static const FIRST_SPEED:Number = 5;
-	public static const SECOND_SPEED:Number = 7.5;
+	public static const FIRST_SPEED:Number = 8;
+	public static const SECOND_SPEED:Number = 10.5;
 
 	public static const TANK_BASE_1:uint = 0;
 	public static const TANK_BASE_2:uint = 1;

@@ -29,25 +29,25 @@ public class PlayerTankController extends TankController{
 	}
 
 	public function moveUp():void {
-		if (tankPointIsCorrect()) {
+		if (tankPointIsCorrect() && canMoveToPoint(tank.x, tank.y - 1)) {
 			readyForMoving();
 			addPointToMovePath(new Point(tank.x, tank.y - 1));
 		}
 	}
 	public function moveDown():void {
-		if (tankPointIsCorrect()) {
+		if (tankPointIsCorrect() && canMoveToPoint(tank.x, tank.y + 1)) {
 			readyForMoving();
 			addPointToMovePath(new Point(tank.x, tank.y + 1));
 		}
 	}
 	public function moveLeft():void {
-		if (tankPointIsCorrect()) {
+		if (tankPointIsCorrect() && canMoveToPoint(tank.x - 1, tank.y)) {
 			readyForMoving();
 			addPointToMovePath(new Point(tank.x - 1, tank.y));
 		}
 	}
 	public function moveRight():void {
-		if (tankPointIsCorrect()) {
+		if (tankPointIsCorrect() && canMoveToPoint(tank.x + 1, tank.y)) {
 			readyForMoving();
 			addPointToMovePath(new Point(tank.x + 1, tank.y));
 		}
@@ -58,6 +58,10 @@ public class PlayerTankController extends TankController{
 	private function tankPointIsCorrect():Boolean {
 		var correctedPoint:Point = tank.getCorrectedMapPosition();
 		return tank.x == correctedPoint.x && tank.y == correctedPoint.y;
+	}
+
+	private function canMoveToPoint(x:Number, y:Number):Boolean {
+		return _mapMatrix.isFreeCell(x, y) && _mapMatrix.isFreeTankCell(x, y);
 	}
 
 }
