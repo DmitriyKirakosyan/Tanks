@@ -93,7 +93,6 @@ public class MouseDrawController extends EventDispatcher{
 
 	public function removePart():void {
 		if (!_pathParts || _pathParts.length == 0) {
-			trace("[MouseDrawingController.removePart] why no parts??");
 			return;
 		}
 		const part:Sprite = _pathParts[0];

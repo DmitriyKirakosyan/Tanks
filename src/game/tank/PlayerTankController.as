@@ -29,28 +29,35 @@ public class PlayerTankController extends TankController{
 	}
 
 	public function moveUp():void {
-		if (tank.y == tank.getCorrectedMapPosition().y) {
+		if (tankPointIsCorrect()) {
 			readyForMoving();
 			addPointToMovePath(new Point(tank.x, tank.y - 1));
 		}
 	}
 	public function moveDown():void {
-		if (tank.y == tank.getCorrectedMapPosition().y) {
+		if (tankPointIsCorrect()) {
 			readyForMoving();
 			addPointToMovePath(new Point(tank.x, tank.y + 1));
 		}
 	}
 	public function moveLeft():void {
-		if (tank.x == tank.getCorrectedMapPosition().x) {
+		if (tankPointIsCorrect()) {
 			readyForMoving();
-			addPointToMovePath(new Point(tank.x - 1, tank.x));
+			addPointToMovePath(new Point(tank.x - 1, tank.y));
 		}
 	}
 	public function moveRight():void {
-		if (tank.x == tank.getCorrectedMapPosition().x) {
+		if (tankPointIsCorrect()) {
 			readyForMoving();
 			addPointToMovePath(new Point(tank.x + 1, tank.y));
 		}
+	}
+
+	/* Internal functions */
+
+	private function tankPointIsCorrect():Boolean {
+		var correctedPoint:Point = tank.getCorrectedMapPosition();
+		return tank.x == correctedPoint.x && tank.y == correctedPoint.y;
 	}
 
 }

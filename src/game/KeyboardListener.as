@@ -26,26 +26,26 @@ public class KeyboardListener extends EventDispatcher{
 	public function get keyPressed():uint { return _keyPressed; }
 
 	public function addListeners():void {
-		_container.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
-		_container.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+		_container.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		_container.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 	}
 	public function removeListeners():void {
-		_container.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
-		_container.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+		_container.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		_container.stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 	}
 
 	private function onKeyDown(event:KeyboardEvent):void {
 		var availableKey:Boolean = false;
-		if (event.keyCode == Keyboard.LEFT) {
+		if (event.keyCode == Keyboard.LEFT || event.keyCode == Keyboard.A) {
 			_keyPressed = LEFT;
 			availableKey = true;
-		} else if (event.keyCode == Keyboard.RIGHT) {
+		} else if (event.keyCode == Keyboard.RIGHT || event.keyCode == Keyboard.D) {
 			_keyPressed = RIGHT;
 			availableKey = true;
-		} else if (event.keyCode == Keyboard.UP) {
+		} else if (event.keyCode == Keyboard.UP || event.keyCode == Keyboard.W) {
 			_keyPressed = UP;
 			availableKey = true;
-		} else if (event.keyCode == Keyboard.DOWN) {
+		} else if (event.keyCode == Keyboard.DOWN || event.keyCode == Keyboard.S) {
 			_keyPressed = DOWN;
 			availableKey = true;
 		}
