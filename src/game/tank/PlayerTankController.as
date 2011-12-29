@@ -56,11 +56,13 @@ public class PlayerTankController extends TankController{
 	/* Internal functions */
 
 	private function tankPointIsCorrect():Boolean {
+		return true;
 		var correctedPoint:Point = tank.getCorrectedMapPosition();
 		return tank.x == correctedPoint.x && tank.y == correctedPoint.y;
 	}
 
 	private function canMoveToPoint(x:Number, y:Number):Boolean {
+		return true;
 		return _mapMatrix.isFreeCell(x, y) && _mapMatrix.isFreeTankCell(x, y);
 	}
 

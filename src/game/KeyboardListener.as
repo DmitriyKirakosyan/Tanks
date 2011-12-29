@@ -7,6 +7,8 @@ package game {
 import flash.display.Sprite;
 import flash.events.EventDispatcher;
 import flash.events.KeyboardEvent;
+import flash.events.TextEvent;
+import flash.text.engine.TextElement;
 import flash.ui.Keyboard;
 
 public class KeyboardListener extends EventDispatcher{
@@ -28,10 +30,16 @@ public class KeyboardListener extends EventDispatcher{
 	public function addListeners():void {
 		_container.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		_container.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+		_container.addEventListener(TextEvent.TEXT_INPUT, onTextInput);
 	}
 	public function removeListeners():void {
 		_container.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		_container.stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+		_container.stage.removeEventListener(TextEvent.TEXT_INPUT, onTextInput);
+	}
+
+	private function onTextInput(event:TextEvent):void {
+		if (event.text == "ф") { trace("yes"); }
 	}
 
 	private function onKeyDown(event:KeyboardEvent):void {
