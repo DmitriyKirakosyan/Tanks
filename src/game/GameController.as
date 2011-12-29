@@ -13,6 +13,7 @@ import game.Debug.DebugController;
 import game.events.DamageObjectEvent;
 import game.events.GameBonusEvent;
 import game.events.SceneEvent;
+import game.events.TankEvent;
 import game.mapObjects.MapEditor;
 import game.mapObjects.bonus.GameBonus;
 import game.tank.PlayerTankController;
@@ -141,6 +142,7 @@ public class GameController extends EventDispatcher implements IScene{
 		_mapObjectsController.addEventListener(GameBonusEvent.BONUS_APPLY_TO_PLAYER, onApplyBonusToPlayer);
 		_tankController.addEventListener(TankShotingEvent.WAS_SHOT, onTankShot);
 		_tankController.addEventListener(TankShotingEvent.RELOAD_COMPLETE, onTankReloadComplete);
+		_tankController.addEventListener(TankEvent.MOVING_COMPLETE, onTankMovingComplete);
 
 		_container.addEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
 		_container.addEventListener(MouseEvent.MOUSE_UP, onStageMouseUp);
@@ -160,6 +162,7 @@ public class GameController extends EventDispatcher implements IScene{
 		_mapObjectsController.removeEventListener(GameBonusEvent.BONUS_APPLY_TO_PLAYER, onApplyBonusToPlayer);
 		_tankController.removeEventListener(TankShotingEvent.WAS_SHOT, onTankShot);
 		_tankController.removeEventListener(TankShotingEvent.RELOAD_COMPLETE, onTankReloadComplete);
+		_tankController.removeEventListener(TankEvent.MOVING_COMPLETE, onTankMovingComplete);
 
 		_container.removeEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
 		_container.removeEventListener(MouseEvent.MOUSE_UP, onStageMouseUp);
@@ -219,6 +222,10 @@ public class GameController extends EventDispatcher implements IScene{
 	}
 
 	private function onKeyboardKeyDown(event:KeyboardEvent):void {
+		movePlayerTankByKeyboard();
+	}
+
+	private function movePlayerTankByKeyboard() {
 		switch (_keyboardListener.keyPressed) {
 			case KeyboardListener.LEFT:
 				_tankController.moveLeft();
@@ -233,6 +240,7 @@ public class GameController extends EventDispatcher implements IScene{
 				_tankController.moveDown();
 		}
 	}
+
 
 	private function onContainerMouseOut(event:MouseEvent):void {
 		timeController.normalize();
@@ -258,6 +266,12 @@ public class GameController extends EventDispatcher implements IScene{
 		if (_mouseDown && _tankController.wannaShot) {
 			_tankController.setTarget(_pointUnderMouse);
 			_tankController.shot();
+		}
+	}
+
+	private function onTankMovingComplete(event:TankEvent):void {
+		if (_keyboardListener.keyPressed != KeyboardListener.NOTHING) {
+			movePlayerTankByKeyboard();
 		}
 	}
 
