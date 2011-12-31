@@ -5,6 +5,8 @@ import com.greensock.TweenLite;
 import flash.events.Event;
 import flash.geom.ColorTransform;
 
+import game.GameController;
+
 import game.events.GunRotateCompleteEvent;
 
 import game.events.TankDestructionEvent;
@@ -145,7 +147,10 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 
 	public function addPointToMovePath(point:Point):void {
 		if (!point) { return; }
-		const speedCoef:Number = _mapMatrix.getSpeedForTank(point);
+		var speedCoef:Number = _mapMatrix.getSpeedForTank(point);
+		if (tank.isPlayer) {
+			speedCoef *= Point.distance(new Point(tank.x, tank.y), point);
+		}
 		_movingTimeline.append(new TweenMax(tank, speedCoef/(tank.vo.speed/5),
 					{x : point.x, y : point.y,
 					ease : Linear.easeNone,

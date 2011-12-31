@@ -24,7 +24,7 @@ public class TankGunController extends EventDispatcher implements IControllerWit
 	private var _targetRotation:Number;
 
 
-	private var _gunSpeed:Number = 4;
+	private var _gunSpeed:Number;
 
 	public function TankGunController(tank:Tank) {
 		_tank = tank;
@@ -82,12 +82,7 @@ public class TankGunController extends EventDispatcher implements IControllerWit
 		var angle:Number = getAngleByPoint(point);
 		_rotationCoeff = getCoeffForAngle(angle);
 		_targetRotation = angle > 180 ? angle - 360 : angle;
-//		if (Math.abs(_gun.rotation - _targetRotation) < 2 ||
-//				Math.abs(_gun.rotation - _targetRotation) > 358) {
-//			_gun.rotation = _targetRotation;
-//		} else {
-			startRotating();
-//		}
+		startRotating();
 	}
 
 	private function startRotating():void {

@@ -14,6 +14,7 @@ import flash.ui.Keyboard;
 public class KeyboardListener extends EventDispatcher{
 	private var _container:Sprite;
 	private var _keyPressed:uint;
+	private var _keyCodeStack:Vector.<uint>;
 
 	public static const LEFT:uint = 1;
 	public static const RIGHT:uint = 2;
@@ -23,6 +24,7 @@ public class KeyboardListener extends EventDispatcher{
 
 	public function KeyboardListener(container:Sprite) {
 		_container = container;
+		_keyCodeStack = new Vector.<uint>();
 	}
 
 	public function get keyPressed():uint { return _keyPressed; }
@@ -43,6 +45,11 @@ public class KeyboardListener extends EventDispatcher{
 	}
 
 	private function onKeyDown(event:KeyboardEvent):void {
+		if (_keyCodeStack.indexOf(event.keyCode) != -1) {
+			_keyCodeStack.splice(_keyCodeStack.indexOf(event.keyCode), 1);
+		}
+		_keyCodeStack.push(event.keyCode);
+
 		var availableKey:Boolean = false;
 		if (event.keyCode == Keyboard.LEFT || event.keyCode == Keyboard.A) {
 			_keyPressed = LEFT;
@@ -62,7 +69,27 @@ public class KeyboardListener extends EventDispatcher{
 		}
 	}
 	private function onKeyUp(event:KeyboardEvent):void {
-		_keyPressed = NOTHING;
+		var indexKeyCode:uint = _keyCodeStack.indexOf(event.keyCode);
+		if (indexKeyCode != -1) {
+			_keyCodeStack.splice(_keyCodeStack.indexOf(event.keyCode), 1);
+		}
+		if (_keyCodeStack.length == 0) {
+			_keyPressed = NOTHING;
+		} else { updateKeyPressed(); }
+	}
+
+	private function updateKeyPressed():void {
+		var keyCode:uint = _keyCodeStack[0];
+		if (keyCode == Keyboard.LEFT || keyCode == Keyboard.A) {
+			_keyPressed = LEFT;
+		} else if (keyCode == Keyboard.RIGHT || keyCode == Keyboard.D) {
+			_keyPressed = RIGHT;
+		} else if (keyCode == Keyboard.UP || keyCode == Keyboard.W) {
+			_keyPressed = UP;
+		} else if (keyCode == Keyboard.DOWN || keyCode == Keyboard.S) {
+			_keyPressed = DOWN;
+		}
+
 	}
 
 }

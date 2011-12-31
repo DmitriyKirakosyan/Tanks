@@ -32,6 +32,7 @@ public class PlayerTankController extends TankController{
 	}
 
 	private function moveOnePoint(x:Number, y:Number, keyDirection:uint):void {
+		trace("move one point " + Math.random() + "[PlayerTankController.moveOnePoint");
 		readyForMoving();
 		addPointToMovePath(_mapMatrix.correctMatrixPoint(x, y));
 		_currentKeyDirection = keyDirection;
