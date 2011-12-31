@@ -31,6 +31,12 @@ public class MapMatrix {
 		return new Point(int(point.x / GameController.CELL), int(point.y / GameController.CELL));
 	}
 
+	public function correctMatrixPoint(x:Number, y:Number):Point {
+		var correctedX:int = x < 0 ? x - .5 : x + .5;
+		var correctedY:int = y < 0 ? y - .5 : y + .5;
+		return new Point(correctedX,correctedY);
+	}
+
 	public function getStagePoint(point:Point):Point {
 		return new Point(point.x * GameController.CELL + GameController.CELL/2,
 											point.y * GameController.CELL + GameController.CELL/2);

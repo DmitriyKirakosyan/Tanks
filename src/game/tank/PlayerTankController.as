@@ -5,7 +5,6 @@
  */
 package game.tank {
 import flash.display.Sprite;
-import flash.geom.ColorTransform;
 import flash.geom.Point;
 
 import game.KeyboardListener;
@@ -13,6 +12,8 @@ import game.KeyboardListener;
 import game.matrix.MapMatrix;
 
 public class PlayerTankController extends TankController{
+	private var _currentKeyDirection:uint;
+
 	public function PlayerTankController(container:Sprite, mapMatrix:MapMatrix) {
 		super(container,  mapMatrix);
 	}
@@ -30,80 +31,66 @@ public class PlayerTankController extends TankController{
 		tank = Tank.createPlayerTank(tankVO);
 	}
 
+	private function moveOnePoint(x:Number, y:Number, keyDirection:uint):void {
+		readyForMoving();
+		addPointToMovePath(_mapMatrix.correctMatrixPoint(x, y));
+		_currentKeyDirection = keyDirection;
+	}
+
 	public function moveUp():void {
 		if (tankPointIsCorrect() && canMoveToPoint(tank.x, tank.y - 1)) {
-			readyForMoving();
-			addPointToMovePath(new Point(tank.x, tank.y - 1));
-		} else if (tryMoveBack(KeyboardListener.UP)) {
-			readyForMoving();
+			moveOnePoint(tank.x,  tank.y-1, KeyboardListener.UP);
+		} else if (triesMoveBack(KeyboardListener.UP)) {
 			var correctedPoint:Point = tank.getCorrectedMapPosition();
 			if (correctedPoint.y > tank.y) { correctedPoint.y--; }
-			addPointToMovePath(new Point(correctedPoint.x, correctedPoint.y));
+			moveOnePoint(correctedPoint.x, correctedPoint.y, KeyboardListener.UP);
 		}
 	}
 	public function moveDown():void {
 		if (tankPointIsCorrect() && canMoveToPoint(tank.x, tank.y + 1)) {
-			readyForMoving();
-			addPointToMovePath(new Point(tank.x, tank.y + 1));
-		} else if (tryMoveBack(KeyboardListener.DOWN)) {
-			readyForMoving();
+			moveOnePoint(tank.x,  tank.y + 1, KeyboardListener.DOWN);
+		} else if (triesMoveBack(KeyboardListener.DOWN)) {
 			var correctedPoint:Point = tank.getCorrectedMapPosition();
 			if (correctedPoint.y < tank.y) { correctedPoint.y++; }
-			addPointToMovePath(new Point(correctedPoint.x, correctedPoint.y));
+			moveOnePoint(correctedPoint.x,  correctedPoint.y, KeyboardListener.DOWN);
 		}
 	}
 	public function moveLeft():void {
 		if (tankPointIsCorrect() && canMoveToPoint(tank.x - 1, tank.y)) {
-			readyForMoving();
-			addPointToMovePath(new Point(tank.x - 1, tank.y));
-		} else if (tryMoveBack(KeyboardListener.LEFT)) {
-			readyForMoving();
+			moveOnePoint(tank.x-1, tank.y, KeyboardListener.LEFT);
+		} else if (triesMoveBack(KeyboardListener.LEFT)) {
 			var correctedPoint:Point = tank.getCorrectedMapPosition();
 			if (correctedPoint.x > tank.x) { correctedPoint.x--; }
-			addPointToMovePath(new Point(correctedPoint.x, correctedPoint.y));
+			moveOnePoint(correctedPoint.x, correctedPoint.y, KeyboardListener.LEFT);
 		}
 	}
 	public function moveRight():void {
 		if (tankPointIsCorrect() && canMoveToPoint(tank.x + 1, tank.y)) {
-			readyForMoving();
-			addPointToMovePath(new Point(tank.x + 1, tank.y));
-		} else if (tryMoveBack(KeyboardListener.RIGHT)) {
-			readyForMoving();
+			moveOnePoint(tank.x+1, tank.y, KeyboardListener.RIGHT);
+		} else if (triesMoveBack(KeyboardListener.RIGHT)) {
 			var correctedPoint:Point = tank.getCorrectedMapPosition();
 			if (correctedPoint.x < tank.x) { correctedPoint.x++; }
-			addPointToMovePath(new Point(correctedPoint.x, correctedPoint.y));
+			moveOnePoint(correctedPoint.x, correctedPoint.y, KeyboardListener.RIGHT);
 		}
 	}
 
 	/* Internal functions */
 
-	private function tryMoveBack(keyDirection:uint):Boolean {
-		var correctedPoint:Point = tank.getCorrectedMapPosition();
-		var result:Boolean = false;
-		switch(keyDirection) {
-			case KeyboardListener.LEFT:
-				result = (tank.x > correctedPoint.x) && canMoveToPoint(correctedPoint.x,  correctedPoint.y);
-				break;
-			case KeyboardListener.RIGHT:
-				result = (tank.x < correctedPoint.x) && canMoveToPoint(correctedPoint.x,  correctedPoint.y);
-				break;
-			case KeyboardListener.UP:
-				result = (tank.y > correctedPoint.y) && canMoveToPoint(correctedPoint.x,  correctedPoint.y);
-				break;
-			default:
-				result = (tank.y < correctedPoint.y) && canMoveToPoint(correctedPoint.x,  correctedPoint.y);
-				break;
-		}
-		return result;
+	private function triesMoveBack(keyDirection:uint):Boolean {
+		return  (keyDirection == KeyboardListener.LEFT && _currentKeyDirection == KeyboardListener.RIGHT) ||
+						(keyDirection == KeyboardListener.RIGHT && _currentKeyDirection == KeyboardListener.LEFT) ||
+						(keyDirection == KeyboardListener.UP && _currentKeyDirection == KeyboardListener.DOWN) ||
+						(keyDirection == KeyboardListener.DOWN && _currentKeyDirection == KeyboardListener.UP)
 	}
 
 	private function tankPointIsCorrect():Boolean {
 		var correctedPoint:Point = tank.getCorrectedMapPosition();
-		return tank.x == correctedPoint.x && tank.y == correctedPoint.y;
+		return Math.abs(tank.x - correctedPoint.x) < .2 && Math.abs(tank.y - correctedPoint.y) < .2;
 	}
 
 	private function canMoveToPoint(x:Number, y:Number):Boolean {
-		return _mapMatrix.isFreeCell(x, y) && _mapMatrix.isFreeTankCell(x, y);
+		var correctedPoint:Point = _mapMatrix.correctMatrixPoint(x, y);
+		return _mapMatrix.isFreeCell(correctedPoint.x, correctedPoint.y) && _mapMatrix.isFreeTankCell(correctedPoint.x, correctedPoint.y);
 	}
 
 }
