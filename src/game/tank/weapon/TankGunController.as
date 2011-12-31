@@ -32,7 +32,7 @@ public class TankGunController extends EventDispatcher implements IControllerWit
 			throw new Error("where is my tank?? [TankGunController]");
 		}
 		_type = tank.vo.weaponType;
-		_gunSpeed = _type == TankGun.MINIGUN ? 7 : _type == TankGun.ROCKET ? 5 : 3;
+		_gunSpeed = _type == TankGun.MINIGUN ? 21 : _type == TankGun.ROCKET ? 15 : 9;
 		_gun = tank.gun;
 		_gunLength = _gun.height;
 		_reloadController = new GunReloadController(getReloadSpeed());
@@ -82,30 +82,35 @@ public class TankGunController extends EventDispatcher implements IControllerWit
 		var angle:Number = getAngleByPoint(point);
 		_rotationCoeff = getCoeffForAngle(angle);
 		_targetRotation = angle > 180 ? angle - 360 : angle;
-		if (Math.abs(_gun.rotation - _targetRotation) < 5 ||
-				Math.abs(_gun.rotation - _targetRotation) > 355) {
-			_gun.rotation = _targetRotation;
-		} else {
+//		if (Math.abs(_gun.rotation - _targetRotation) < 2 ||
+//				Math.abs(_gun.rotation - _targetRotation) > 358) {
+//			_gun.rotation = _targetRotation;
+//		} else {
 			startRotating();
-		}
+//		}
 	}
 
 	private function startRotating():void {
-		_rotating = true;
-		_gun.addEventListener(Event.ENTER_FRAME, onGunEnterFrame);
+		if (!_rotating) {
+			_rotating = true;
+			_gun.addEventListener(Event.ENTER_FRAME, onGunEnterFrame);
+		}
 	}
 	private function stopRotating():void {
-		_rotating = false;
-		_gun.removeEventListener(Event.ENTER_FRAME, onGunEnterFrame);
-		dispatchEvent(new GunRotateCompleteEvent(GunRotateCompleteEvent.COMPLETE));
+		if (_rotating) {
+			_rotating = false;
+			_gun.removeEventListener(Event.ENTER_FRAME, onGunEnterFrame);
+			dispatchEvent(new GunRotateCompleteEvent(GunRotateCompleteEvent.COMPLETE));
+		}
 	}
 
 	private function onGunEnterFrame(event:Event):void {
 		if (Math.abs(_targetRotation - _gun.rotation) <= _gunSpeed) {
+			_gun.rotation = _targetRotation;
 			stopRotating();
-			return;
+		} else {
+			_gun.rotation += _rotationCoeff * _gunSpeed;
 		}
-		_gun.rotation += _rotationCoeff * _gunSpeed;
 	}
 
 	private function getCoeffForAngle(angle:Number):int {
@@ -120,8 +125,8 @@ public class TankGunController extends EventDispatcher implements IControllerWit
 	}
 
 	private function getAngleByPoint(point:Point):Number {
-		var result:Number = Math.atan(-(point.y-_tank.y)/(point.x-_tank.x)) * 180 / Math.PI;
-		if (point.x >= _tank.x) {
+		var result:Number = Math.atan(-(point.y-_tank.originY)/(point.x-_tank.originX)) * 180 / Math.PI;
+		if (point.x >= _tank.originX) {
 			result = 90 - result;
 		} else {
 			result = 270 - result;

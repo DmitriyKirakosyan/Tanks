@@ -162,7 +162,7 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 				_gunController.removeTween();
 				_gunController.removeEventListener(GunRotateCompleteEvent.COMPLETE, onGunRotateComplete);
 			}
-			_gunController.rotateGun(_mapMatrix.getMatrixPoint(_bulletPoint));
+			_gunController.rotateGun(_bulletPoint);
 		}
 	}
 
