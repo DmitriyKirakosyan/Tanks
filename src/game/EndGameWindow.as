@@ -48,10 +48,10 @@ public class EndGameWindow extends Sprite{
 		var tank:Tank;
 		var textField:TextField;
 		tank = Tank.createBotTank(new TankVO(), tankType);
-		tank.originY =tank.width/2 + x;
-		tank.originX = tank.height/2;
+		tank.originX =tank.width/2 + x;
+		tank.originY = tank.height/2;
 		textField = createScoreTF(scoreValue);
-		textField.x = x + tank.width/2 + 10;
+		textField.x = x + tank.width + 10;
 
 		tanksSprite.addChild(tank);
 		tanksSprite.addChild(textField);
