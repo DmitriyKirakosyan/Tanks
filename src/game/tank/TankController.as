@@ -205,7 +205,7 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 	}
 
 	protected function onStartMoveToPathNode(point:Point):void {
-		_direction.rotateIfNeed(tank, point);
+		_direction.rotateIfNeed(tank, point, _scaleTime);
 
 		clearTankCell();
 		_mapMatrix.setTankCell(point.x,  point.y, 1);

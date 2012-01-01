@@ -108,10 +108,11 @@ public class Bullet extends Sprite implements IControllerWithTime {
 		var color:uint = _type == TankGun.MINIGUN ? 0xFFF000 : 0xf0002f; //B22222
 		var alpha:uint = _type == TankGun.MINIGUN ? 0 : 1;
 		var radius:uint = _type == TankGun.MINIGUN ? 1 : _type == TankGun.TAIL_ROCKET ? 3 : 2;
-		sprite.graphics.beginFill(color);
+		//sprite.graphics.beginFill(color);
 		sprite.alpha = alpha;
-		sprite.graphics.drawCircle(0,0,radius);
-		sprite.graphics.endFill();
+        sprite = new SimpleBullet;
+		//sprite.graphics.drawCircle(0,0,radius);
+		//sprite.graphics.endFill();
 	}
 
 	/* Internal functions */
