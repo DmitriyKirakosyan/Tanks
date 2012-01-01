@@ -16,6 +16,10 @@ import game.matrix.MapMatrix;
 import game.tank.Tank;
 import game.tank.TankVO;
 
+import sound.Sounds;
+
+import sound.SoundsManager;
+
 import state.UserState;
 
 public class TankPodium extends EventDispatcher implements IScene{
@@ -74,6 +78,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 		addPlayBtn();
 		addListeners();
 		checkForUnlockTank();
+		SoundsManager.playSoundByName(Sounds.BACKGROUND_1, true, true);
 	}
 
 	public function remove():void {
@@ -87,6 +92,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 		}
 		if (_container.contains(_gunSlots)) { _container.removeChild(_gunSlots); }
 		_closed = true;
+		SoundsManager.stopSoundByName(Sounds.BACKGROUND_1);
 	}
 
 	/* Internal functions */
@@ -163,6 +169,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 			//trace(Sprite(event.target)["constructor"]);
 			if (Sprite(event.target)["constructor"] == VALID_TANK_BASES_FOR_PLAYER[i]) {
 				_tank.updateBase(i);
+				SoundsManager.playSoundByName(Sounds.CLICK);
 			}
 		}
 	}
@@ -195,6 +202,7 @@ public class TankPodium extends EventDispatcher implements IScene{
 	}
 
 	private function onPlayBtnClick(event:MouseEvent):void {
+		SoundsManager.playSoundByName(Sounds.CLICK);
 		if (_tutorialWindow && _tutorialCounter < MAX_TUTORIAL_COUNT) {
 			_tutorialCounter++;
 			_container.addChild(_tutorialWindow);

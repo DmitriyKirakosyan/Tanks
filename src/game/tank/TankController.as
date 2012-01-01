@@ -206,7 +206,10 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 
 	protected function onMovingComplete():void {
 		dispatchEvent(new TankEvent(TankEvent.MOVING_COMPLETE, this));
-		SoundsManager.stopSoundByName(Sounds.MOVE);
+
+		if (!tank.isPlayer) {
+			SoundsManager.stopSoundByName(Sounds.MOVE);
+		}
 	}
 
 	protected function onStartMoveToPathNode(point:Point):void {

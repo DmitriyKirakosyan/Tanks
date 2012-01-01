@@ -2,7 +2,8 @@ package sound {
 	
 	import flash.events.Event;
 	import flash.media.Sound;
-	import flash.media.SoundChannel;
+import flash.media.SoundChannel;
+import flash.media.SoundChannel;
 	import flash.media.SoundTransform;
 	import flash.utils.Dictionary;
 	
@@ -27,8 +28,23 @@ package sound {
 			return sc;
 		}
 		
-		private static function playStratifySound(snd:Sound):SoundChannel {
-			const sc:SoundChannel = snd.play();
+		private static function playStratifySound(snd:Sound, infinityLoop:Boolean):SoundChannel {
+			var sc:SoundChannel = soundChannels[snd];
+			if (sc) {
+				sc.stop();
+			}
+
+			sc = snd.play();
+			if (infinityLoop) {
+				const soundComplete:Function = function(event:Event):void {
+					if (soundChannels[snd]) {
+						delete soundChannels[snd];
+					}
+					soundChannels[snd] = snd.play();
+					soundChannels[snd].addEventListener(Event.SOUND_COMPLETE, soundComplete);
+				};
+				sc.addEventListener(Event.SOUND_COMPLETE, soundComplete);
+			}
 			soundChannels[snd] = sc;
 			return sc;
 		}
@@ -48,12 +64,12 @@ package sound {
 		//
 		//--------------------------------------------------------------------------
 		
-		public static function playSoundByName(soundClass:Class, stratify:Boolean = true):void {
+		public static function playSoundByName(soundClass:Class, stratify:Boolean = true, infinityLoop:Boolean = false):void {
 			if (!on) return;
 			const snd:Sound = getSoundInstance(soundClass);
 			if (!snd) return;
 			if (stratify) {
-				playStratifySound(snd);
+				playStratifySound(snd, infinityLoop);
 			} else {
 				playSound(snd);
 			}

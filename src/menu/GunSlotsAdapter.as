@@ -18,6 +18,10 @@ import menu.TankPodium;
 
 import mx.effects.Glow;
 
+import sound.Sounds;
+
+import sound.SoundsManager;
+
 public class GunSlotsAdapter extends Sprite{
 
 	private var _podium:TankPodium;
@@ -87,8 +91,10 @@ public class GunSlotsAdapter extends Sprite{
 		var chosenWeapon:uint;
 		if (event.localX > 50) {
 			chosenWeapon = _rightGun.type;
+			SoundsManager.playSoundByName(Sounds.CLICK);
 		} else if (event.localX < -50) {
 			chosenWeapon = _leftGun.type;
+			SoundsManager.playSoundByName(Sounds.CLICK);
 		}
 		if ((event.localX > 50 || event.localX < -50) && _leftGun) {
 			this.removeChild(_leftGun);

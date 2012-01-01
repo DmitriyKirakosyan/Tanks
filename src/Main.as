@@ -11,6 +11,10 @@ import game.SceneController;
 import mochi.as3.MochiAd;
 import mochi.as3.MochiServices;
 
+import sound.Sounds;
+
+import sound.SoundsManager;
+
 [SWF(width=600, height=600, frameRate=25)]
 	public class Main extends Sprite {
 		private var container:Sprite;

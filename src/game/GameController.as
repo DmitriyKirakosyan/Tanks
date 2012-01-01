@@ -5,6 +5,7 @@ import flash.events.Event;
 import flash.events.KeyboardEvent;
 import flash.events.TimerEvent;
 import flash.filters.BlurFilter;
+import flash.media.SoundMixer;
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 import flash.utils.Timer;
@@ -38,6 +39,11 @@ import game.drawing.MouseDrawController;
 import game.matrix.MapMatrix;
 import game.tank.TankController;
 import game.tank.TargetsController;
+
+import sound.Sounds;
+
+import sound.SoundsManager;
+
 import state.UserState;
 
 import flash.events.EventDispatcher;
@@ -81,6 +87,7 @@ public class GameController extends EventDispatcher implements IScene{
 		initMapObjectsController();
 		addListeners();
 		//_debugController.open();
+		SoundsManager.playSoundByName(Sounds.BACKGROUND_2, true, true);
 	}
 
 	public function remove():void {
@@ -91,6 +98,7 @@ public class GameController extends EventDispatcher implements IScene{
 		_mapObjectsController.remove();
 		//_debugController.close();
 		_mouseDown = false;
+		SoundsManager.stopSoundByName(Sounds.BACKGROUND_2);
 	}
 
 	/* For debug */
@@ -272,6 +280,8 @@ public class GameController extends EventDispatcher implements IScene{
 	private function onTankMovingComplete(event:TankEvent):void {
 		if (_keyboardListener.keyPressed != KeyboardListener.NOTHING) {
 			movePlayerTankByKeyboard();
+		} else {
+			SoundsManager.stopSoundByName(Sounds.MOVE);
 		}
 	}
 
