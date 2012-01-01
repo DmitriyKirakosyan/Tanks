@@ -14,7 +14,6 @@ package game.tank {
 		public var _rotation:int;
 		
 		private var _value:uint;
-		private var _scaleTime:Number;
 
 		public function TankDirection(defaultDirection:uint) {
 			super();
@@ -30,7 +29,6 @@ package game.tank {
 		public function get rotation():uint { return _rotation; }
 		
 		public function rotateIfNeed(tank:Tank, nPoint:Point, scaleTime:Number):Boolean {
-            _scaleTime = scaleTime;
 			const pPoint:Point = new Point(tank.x, tank.y);
 			if (Math.abs(pPoint.x - nPoint.x) < .5) {
 				if (pPoint.y > nPoint.y) {
@@ -60,7 +58,7 @@ package game.tank {
 			if (_rotation == TankController.LEFT_ROT && oldRotation == TankController.DOWN_ROT_PLUS) {
 				tank.tankBase.rotation = -180;
 			}
-			TweenMax.to(tank.tankBase, 0.5 / _scaleTime, {rotation : _rotation,
+			TweenMax.to(tank.tankBase, 0.5, {rotation : _rotation,
 																	onComplete : function():void {
 																		if (_rotation == TankController.DOWN_ROT_MINUS) {
 																			_rotation = TankController.DOWN_ROT_PLUS;

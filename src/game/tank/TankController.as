@@ -232,6 +232,7 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 	}
 
 	private function ejectBullet():void {
+		trace("ejectBullet");
 		if (tank.destroyed) { return; }
 		showShotEffect(_gunController.getBulletPoint(), _gunController.targetRotation);
 		const bullet:Bullet = _gunController.createBullet();

@@ -21,7 +21,6 @@ public class TankGunController extends EventDispatcher implements IControllerWit
 	private var _gun:TankGun;
 	private var _gunLength:Number;
 	private var _rotationCoeff:Number;
-    private var _scaleTime:Number;
 	private var _targetRotation:Number;
 
 
@@ -47,7 +46,6 @@ public class TankGunController extends EventDispatcher implements IControllerWit
 		//if (_reloadController.reloading) {
 		//	trace("reload controller speed down [TankGunController.scaleTime]");
 			_reloadController.scaleTime(value);
-            _scaleTime = value;
 		//}
 	}
 
@@ -82,7 +80,7 @@ public class TankGunController extends EventDispatcher implements IControllerWit
 
 	public function rotateGun(point:Point):void {
 		var angle:Number = getAngleByPoint(point);
-		_rotationCoeff = _scaleTime * getCoeffForAngle(angle);
+		_rotationCoeff = getCoeffForAngle(angle);
 		_targetRotation = angle > 180 ? angle - 360 : angle;
 		startRotating();
 	}
