@@ -85,8 +85,8 @@ import flash.utils.Timer;
 
 		public function init():void {
 			_levelStrength = .01;
-			for (var i:int = 0; i < Math.random() * 7; i++) { createTarget(); }
-			startTimer();
+			//for (var i:int = 0; i < Math.random() * 7; i++) { createTarget(); }
+			//startTimer();
 		}
 
 		public function remove():void {

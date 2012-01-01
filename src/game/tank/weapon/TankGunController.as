@@ -10,6 +10,8 @@ import com.greensock.TweenMax;
 
 import flash.geom.Point;
 
+import sound.Sounds;
+
 public class TankGunController extends EventDispatcher implements IControllerWithTime {
 	private var _type:uint;
 
@@ -76,6 +78,10 @@ public class TankGunController extends EventDispatcher implements IControllerWit
 
 	public function removeTween():void {
 		TweenMax.killTweensOf(_gun);
+	}
+
+	public function getSoundByType():Class {
+		return _type == TankGun.ROCKET ? Sounds.SHOT_6 : _type == TankGun.TAIL_ROCKET ? Sounds.SHOT_5 : Sounds.SHOT_1;
 	}
 
 	public function rotateGun(point:Point):void {

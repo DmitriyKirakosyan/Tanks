@@ -25,6 +25,10 @@ import game.tank.weapon.Bullet;
 import game.tank.Tank;
 import game.time.GameTimeZone;
 
+import sound.Sounds;
+
+import sound.SoundsManager;
+
 import spark.effects.animation.Timeline;
 
 import state.UserState;
@@ -322,14 +326,15 @@ public class MapObjectsController extends EventDispatcher implements IController
 	}*/
 
 	private function onBulletComplete(bullet:Bullet):void {
-		removeBullet(bullet);
+		removeBullet(bullet, false);
 	}
-	private function removeBullet(bullet:Bullet):void {
+	private function removeBullet(bullet:Bullet, goal:Boolean = true):void {
 		if (_container.contains(bullet)) { _container.removeChild(bullet); }
 		bullet.remove();
 		const index:int = _bullets.indexOf(bullet);
 		if (index >= 0) { _bullets.splice(index, 1); }
 		bulletBamEffect(bullet.x,  bullet.y);
+		SoundsManager.playSoundByName(goal ? Sounds.SHOT_GOAL_2 : Sounds.SHOT_GOAL_1);
 	}
 
 	private function bulletBamEffect(x:Number,  y:Number):void {

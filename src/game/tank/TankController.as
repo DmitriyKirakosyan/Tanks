@@ -27,6 +27,10 @@ import game.matrix.MapMatrix;
 import game.tank.weapon.Bullet;
 import game.tank.weapon.TankGunController;
 
+import sound.Sounds;
+
+import sound.SoundsManager;
+
 public class TankController extends EventDispatcher implements IControllerWithTime{
 	public var tank:Tank;
 
@@ -202,6 +206,7 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 
 	protected function onMovingComplete():void {
 		dispatchEvent(new TankEvent(TankEvent.MOVING_COMPLETE, this));
+		SoundsManager.stopSoundByName(Sounds.MOVE);
 	}
 
 	protected function onStartMoveToPathNode(point:Point):void {
@@ -211,6 +216,7 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 		_mapMatrix.setTankCell(point.x,  point.y, 1);
 		dispatchEvent(new TankEvent(TankEvent.COME_TO_CELL));
 		_nextPoint = point;
+		SoundsManager.playSoundByName(Sounds.MOVE);
 	}
 
 	private function clearTankCell():void {
@@ -242,6 +248,7 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 		_gunController.reloadController.reload();
 		_gunController.reloadController.addEventListener(Event.COMPLETE, onReloadComplete);
 		_wannaShot = false;
+		SoundsManager.playSoundByName(_gunController.getSoundByType(), true);
 	}
 
 	private function showShotEffect(point:Point, angle:Number):void {
