@@ -8,11 +8,14 @@ import flash.display.Sprite;
 import flash.geom.Point;
 
 import game.KeyboardListener;
-
 import game.matrix.MapMatrix;
 
 public class PlayerTankController extends TankController{
 	private var _currentKeyDirection:uint;
+
+	private var _speedIncrement:Number;
+	private var _targetMovePoint:Point;
+	private var _moving:Boolean;
 
 	public function PlayerTankController(container:Sprite, mapMatrix:MapMatrix) {
 		super(container,  mapMatrix);
@@ -25,7 +28,33 @@ public class PlayerTankController extends TankController{
 		tank.y = matrixPoint.y;
 		_mapMatrix.setTankCell(tank.x,  tank.y,  1);
 		tank.addReloadBar(gunController.reloadController.reloadBar);
+		_speedIncrement = 1/25 * (tank.vo.speed/5);
+		_moving = false;
 	}
+
+	public function tick():void {
+		if (_moving) {
+			if (_currentKeyDirection == KeyboardListener.LEFT) { tank.x -= _speedIncrement;
+			} else if (_currentKeyDirection == KeyboardListener.RIGHT) { tank.x += _speedIncrement;
+			} else {
+				_currentKeyDirection == KeyboardListener.UP ? tank.y -= _speedIncrement : tank.y += _speedIncrement;
+			}
+			if (needStop()) {
+				tank.x = _targetMovePoint.x;
+				tank.y = _targetMovePoint.y;
+				_moving = false;
+				onMovingComplete();
+			}
+		}
+	}
+
+	private function needStop():Boolean {
+		return  _currentKeyDirection == KeyboardListener.DOWN && _targetMovePoint.y < tank.y ||
+						_currentKeyDirection == KeyboardListener.UP && _targetMovePoint.y > tank.y ||
+						_currentKeyDirection == KeyboardListener.LEFT && _targetMovePoint.x > tank.x ||
+						_currentKeyDirection == KeyboardListener.RIGHT && _targetMovePoint.x < tank.x;
+	}
+
 
 	override protected function createTank(tankVO:TankVO):void {
 		tank = Tank.createPlayerTank(tankVO);
@@ -34,8 +63,29 @@ public class PlayerTankController extends TankController{
 	private function moveOnePoint(x:Number, y:Number, keyDirection:uint):void {
 		trace("move one point " + Math.random() + "[PlayerTankController.moveOnePoint");
 		readyForMoving();
-		addPointToMovePath(_mapMatrix.correctMatrixPoint(x, y));
-		_currentKeyDirection = keyDirection;
+		var point:Point = _mapMatrix.correctMatrixPoint(x, y);
+		if (point && (point.x != _targetMovePoint.x || point.y != _targetMovePoint.y)) {
+			addPointToMovePath(point);
+			_currentKeyDirection = keyDirection;
+		}
+	}
+
+	override public function addPointToMovePath(point:Point):void {
+		_targetMovePoint = point;
+		_moving = true;
+		onStartMoveToPathNode(point);
+		//var speedCoef:Number = _mapMatrix.getSpeedForTank(point);
+		//if (tank.isPlayer) {
+		//	speedCoef *= Point.distance(new Point(tank.x, tank.y), point);
+		//}
+		/*
+		_movingTimeline.append(new TweenMax(tank, speedCoef/(tank.vo.speed/5),
+					{x : point.x, y : point.y,
+					ease : Linear.easeNone,
+					onStart : onStartMoveToPathNode,
+					onStartParams : [point]}));
+		_movingTimeline.play();
+		*/
 	}
 
 	public function moveUp():void {
