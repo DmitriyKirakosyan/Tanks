@@ -11,7 +11,7 @@ import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.geom.Point;
 
-import game.IControllerWithTime;
+import game.ControllerWithTime;
 import game.events.DamageObjectEvent;
 import game.events.GameBonusEvent;
 import game.events.TankShotingEvent;
@@ -35,7 +35,7 @@ import state.UserState;
 
 import tilemap.TileMap;
 
-public class MapObjectsController extends EventDispatcher implements IControllerWithTime{
+public class MapObjectsController extends ControllerWithTime{
 	private var _mapMatrix:MapMatrix;
 	private var _tileMap:TileMap;
 	private var _container:Sprite;
@@ -101,14 +101,14 @@ public class MapObjectsController extends EventDispatcher implements IController
 
 	/* time functions */
 
-	public function scaleTime(value:Number):void {
+	override protected function scaleTime(value:Number):void {
 		_scaleTime = value;
 		if (_bullets) {
 			for each (var bullet:Bullet in _bullets) {
 				bullet.scaleTime(value);
 			}
 		}
-		_targetsController.scaleTime(value);
+		//_targetsController.scaleTime(value);
 	}
 
 	public function pause():void {

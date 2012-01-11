@@ -3,7 +3,7 @@ import game.tank.*;
 
 import flash.events.Event;
 
-import game.IControllerWithTime;
+import game.ControllerWithTime;
 import game.events.GunRotateCompleteEvent;
 import flash.events.EventDispatcher;
 import com.greensock.TweenMax;
@@ -12,7 +12,7 @@ import flash.geom.Point;
 
 import sound.Sounds;
 
-public class TankGunController extends EventDispatcher implements IControllerWithTime {
+public class TankGunController extends EventDispatcher implements ControllerWithTime {
 	private var _type:uint;
 
 	private var _reloadController:GunReloadController;

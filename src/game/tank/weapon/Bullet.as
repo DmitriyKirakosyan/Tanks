@@ -1,7 +1,7 @@
 package game.tank.weapon {
 import com.greensock.easing.Cubic;
 import com.greensock.TweenLite;
-import game.IControllerWithTime;
+import game.ControllerWithTime;
 import game.tank.*;
 
 import com.greensock.easing.Linear;
@@ -10,7 +10,7 @@ import flash.geom.Point;
 import com.greensock.TweenMax;
 import flash.display.Sprite;
 
-public class Bullet extends Sprite implements IControllerWithTime {
+public class Bullet extends Sprite {
 	private var _tween:TweenMax;
 	private var _speed:Number;
 	private var _selfTank:Tank;

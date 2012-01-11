@@ -5,9 +5,9 @@ import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.EventDispatcher;
 
-import game.IControllerWithTime;
+import game.ControllerWithTime;
 
-public class GunReloadController extends EventDispatcher implements IControllerWithTime{
+public class GunReloadController extends EventDispatcher implements ControllerWithTime{
 	private var _reloadBar:ReloadBar;
 	private var _reloading:Boolean;
 	private var _reloadTween:TweenMax;

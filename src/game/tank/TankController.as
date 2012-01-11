@@ -6,12 +6,13 @@ import flash.events.Event;
 import flash.geom.ColorTransform;
 
 import game.GameController;
+import game.TimeController;
 
 import game.events.GunRotateCompleteEvent;
 
 import game.events.TankDestructionEvent;
 import game.events.TankShotingEvent;
-import game.IControllerWithTime;
+import game.ControllerWithTime;
 import com.greensock.TimelineMax;
 import com.greensock.TweenMax;
 import com.greensock.easing.Linear;
@@ -31,7 +32,7 @@ import sound.Sounds;
 
 import sound.SoundsManager;
 
-public class TankController extends EventDispatcher implements IControllerWithTime{
+public class TankController extends ControllerWithTime {
 	public var tank:Tank;
 
 	private var _scaleTime:Number;
@@ -89,14 +90,14 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 		}
 	}
 
-	public function scaleTime(value:Number):void {
+	override protected function scaleTime(value:Number):void {
 		_scaleTime = value;
 		if (_movingTimeline) {
 			_movingTimeline.timeScale = value;
 		}
 		_gunController.scaleTime(value);
 	}
-
+/*
 	public function pause():void {
 		if (_movingTimeline) {
 			_movingTimeline.pause();
@@ -109,6 +110,7 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 		}
 		_gunController.resume();
 	}
+	*/
 
 	public function isPointOnTank(point:Point):Boolean {
 		return tank.hitTestPoint(point.x, point.y);
@@ -161,6 +163,9 @@ public class TankController extends EventDispatcher implements IControllerWithTi
 					onStart : onStartMoveToPathNode,
 					onStartParams : [point]}));
 		_movingTimeline.play();
+		if (_scaleTime != TimeController.NORMAL_TIME_SPEED) {
+			_movingTimeline.timeScale = _scaleTime;
+		}
 	}
 
 	public function setTarget(point:Point = null, rotateGun:Boolean = true):void {

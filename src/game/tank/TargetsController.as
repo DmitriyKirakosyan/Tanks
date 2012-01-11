@@ -1,5 +1,5 @@
 package game.tank {
-import game.IControllerWithTime;
+import game.ControllerWithTime;
 import game.events.TankShotingEvent;
 import game.events.TankEvent;
 import game.matrix.MapMatrix;
@@ -15,7 +15,7 @@ import flash.display.Sprite;
 import flash.events.TimerEvent;
 import flash.utils.Timer;
 	
-	public class TargetsController extends EventDispatcher implements IControllerWithTime{
+	public class TargetsController extends ControllerWithTime {
 		private var _timer:Timer;
 		private var _enemyControllers:Vector.<TankBotController>;
 		private var _container:Sprite;
@@ -39,21 +39,21 @@ import flash.utils.Timer;
 
 		/* time functions */
 
-		public function scaleTime(value:Number):void {
-			for each (var tankController:TankController in _enemyControllers) {
-				tankController.scaleTime(value);
-			}
+		override protected function scaleTime(value:Number):void {
+//			for each (var tankController:TankController in _enemyControllers) {
+//				tankController.scaleTime(value);
+//			}
 		}
 
 		public function pause():void {
-			for each (var tankController:TankController in _enemyControllers) {
-				tankController.pause();
-			}
+	//		for each (var tankController:TankController in _enemyControllers) {
+	//			tankController.pause();
+	//		}
 		}
 		public function resume():void {
-			for each (var tankController:TankController in _enemyControllers) {
-				tankController.resume();
-			}
+//			for each (var tankController:TankController in _enemyControllers) {
+//				tankController.resume();
+//			}
 		}
 		
 		public function getEnemyTanks():Vector.<Tank> {
