@@ -12,7 +12,7 @@ import flash.geom.Point;
 
 import sound.Sounds;
 
-public class TankGunController extends EventDispatcher implements ControllerWithTime {
+public class TankGunController extends EventDispatcher {
 	private var _type:uint;
 
 	private var _reloadController:GunReloadController;
