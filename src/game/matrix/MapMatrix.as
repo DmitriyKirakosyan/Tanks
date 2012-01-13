@@ -52,6 +52,10 @@ public class MapMatrix {
 													GameController.CELL, GameController.CELL);
 	}
 
+	public function getNeighborElementPoint(item:int):Point {
+		return new Point();
+	}
+
 	public function getSpeedForTank(point:Point):Number {
 		if (_matrix[point.x][point.y] == 0) { return 1;
 		} else { return 1.6; }

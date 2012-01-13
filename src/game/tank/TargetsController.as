@@ -188,7 +188,7 @@ import flash.utils.Timer;
 			const path:Vector.<Point> = Pathfinder.getPath(new Point(enemyTankController.tank.x, enemyTankController.tank.y),
 																										toPoint);
 			if (path.length == 0) {
-				enemyTankController.standHere();
+				enemyTankController.setInDeadLock();
 			}
 			addPathToEnemyTankController(path, enemyTankController);
 		}	

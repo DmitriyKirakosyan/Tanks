@@ -78,6 +78,8 @@ public class TankController extends ControllerWithTime {
 		_container.addChild(tank);
 	}
 
+	public function tick():void {}
+
 	protected function createTank(tankVO:TankVO):void { //for override
 	}
 

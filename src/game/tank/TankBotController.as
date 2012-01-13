@@ -15,14 +15,18 @@ import game.GameController;
 import game.events.TankDestructionEvent;
 
 import game.events.TankEvent;
+import game.mapObjects.MapObject;
+import game.mapObjects.MapObjectsController;
 
 import game.matrix.MapMatrix;
+import game.matrix.MatrixItemIds;
 
 public class TankBotController extends TankController{
 	private var _targetTank:Tank;
 	private var _strength:uint;
 
 	private var _waitTimer:Timer;
+	private var _inDeadLock:Boolean;
 
 	private const UPDATE_FRAME_PERIOD:int = 10;
 	private var _currentUpdateCounter:int;
@@ -34,6 +38,7 @@ public class TankBotController extends TankController{
 	public function TankBotController(container:Sprite, mapMatrix:MapMatrix, strength:uint = BASE_BOT) {
 		super(container, mapMatrix);
 		_currentUpdateCounter = 0;
+		_inDeadLock = false;
 		_strength = strength;
 		_waitTimer = new Timer(3000);
 	}
@@ -90,8 +95,14 @@ public class TankBotController extends TankController{
 
 	public function hasTargetTank():Boolean { return _targetTank != null; }
 
-	public function standHere():void {
+	public function setInDeadLock():void {
+		_inDeadLock = true;
 		onMovingComplete();
+	}
+
+	override public function setMovingPath(path:Vector.<Point>):void {
+		super.setMovingPath(path);
+		_inDeadLock = false;
 	}
 
 	override public function bam():void {
@@ -108,6 +119,12 @@ public class TankBotController extends TankController{
 
 	private function updateTankThink():void {
 		if (!_targetTank || !this.wannaShot) { return; }
+
+		if (!_inDeadLock) {
+			shotNeighborBrick();
+			return;
+		}
+
 		if (Math.abs(_targetTank.originX - tank.originX) < GameController.CELL ||
 				Math.abs(_targetTank.originY - tank.originY) < GameController.CELL) {
 			setTarget(new Point(_targetTank.originX,  _targetTank.originY));
@@ -134,6 +151,11 @@ public class TankBotController extends TankController{
 					shot();
 			}
 		}
+	}
+
+	private function shotNeighborBrick():void {
+		setTarget(_mapMatrix.getStagePoint(_mapMatrix.getNeighborElementPoint(MatrixItemIds.BRICKS)));
+		shot();
 	}
 
 	override protected function onMovingComplete():void {

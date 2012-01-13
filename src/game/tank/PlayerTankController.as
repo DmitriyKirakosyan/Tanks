@@ -32,7 +32,7 @@ public class PlayerTankController extends TankController{
 		_moving = false;
 	}
 
-	public function tick():void {
+	override public function tick():void {
 		if (_moving) {
 			if (_currentKeyDirection == KeyboardListener.LEFT) { tank.x -= _speedIncrement;
 			} else if (_currentKeyDirection == KeyboardListener.RIGHT) { tank.x += _speedIncrement;
