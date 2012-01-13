@@ -64,7 +64,7 @@ public class PlayerTankController extends TankController{
 		trace("move one point " + Math.random() + "[PlayerTankController.moveOnePoint");
 		readyForMoving();
 		var point:Point = _mapMatrix.correctMatrixPoint(x, y);
-		if (point && (point.x != _targetMovePoint.x || point.y != _targetMovePoint.y)) {
+		if (!_targetMovePoint || (point && (point.x != _targetMovePoint.x || point.y != _targetMovePoint.y))) {
 			addPointToMovePath(point);
 			_currentKeyDirection = keyDirection;
 		}

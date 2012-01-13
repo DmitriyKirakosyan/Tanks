@@ -157,6 +157,7 @@ public class GameController extends EventDispatcher implements IScene{
 		_container.addEventListener(MouseEvent.MOUSE_UP, onStageMouseUp);
 		_container.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 		_container.addEventListener(MouseEvent.ROLL_OUT, onContainerMouseOut);
+		_container.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 
 		_keyboardListener.addListeners();
 		_keyboardListener.addEventListener(KeyboardEvent.KEY_DOWN, onKeyboardKeyDown);
@@ -177,6 +178,7 @@ public class GameController extends EventDispatcher implements IScene{
 		_container.removeEventListener(MouseEvent.MOUSE_UP, onStageMouseUp);
 		_container.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
 		_container.removeEventListener(MouseEvent.ROLL_OUT, onContainerMouseOut);
+		_container.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 
 		_keyboardListener.removeListeners();
 		_keyboardListener.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyboardKeyDown);
@@ -257,7 +259,7 @@ public class GameController extends EventDispatcher implements IScene{
 	}
 
 	private function onEnterFrame(event:Event):void {
-		if (Math.random() < .4) { _mapObjectsController.checkObjectsInteract(); }
+		_tankController.tick();
 	}
 
 	private function onMineBam(event:MineBamEvent):void {
