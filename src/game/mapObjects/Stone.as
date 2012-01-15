@@ -3,20 +3,13 @@ import flash.geom.Point;
 
 import game.mapObjects.MapObject;
 
-	public class Stone extends MapObject {
-		private var _view:StoneView;
-		
+	public class Stone extends MapNativeObject {
+
 		private var _damagedStone:DamagedBriksView;
 
 		public function Stone(point:Point) {
-			super();
+			super(point, new StoneView());
 			setHp(ObjectsHp.STONE);
-			_view = new StoneView();
-			_view.x -= _view.width/2;
-			_view.y -= _view.height/2;
-			this.x = point.x;
-			this.y = point.y;
-			this.addChild(_view);
 		}
 
 		override public function damage(value:Number):void {

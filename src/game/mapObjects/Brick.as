@@ -3,18 +3,12 @@ package game.mapObjects {
 
 	import game.mapObjects.MapObject;
 
-	public class Brick extends MapObject {
+	public class Brick extends MapNativeObject {
 		private var _damagedBrick:DamagedBriksView;
 
 		public function Brick(point:Point) {
-			super();
+			super(point, new BricksView());
 			setHp(ObjectsHp.BRICK);
-			this.x = point.x;
-			this.y = point.y;
-			const brick:BricksView = new BricksView();
-			brick.x -= brick.width/2;
-			brick.y -= brick.height/2;
-			this.addChild(brick);
 		}
 		
 		override public function damage(value:Number):void {

@@ -1,4 +1,5 @@
 package game.mapObjects {
+import game.mapObjects.MapNativeObject;
 import game.tank.weapon.TankGun;
 import com.greensock.TimelineLite;
 import com.greensock.TweenLite;
@@ -41,6 +42,7 @@ public class MapObjectsController extends ControllerWithTime{
 	private var _container:Sprite;
 	private var _stones:Vector.<Stone>;
 	private var _bricks:Vector.<Brick>;
+	private var _puddles:Vector.<MapNativeObject>;
 	private var _bullets:Vector.<Bullet>;
 	private var _timeZoneList:Vector.<GameTimeZone>;
 	private var _playerTank:Tank;
@@ -73,6 +75,7 @@ public class MapObjectsController extends ControllerWithTime{
 	public function removeMapObjects():void {
 		removeBricks();
 		removeStones();
+		removePuddles();
 	}
 
 	public function init():void {
@@ -213,22 +216,6 @@ public class MapObjectsController extends ControllerWithTime{
 		}
 	}
 
-	private function removeBullets():void {
-		for each (var bullet:Bullet in _bullets) {
-			bullet.remove();
-			if (_container.contains(bullet)) { _container.removeChild(bullet);
-			} else { trace("bullet not on container [MapObjectsController.removeBullets]"); }
-		}
-	}
-
-	private function removeBonuses():void {
-		for each (var gameBonus:GameBonus in _bonusManager.activeBonuseList) {
-			if (_container.contains(gameBonus)) { _container.removeChild(gameBonus);
-			} else { trace("WARN! bonus not on container [MapObjectsController.removeBonuses]"); }
-		}
-		_bonusManager.clear();
-	}
-
 	private function addBrick(mPoint:Point):void {
 		var brick:Brick;
 		brick = new Brick(mPoint);
@@ -245,13 +232,26 @@ public class MapObjectsController extends ControllerWithTime{
 	}
 
 	private function addPuddle(mPoint:Point):void {
-/*		var puddle:Pu;
-		brick = new Brick(mPoint);
-		if (!_bricks) { _bricks = new Vector.<Brick>(); }
-		_bricks.push(brick);
-		_container.addChild(brick);
-		_mapMatrix.setCell(mPoint.x, mPoint.y, MatrixItemIds.BRICKS);
-*/
+		var puddle:MapNativeObject;
+		puddle = new MapNativeObject(mPoint, new Puddle());
+		if (!_puddles) { _puddles = new Vector.<MapNativeObject>(); }
+		_puddles.push(puddle);
+		_container.addChild(puddle);
+		_mapMatrix.setCell(mPoint.x, mPoint.y, MatrixItemIds.PUDDLE);
+	}
+	private function removePuddles():void {
+		for each (var puddle:MapNativeObject in _puddles) {
+			removeElementFromMap(puddle);
+			_puddles = new Vector.<MapNativeObject>();
+		}
+	}
+
+	private function removeBonuses():void {
+		for each (var gameBonus:GameBonus in _bonusManager.activeBonuseList) {
+			if (_container.contains(gameBonus)) { _container.removeChild(gameBonus);
+			} else { trace("WARN! bonus not on container [MapObjectsController.removeBonuses]"); }
+		}
+		_bonusManager.clear();
 	}
 
 	/* bullet functions */
@@ -308,7 +308,6 @@ public class MapObjectsController extends ControllerWithTime{
 			removeBullet(bullet);
 			if (!_playerTank.hasDefence()) {
 				dispatchEvent(new DamageObjectEvent(DamageObjectEvent.DAMAGE_PLAYER_TANK, _playerTank, bullet.damageStrength));
-				//showBamOnTank(new Point(_playerTank.originX, _playerTank.originY));
 			}
 		}
 	}
@@ -323,17 +322,6 @@ public class MapObjectsController extends ControllerWithTime{
 			dispatchEvent(GameBonusEvent.createBonusApplyToPlayerEvent(gameBonus));
 		}
 	}
-	//TODO Я удалил эту кривую swc
-	/*private function showBamOnTank(point:Point, player:Boolean = false):void {
-		const bam:BamView = new BamView();
-		bam.x = point.x - bam.width/2;
-		bam.y = point.y - bam.height/2;
-		bam.scaleX = 0; bam.scaleY = 0;
-		bam.alpha = .4;
-		_container.addChild(bam);
-		TweenMax.to(bam, .9, {scaleX : 1, scaleY : 1, alpha : 1, ease : Bounce.easeOut,
-								onComplete: function():void {if (!player) {_container.removeChild(bam); }}});
-	}*/
 
 	private function onBulletComplete(bullet:Bullet):void {
 		removeBullet(bullet, false);
@@ -347,20 +335,19 @@ public class MapObjectsController extends ControllerWithTime{
 		SoundsManager.playSoundByName(goal ? Sounds.SHOT_GOAL_2 : Sounds.SHOT_GOAL_1);
 	}
 
+	private function removeBullets():void {
+		for each (var bullet:Bullet in _bullets) {
+			bullet.remove();
+			if (_container.contains(bullet)) { _container.removeChild(bullet);
+			} else { trace("bullet not on container [MapObjectsController.removeBullets]"); }
+		}
+	}
+
 	private function bulletBamEffect(x:Number,  y:Number):void {
 		var bamSprite:BulletBam = new BulletBam();
 		bamSprite.x = x;
 		bamSprite.y = y;
 		bamSprite.rotation = _playerTank.gun.rotation;
-		/*bamSprite.graphics.lineStyle(1, 0);
-		bamSprite.graphics.moveTo(2,  2);
-		bamSprite.graphics.lineTo(7, 7);
-		bamSprite.graphics.moveTo(-2,  2);
-		bamSprite.graphics.lineTo(-7, 7);
-		bamSprite.graphics.moveTo(2,  -2);
-		bamSprite.graphics.lineTo(7, - 7);
-		bamSprite.graphics.moveTo(-2,  -2);
-		bamSprite.graphics.lineTo(- 7, - 7);*/
 		bamSprite.scaleX = bamSprite.scaleY = .05;
 		_container.addChild(bamSprite);
 		TweenLite.to(bamSprite, .4, {scaleX : .3, scaleY : .3, ease : Linear.easeNone,
