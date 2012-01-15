@@ -156,6 +156,16 @@ public class MapObjectsController extends ControllerWithTime{
 		_targetsController.addPlayerTank(tank);
 	}
 
+	public function resetObjects():void {
+		removeMapObjects();
+		drawObjects();
+	}
+
+	/* сдесь будут отслеживаться основные столкновения */
+	public function checkObjectsInteract():void {
+		checkHitBonus();
+	}
+
 	/* Internal functions */
 
 	private function onEnterFrame(event:Event):void {
@@ -166,26 +176,14 @@ public class MapObjectsController extends ControllerWithTime{
 		addBullet(event.bullet);
 	}
 
-	/* сдесь будут отслеживаться основные столкновения */
-	public function checkObjectsInteract():void {
-		checkHitBonus();
-	}
-	//TODO what need to do of this method? clear?
-	private function addTimeZone(timeZone:GameTimeZone):void {
-		if (!_timeZoneList) { _timeZoneList = new Vector.<GameTimeZone>(); }
-		if (timeZone && _timeZoneList.indexOf(timeZone) == -1) {
-			_timeZoneList.push(timeZone);
-		}
-	}
-
 	private function onBonusAdded(event:GameBonusEvent):void {
 		var point:Point = _mapMatrix.getRandomPoint();
 		event.bonus.x = point.x;
 		event.bonus.y = point.y;
 		_container.addChild(event.bonus);
 	}
-	//TODO he was private, norm or ne norm? ^)
-	public function drawObjects():void {
+
+	private function drawObjects():void {
 		if (!_mapMatrix || !_mapMatrix.matrix) { return; }
 		for (var i:int = 0; i < MapMatrix.MATRIX_WIDTH; ++i) {
 			for (var j:int = 0; j < MapMatrix.MATRIX_HEIGHT; ++j) {
@@ -193,6 +191,8 @@ public class MapObjectsController extends ControllerWithTime{
 					addStone(new Point(i, j));
 				} else if (_mapMatrix.matrix[i][j] == MatrixItemIds.BRICKS) {
 					addBrick(new Point(i, j));
+				} else if (_mapMatrix.matrix[i][j] == MatrixItemIds.PUDDLE) {
+					addPuddle(new Point(i, j));
 				}
 			}
 		}
@@ -242,6 +242,16 @@ public class MapObjectsController extends ControllerWithTime{
 			removeElementFromMap(brick);
 			_bricks = new Vector.<Brick>();
 		}
+	}
+
+	private function addPuddle(mPoint:Point):void {
+/*		var puddle:Pu;
+		brick = new Brick(mPoint);
+		if (!_bricks) { _bricks = new Vector.<Brick>(); }
+		_bricks.push(brick);
+		_container.addChild(brick);
+		_mapMatrix.setCell(mPoint.x, mPoint.y, MatrixItemIds.BRICKS);
+*/
 	}
 
 	/* bullet functions */

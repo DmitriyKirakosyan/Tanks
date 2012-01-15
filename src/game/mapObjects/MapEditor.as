@@ -70,14 +70,13 @@ public class MapEditor {
         parseXML();
     }
 
-    private function parseXML():void {
-        _objectsController.removeMapObjects();
-        var objects:String = _xmlMap.MAP_OBJECTS;
-        var mapObjects:Array = new Array;
-        mapObjects = objects.split(",");
-        _mapMatrix.createLoadMatrix(mapObjects);
-        _objectsController.drawObjects();
-    }
+	private function parseXML():void {
+		var objects:String = _xmlMap.MAP_OBJECTS;
+		var mapObjects:Array = new Array;
+		mapObjects = objects.split(",");
+		_mapMatrix.createLoadMatrix(mapObjects);
+		_objectsController.resetObjects();
+	}
 
 	private function saveMapInXML():void
 	{

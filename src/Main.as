@@ -38,7 +38,7 @@ import sound.SoundsManager;
 		private function start():void {
 			//MochiServices.connect( _mochiads_game_id, stage, onMochiConnectError);
 			container = new Sprite();
-			container.alpha = .04;
+			//container.alpha = .04;
 			this.addChild(container);
 
 			new SceneController(container);

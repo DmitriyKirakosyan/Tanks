@@ -4,6 +4,8 @@ import flash.geom.Point;
 import game.GameController;
 import flash.display.Sprite;
 
+import game.matrix.MatrixItemIds;
+
 public class MapMatrix {
 	private var _matrix:Vector.<Vector.<uint>>;
 	private var _tankMatrix:Vector.<Vector.<uint>>;
@@ -121,8 +123,8 @@ public class MapMatrix {
 					_matrix[i][j] = MatrixItemIds.EMPTY;
 				} else {
 					rnd = Math.random();
-					_matrix[i][j] = rnd > .2 ?  MatrixItemIds.EMPTY :
-																rnd < .1 ? MatrixItemIds.STONE : MatrixItemIds.BRICKS;
+					_matrix[i][j] = rnd > .3 ?  MatrixItemIds.EMPTY :
+																rnd < .1 ? MatrixItemIds.STONE : rnd < .2 ? MatrixItemIds.PUDDLE : MatrixItemIds.BRICKS;
 				}
 			}
 		}

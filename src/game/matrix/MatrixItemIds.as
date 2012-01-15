@@ -5,5 +5,6 @@ package game.matrix
 		public static const EMPTY:int = 0;
 		public static const STONE:int = 1;
 		public static const BRICKS:int = 2;
+		public static const PUDDLE:int = 3;
 	}
 }
