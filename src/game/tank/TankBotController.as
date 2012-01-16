@@ -120,7 +120,7 @@ public class TankBotController extends TankController{
 	private function updateTankThink():void {
 		if (!_targetTank || !this.wannaShot) { return; }
 
-		if (!_inDeadLock) {
+		if (_inDeadLock) {
 			shotNeighborBrick();
 			return;
 		}

@@ -68,6 +68,8 @@ public class TankController extends ControllerWithTime {
 	public function get wannaShot():Boolean { return _wannaShot; }
 	public function get gunController():TankGunController { return _gunController; }
 
+	protected function get container():Sprite { return _container; }
+
 	/**
 	 * calls createTank function
 	 * @param tankVO -- tank vo

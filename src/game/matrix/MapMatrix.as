@@ -55,7 +55,7 @@ public class MapMatrix {
 	}
 
 	public function getNeighborElementPoint(item:int):Point {
-		return new Point();
+		return new Point(MATRIX_WIDTH/2, MATRIX_HEIGHT/2);
 	}
 
 	public function getSpeedForTank(point:Point):Number {
@@ -123,26 +123,26 @@ public class MapMatrix {
 					_matrix[i][j] = MatrixItemIds.EMPTY;
 				} else {
 					rnd = Math.random();
-					_matrix[i][j] = rnd > .3 ?  MatrixItemIds.EMPTY :
-																rnd < .1 ? MatrixItemIds.STONE : rnd < .2 ? MatrixItemIds.PUDDLE : MatrixItemIds.BRICKS;
+					_matrix[i][j] = rnd > .2 ?  MatrixItemIds.EMPTY :
+																rnd < .1 ? MatrixItemIds.STONE : MatrixItemIds.BRICKS;
 				}
 			}
 		}
 	}
-    public function createLoadMatrix(loadMatrix:Array):void {
-        var rnd:Number = 0;
+	public function createLoadMatrix(loadMatrix:Array):void {
+		var rnd:Number = 0;
 		for (var i:int = 0; i < _matrix.length; ++i) {
-            for (var j:int = 0; j < MATRIX_HEIGHT; ++j) {
-                if (i == int(MATRIX_WIDTH / 2) && j == int(MATRIX_HEIGHT / 2)) {
-                    _matrix[i][j] = MatrixItemIds.EMPTY;
-                    rnd++;
-                } else {
-                    _matrix[i][j] = loadMatrix[rnd];
-                    rnd++;
-                }
-            }
+			for (var j:int = 0; j < MATRIX_HEIGHT; ++j) {
+				if (i == int(MATRIX_WIDTH / 2) && j == int(MATRIX_HEIGHT / 2)) {
+					_matrix[i][j] = MatrixItemIds.EMPTY;
+					rnd++;
+				} else {
+					_matrix[i][j] = loadMatrix[rnd];
+					rnd++;
+				}
+			}
 		}
-    }
+	}
 
 	private function pointInMatrix(x:int, y:int):Boolean {
 		return x >= 0 && x < MATRIX_WIDTH && y >= 0 && y < MATRIX_HEIGHT;
