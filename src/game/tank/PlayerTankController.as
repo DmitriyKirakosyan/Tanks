@@ -13,6 +13,8 @@ import flash.geom.Point;
 import game.KeyboardListener;
 
 import game.KeyboardListener;
+
+import game.KeyboardListener;
 import game.matrix.MapMatrix;
 
 public class PlayerTankController extends TankController{
@@ -55,20 +57,9 @@ public class PlayerTankController extends TankController{
 				_currentKeyDirection == KeyboardListener.UP ? tank.y -= _speedIncrement : tank.y += _speedIncrement;
 			}
 
-			var track:Track = new Track();
-			if (_currentKeyDirection == KeyboardListener.LEFT || _currentKeyDirection == KeyboardListener.RIGHT) {
-				track.rotation = 90;
-				track.y = tank.originY;
-				track.x = (_currentKeyDirection == KeyboardListener.LEFT) ? tank.originX + tank.tankBase.width/2 : tank.originX - tank.tankBase.width/2;
-			} else {
-				track.x = tank.originX;
-				track.y = (_currentKeyDirection == KeyboardListener.UP) ? (tank.originY + tank.tankBase.height/2) :
-										tank.originY - tank.tankBase.height/2;
-			}
-			container.addChild(track);
-			TweenLite.to(track, 2, { alpha : 0, ease:Linear.easeNone,
-					onComplete:function():void { removeTrack(track); } });
-			addTrack(track);
+
+
+			addTrack();
 
 			if (needStop()) {
 				tank.x = _targetMovePoint.x;
@@ -86,7 +77,22 @@ public class PlayerTankController extends TankController{
 						_currentKeyDirection == KeyboardListener.RIGHT && _targetMovePoint.x < tank.x;
 	}
 
-	private function addTrack(track:Track):void {
+	private function addTrack():void {
+		var track:Track = new Track();
+		if (_currentKeyDirection == KeyboardListener.LEFT || _currentKeyDirection == KeyboardListener.RIGHT) {
+			track.rotation = (_currentKeyDirection == KeyboardListener.LEFT) ? -90 : 90;
+			track.y = tank.originY;
+			track.x = (_currentKeyDirection == KeyboardListener.LEFT) ? tank.originX + tank.tankBase.width/2 : tank.originX - tank.tankBase.width/2;
+		} else {
+			track.rotation = _currentKeyDirection == KeyboardListener.UP ? 0 : 180;
+			track.x = tank.originX;
+			track.y = (_currentKeyDirection == KeyboardListener.UP) ? (tank.originY + tank.tankBase.height/2) :
+									tank.originY - tank.tankBase.height/2;
+		}
+		container.addChild(track);
+		TweenLite.to(track, 2, { alpha : 0, ease:Linear.easeNone,
+				onComplete:function():void { removeTrack(track); } });
+
 		if (!track) { return; }
 		if (!_trackList) { _trackList = new Vector.<Track>(); }
 		_trackList.push(track);

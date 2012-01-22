@@ -123,21 +123,32 @@ import flash.utils.Timer;
 			// 0 - BaseBot, 1 - AdvanceBot, 2 - HardBot
 			var strength:int = Math.random() < 1/_levelStrength ? 0 : Math.random()< 1/_levelStrength*5 ? 1 : 2;
 			var enemyTank:TankBotController = new TankBotController(_container, _mapMatrix, strength);
+
+			var rnd:Number = Math.random();
+			var x:Number = rnd < .5 ? (1 + int(rnd*2 * (MapMatrix.MATRIX_WIDTH-1))) : rnd < 7.5 ? -1 : MapMatrix.MATRIX_WIDTH;
+			var y:Number = rnd > .5 ? (1 + int((rnd-.5)*2 * (MapMatrix.MATRIX_HEIGHT-1))) : rnd < 2.5 ? -1 : MapMatrix.MATRIX_HEIGHT;
+
+			if (tankOnThisPointExists(x, y)) { trace("has tank here already [TargetsController.createTarget]"); return; }
+
 			enemyTank.addEventListener(TankEvent.MOVING_COMPLETE, onEnemyMovingComplete);
 			enemyTank.addEventListener(TankShotingEvent.WAS_SHOT, onEnemyShotEvent);
 
 			var tankVO:TankVO = new TankVO();
 			tankVO.weaponType = int(Math.random() * 3);
 			enemyTank.init(tankVO);
-			moveEnemyFromBackstage(enemyTank);
+			moveEnemyFromBackstage(x, y, enemyTank);
 			if (_playerTank && !enemyTank.hasTargetTank()) { enemyTank.setTargetTank(_playerTank); }
 			_enemyControllers.push(enemyTank);
 		}
 
-		private function moveEnemyFromBackstage(enemy:TankBotController):void {
-			var rnd:Number = Math.random();
-			var x:Number = rnd < .5 ? (1 + int(rnd*2 * (MapMatrix.MATRIX_WIDTH-1))) : rnd < 7.5 ? -1 : MapMatrix.MATRIX_WIDTH;
-			var y:Number = rnd > .5 ? (1 + int((rnd-.5)*2 * (MapMatrix.MATRIX_HEIGHT-1))) : rnd < 2.5 ? -1 : MapMatrix.MATRIX_HEIGHT;
+		private function tankOnThisPointExists(x:int, y:int):Boolean {
+			for each (var tankController:TankBotController in _enemyControllers) {
+				if (tankController.tank.x == x && tankController.tank.y == y) { return true; }
+			}
+			return false;
+		}
+
+		private function moveEnemyFromBackstage(x:int, y:int, enemy:TankBotController):void {
 			enemy.tank.x = x;
 			enemy.tank.y = y;
 			moveEnemyTank(enemy);

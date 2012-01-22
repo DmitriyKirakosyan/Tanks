@@ -99,7 +99,9 @@ public class TankController extends ControllerWithTime {
 		if (_movingTimeline) {
 			_movingTimeline.timeScale = value;
 		}
-		_gunController.scaleTime(value);
+		if (_gunController) {
+			_gunController.scaleTime(value);
+		}
 	}
 /*
 	public function pause():void {
