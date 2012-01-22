@@ -18,10 +18,9 @@ import sound.SoundsManager;
 [SWF(width=600, height=600, frameRate=25)]
 	public class Main extends Sprite {
 		private var container:Sprite;
-		//mochimedia.com
 		var _mochiads_game_id:String = "88119fe352061898";
 
-		public static var MOCHI_ON:Boolean = false;
+		public static var MOCHI_ON:Boolean = true;
 
 		public function Main() {
 			start();
@@ -36,7 +35,7 @@ import sound.SoundsManager;
 		}
 
 		private function start():void {
-			//MochiServices.connect( _mochiads_game_id, stage, onMochiConnectError);
+			MochiServices.connect( _mochiads_game_id, stage, onMochiConnectError);
 			container = new Sprite();
 			//container.alpha = .04;
 			this.addChild(container);
