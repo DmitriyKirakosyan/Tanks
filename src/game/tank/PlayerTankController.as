@@ -57,8 +57,6 @@ public class PlayerTankController extends TankController{
 				_currentKeyDirection == KeyboardListener.UP ? tank.y -= _speedIncrement : tank.y += _speedIncrement;
 			}
 
-
-
 			addTrack();
 
 			if (needStop()) {

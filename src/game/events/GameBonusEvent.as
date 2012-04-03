@@ -16,8 +16,8 @@ public class GameBonusEvent extends Event{
 	public static const BONUS_ADDED:String = "bonusAdded";
 	public static const BONUS_APPLY_TO_PLAYER:String = "bonusApplyToPlayer";
 
-	public static function createBonusAddedEvent(bonus:GameBonus):GameBonusEvent {
-		return new GameBonusEvent(BONUS_ADDED, bonus);
+	public static function createBonusAddedEvent(bonus:GameBonus, tank:Tank = null):GameBonusEvent {
+		return new GameBonusEvent(BONUS_ADDED, bonus, tank);
 	}
 	public static function createBonusApplyToPlayerEvent(bonus:GameBonus):GameBonusEvent {
 		return new GameBonusEvent(BONUS_APPLY_TO_PLAYER, bonus);

@@ -22,10 +22,11 @@ public class BulletEffect {
 
 	private static const ROCKET_TAIL_EFFECT:uint = 0;
 	private static const MINIGUN_TAIL_EFFECT:uint = 1;
+	private static const GAUSS_TAIL_EFFECT:uint = 2;
 
 	public function BulletEffect(bullet:Bullet, effectType:uint) {
 		_tailPeriodCounter = 0;
-		_tailPeriod = effectType == ROCKET_TAIL_EFFECT ? 1 : 3;
+		_tailPeriod = effectType == ROCKET_TAIL_EFFECT ? 1 : effectType == GAUSS_TAIL_EFFECT ? 1 : 3;
 		_effectType = effectType;
 		_bullet = bullet;
 	}
@@ -38,6 +39,10 @@ public class BulletEffect {
 		return new BulletEffect(bullet, MINIGUN_TAIL_EFFECT);
 	}
 
+	public static function createGaussTailEffect(bullet:Bullet):BulletEffect {
+		return new BulletEffect(bullet,  GAUSS_TAIL_EFFECT);
+	}
+
 	public function updateEffect():void {
 		tickTailPeriod();
 		if (timeToTail) {
@@ -45,6 +50,8 @@ public class BulletEffect {
 				drawTail();
 			} else if (_effectType == MINIGUN_TAIL_EFFECT) {
 				drawMinigunTail();
+			} else if (_effectType == GAUSS_TAIL_EFFECT) {
+				drawGaussTail();
 			}
 		}
 	}
@@ -77,6 +84,20 @@ public class BulletEffect {
 		bulletTailPart.alpha = .8;
 		_bullet.container.addChild(bulletTailPart);
 		TweenMax.to(bulletTailPart, .5, { alpha: 0, ease : Linear.easeNone,
+									onComplete: function():void { _bullet.container.removeChild(bulletTailPart); } });
+	}
+
+	private function drawGaussTail():void {
+		if (!_bullet.container) { return; }
+		var bulletTailPart:Sprite = new Sprite();
+		bulletTailPart.graphics.lineStyle(2, 0x00BFFF);
+		bulletTailPart.graphics.drawCircle(0, 0, 4);
+		bulletTailPart.x = _bullet.x;
+		bulletTailPart.y = _bullet.y;
+		bulletTailPart.scaleX = bulletTailPart.scaleY = .1;
+		bulletTailPart.alpha = .6;
+		_bullet.container.addChild(bulletTailPart);
+		TweenMax.to(bulletTailPart, 1.5, { scaleX : 2, scaleY : 2, alpha : 0, ease : Linear.easeNone,
 									onComplete: function():void { _bullet.container.removeChild(bulletTailPart); } });
 	}
 

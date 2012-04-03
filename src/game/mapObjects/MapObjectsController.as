@@ -181,6 +181,9 @@ public class MapObjectsController extends ControllerWithTime{
 
 	private function onBonusAdded(event:GameBonusEvent):void {
 		var point:Point = _mapMatrix.getRandomPoint();
+		if (event.tank) {
+			point = new Point(event.tank.x,  event.tank.y);
+		}
 		event.bonus.x = point.x;
 		event.bonus.y = point.y;
 		_container.addChild(event.bonus);

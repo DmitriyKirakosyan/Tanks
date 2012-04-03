@@ -13,6 +13,7 @@ public class TankGun extends Sprite{
 	public static const TAIL_ROCKET:uint = 2;
 	public static const ROCKET:uint = 0;
 	public static const MINIGUN:uint = 1;
+	public static const GAUSS:uint = 4;
 
 	public function TankGun(weaponType:uint = ROCKET) {
 		super();
@@ -31,6 +32,9 @@ public class TankGun extends Sprite{
 				break;
 			case MINIGUN :
 				createMiniGun();
+				break;
+			case GAUSS :
+				addChild(new GaussGun());
 				break;
 			default : //TAIL_ROCKET
 				createTailRocket();

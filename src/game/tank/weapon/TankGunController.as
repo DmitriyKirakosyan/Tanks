@@ -154,6 +154,7 @@ public class TankGunController extends EventDispatcher {
 		switch (_type) {
 			case TankGun.TAIL_ROCKET : result = Bullet.createTailRocketBullet(_tank); break;
 			case TankGun.MINIGUN : result = Bullet.createMinigunBullet(_tank); break;
+			case TankGun.GAUSS : result = Bullet.createGaussBullet(_tank); break;
 
 			default : result = Bullet.createRocketBullet(_tank);
 		}

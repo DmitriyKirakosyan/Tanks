@@ -17,6 +17,7 @@ public class GameBonus extends MapObject {
 
 	public static const MEDKIT:uint = 0;
 	public static const TIME_DEFENSE:uint = 1;
+	public static const GAUSS_GUN:uint = 2;
 
 	public static function createMedkit():GameBonus {
 		return new MedKit();

@@ -26,6 +26,7 @@ public class Bullet extends Sprite {
 	public static const TAIL_ROCKET_STRENGTH:Number = 11;
 	public static const ROCKET_STRENGTH:Number = 5;
 	public static const MINIGUN_STRENGTH:Number = .6;
+	public static const GAUSS_STRENGTH:Number = 20;
 
 	public static function createTailRocketBullet(selfTank:Tank):Bullet {
 		return new Bullet(selfTank,  TankGun.TAIL_ROCKET, TAIL_ROCKET_STRENGTH);
@@ -35,6 +36,9 @@ public class Bullet extends Sprite {
 	}
 	public static function createRocketBullet(selfTank:Tank):Bullet {
 		return new Bullet(selfTank, TankGun.ROCKET, ROCKET_STRENGTH);
+	}
+	public static function createGaussBullet(selfTank:Tank):Bullet {
+		return new Bullet(selfTank,  TankGun.GAUSS, GAUSS_STRENGTH);
 	}
 
 	public function Bullet(selfTank:Tank, type:uint, damageStrength:Number):void {
@@ -119,7 +123,8 @@ public class Bullet extends Sprite {
 
 	private function createBulletEffect():BulletEffect {
 		if (_type == TankGun.TAIL_ROCKET) { return BulletEffect.createRocketTailEffect(this);
-		} else if (_type == TankGun.MINIGUN) { return BulletEffect.createMinigunTailEffect(this); }
+		} else if (_type == TankGun.MINIGUN) { return BulletEffect.createMinigunTailEffect(this);
+		} else if (_type == TankGun.GAUSS) { return BulletEffect.createGaussTailEffect(this); }
 		
 		return null;
 	}

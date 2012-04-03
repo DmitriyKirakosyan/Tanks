@@ -23,6 +23,7 @@ import game.tank.TankBotController;
 import game.tank.TankMovementListener;
 import game.tank.TankVO;
 import game.tank.ability.TankAbility;
+import game.tank.weapon.TankGun;
 import game.world.GameWorld;
 
 import mochi.as3.MochiAd;
