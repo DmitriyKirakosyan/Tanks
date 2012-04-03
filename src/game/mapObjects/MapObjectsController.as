@@ -184,9 +184,13 @@ public class MapObjectsController extends ControllerWithTime{
 		if (event.tank) {
 			point = new Point(event.tank.x,  event.tank.y);
 		}
-		event.bonus.x = point.x;
-		event.bonus.y = point.y;
-		_container.addChild(event.bonus);
+		addBonus(event.bonus, point);
+	}
+	
+	private function addBonus(gameBonus:GameBonus, point:Point):void {
+		gameBonus.x = point.x;
+		gameBonus.y = point.y;
+		_container.addChild(gameBonus);
 	}
 
 	private function drawObjects():void {
@@ -276,6 +280,7 @@ public class MapObjectsController extends ControllerWithTime{
 						addScore(enemyTank);
 					}
 					removeEnemyTank(enemyTank);
+					addBonus(_bonusManager.addGaussGunBonus(), new Point(enemyTank.x, enemyTank.y));
 				}
 				break;
 			}

@@ -33,10 +33,7 @@ public class TankGunController extends EventDispatcher {
 		if (!tank) {
 			throw new Error("where is my tank?? [TankGunController]");
 		}
-		_type = tank.vo.weaponType;
-		_gunSpeed = _type == TankGun.MINIGUN ? 21 : _type == TankGun.ROCKET ? 15 : 9;
-		_gun = tank.gun;
-		_gunLength = _gun.height;
+		updateGun();
 		_reloadController = new GunReloadController(getReloadSpeed());
 		_reloadController.reloadBar.y = tank.originY + 30;
 		_reloadController.reloadBar.x = tank.originX - tank.width/2;
@@ -66,9 +63,14 @@ public class TankGunController extends EventDispatcher {
 	public function get gun():TankGun { return _gun; }
 	public function get reloadController():GunReloadController { return _reloadController; }
 
-	public function updateGun(type:uint):void {
-		TweenMax.killTweensOf(_gun);
-		_gun = new TankGun(type);
+	public function updateGun():void {
+		if (_gun) {
+			TweenMax.killTweensOf(_gun);
+		}
+		_type = _tank.vo.weaponType;
+		_gunSpeed = _type == TankGun.MINIGUN ? 21 : _type == TankGun.ROCKET ? 15 : 9;
+		_gun = _tank.gun;
+		_gunLength = _gun.height;
 	}
 
 	public function killGunTweens():void {
@@ -142,12 +144,12 @@ public class TankGunController extends EventDispatcher {
 		return new Point(_tank.originX + endX, _tank.originY + endY);
 	}
 
-	public function updateWeaponType(type:uint):void {
-		if (_type != type) {
-			_type = type;
-			updateGun(type);
-		}
-	}
+//	public function updateWeaponType(type:uint):void {
+//		if (_type != type) {
+//			_type = type;
+//			updateGun(type);
+//		}
+//	}
 
 	public function createBullet():Bullet {
 		var result:Bullet;

@@ -57,6 +57,12 @@ public class BonusManager extends EventDispatcher {
 
 	public function get activeBonuseList():Vector.<GameBonus> { return _activeBonusList; }
 
+	public function addGaussGunBonus():GameBonus {
+		var gameBonus:GameBonus = GameBonus.createGaussGun();
+		addActiveBonus(gameBonus);
+		return gameBonus;
+	}
+	
 	/* Internal functions */
 
 	private function onBonusTimer(event:TimerEvent):void{
@@ -70,6 +76,9 @@ public class BonusManager extends EventDispatcher {
 		switch (nextBonusType) {
 			default : gameBonus = GameBonus.createMedkit();
 		}
+		addBonus(gameBonus);
+	}
+	private function addBonus(gameBonus:GameBonus):void {
 		addActiveBonus(gameBonus);
 		dispatchEvent(new GameBonusEvent(GameBonusEvent.BONUS_ADDED, gameBonus));
 	}

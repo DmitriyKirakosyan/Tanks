@@ -241,7 +241,7 @@ public class GameController extends EventDispatcher implements IScene{
 		movePlayerTankByKeyboard();
 	}
 
-	private function movePlayerTankByKeyboard() {
+	private function movePlayerTankByKeyboard():void {
 		switch (_keyboardListener.keyPressed) {
 			case KeyboardListener.LEFT:
 				_tankController.moveLeft();

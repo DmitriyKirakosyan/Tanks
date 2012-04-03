@@ -22,6 +22,9 @@ public class GameBonus extends MapObject {
 	public static function createMedkit():GameBonus {
 		return new MedKit();
 	}
+	public static function createGaussGun():GameBonus {
+		return new GaussBonus();
+	}
 
 	public function GameBonus(type:uint) {
 		super();

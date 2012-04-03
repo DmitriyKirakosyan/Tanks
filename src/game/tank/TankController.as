@@ -1,6 +1,7 @@
 package game.tank {
 import com.greensock.TimelineLite;
 import com.greensock.TweenLite;
+import game.tank.weapon.TankGun;
 
 import flash.events.Event;
 import flash.geom.ColorTransform;
@@ -200,8 +201,12 @@ public class TankController extends ControllerWithTime {
 
 	public function applyBonus(bonusType:uint):void {
 		switch (bonusType) {
-			case GameBonus.MEDKIT : tank.updateLive(ObjectsHp.MEDKIT_BONUS);
-			case GameBonus.TIME_DEFENSE : tank.addDefense(TankDefense.createTimeDefense());
+			case GameBonus.MEDKIT : tank.updateLive(ObjectsHp.MEDKIT_BONUS); break;
+			case GameBonus.TIME_DEFENSE : tank.addDefense(TankDefense.createTimeDefense()); break;
+			case GameBonus.GAUSS_GUN :
+							tank.updateGun(TankGun.GAUSS);
+							_gunController.updateGun();
+							break;
 		}
 	}
 

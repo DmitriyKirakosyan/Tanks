@@ -21,7 +21,7 @@ import sound.SoundsManager;
 		private var container:Sprite;
 		var _mochiads_game_id:String = "88119fe352061898";
 
-		public static var MOCHI_ON:Boolean = true;
+		public static var MOCHI_ON:Boolean = false;
 
 		public function Main() {
 			Security.allowInsecureDomain("*");
