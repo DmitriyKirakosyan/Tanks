@@ -283,7 +283,7 @@ public class MapObjectsController extends ControllerWithTime{
 		if (!_stones) { return; }
 		for each (var stone:Stone in _stones) {
 			if (bullet.hitTestObject(stone)) {
-				removeBullet(bullet);
+				removeBullet(bullet,false);
 				stone.damage(bullet.damageStrength);
 				if (stone.destroyed) { removeStone(stone); }
 				break;
@@ -294,7 +294,7 @@ public class MapObjectsController extends ControllerWithTime{
 		if (!_bricks) { return; }
 		for each (var brick:Brick in _bricks) {
 			if (bullet.hitTestObject(brick)) {
-				removeBullet(bullet);
+				removeBullet(bullet,false);
 				brick.damage(bullet.damageStrength);
 				if (brick.destroyed) { removeBrick(brick); }
 				break;

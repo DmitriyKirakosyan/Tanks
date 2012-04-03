@@ -82,6 +82,7 @@ public class GameController extends EventDispatcher implements IScene{
 	}
 
 	public function open():void {
+		_container.stage.focus = _container;
 		UserState.instance.clearScore();
 		_mapObjectsController.init(); // first of all we need to create map and map objects
 		_tankController.init(UserState.instance.tankVO);
@@ -89,6 +90,7 @@ public class GameController extends EventDispatcher implements IScene{
 		addListeners();
 		//_debugController.open();
 		SoundsManager.playSoundByName(Sounds.BACKGROUND_2, true, true);
+		
 	}
 
 	public function remove():void {
@@ -119,6 +121,7 @@ public class GameController extends EventDispatcher implements IScene{
 	/* Inits */
 
 	private function initControllers():void {
+		
 		_mapMatrix = new MapMatrix(_container);
 		_mapMatrix.drawMatrix();
 		Pathfinder.setMatrix(_mapMatrix.matrix);
@@ -132,6 +135,7 @@ public class GameController extends EventDispatcher implements IScene{
 		_mapEditor = new MapEditor(_container, _mapObjectsController, _mapMatrix);
 		_keyboardListener = new KeyboardListener(_container);
 		initTimeController();
+		
 	}
 
 	private function initTimeController():void {
@@ -191,9 +195,9 @@ public class GameController extends EventDispatcher implements IScene{
 		if(_tankController.tank.destroyed) {
 			_tankController.bam();
 			_mapObjectsController.targetsController.cleanTargetTank();
-			endGame();
-			//showEndWindow();
-			//_container.addEventListener(MouseEvent.CLICK, onClick);
+			//endGame();
+			showEndWindow();
+			_container.addEventListener(MouseEvent.CLICK, onClick);
 		} else {
 			_mapObjectsController.dropBonus(GameBonus.MEDKIT);
 		}
@@ -251,7 +255,6 @@ public class GameController extends EventDispatcher implements IScene{
 				_tankController.moveDown();
 		}
 	}
-
 
 	private function onContainerMouseOut(event:MouseEvent):void {
 		timeController.normalize();

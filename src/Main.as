@@ -1,5 +1,6 @@
 package {
 import com.flashdynamix.utils.SWFProfiler;
+import flash.system.Security;
 
 import flash.display.MovieClip;
 
@@ -23,22 +24,18 @@ import sound.SoundsManager;
 		public static var MOCHI_ON:Boolean = true;
 
 		public function Main() {
+			Security.allowInsecureDomain("*");
+			Security.allowDomain("*");
+			Security.allowDomain("http://www.mochiads.com/static/lib/services/");
+			
 			start();
-			/*
-			MochiAd.showPreGameAd( {
-					skip: true,
-					id: _mochiads_game_id,              // This is the game ID for displaying ads!
-					clip: this,             // We are displaying in a container (which is dynamic)
-					ad_finished: start      // Ad has completed
-			} );
-			*/
 		}
 
 		private function start():void {
-			MochiServices.connect( _mochiads_game_id, stage, onMochiConnectError);
 			container = new Sprite();
+			//MochiServices.connect( _mochiads_game_id, root, onMochiConnectError);
 			//container.alpha = .04;
-			this.addChild(container);
+			addChild(container);
 
 			new SceneController(container);
 			//SWFProfiler.init(stage, container);
